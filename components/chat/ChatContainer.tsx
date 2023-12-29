@@ -9,15 +9,16 @@ import { useSearchParams } from "next/navigation";
 import { Textarea } from "../ui/textarea";
 import { Button } from "../ui/button";
 import { ChevronRightCircle } from "lucide-react";
-import { ChatPayload } from "@/lib/validators";
 import axios from "axios";
 import MessageSkeleton from "./MessageSkeleton";
 
-const createMessage = (text: string, sender: string): Message => ({
-  text,
-  sender,
-  reference: null,
-});
+import { useMutation } from "@tanstack/react-query";
+
+import { useToast } from "@/components/ui/use-toast";
+import {
+  ChatPayload,
+  ChatResponseValidator,
+} from "@/lib/validators";
 
 interface ChatContainerProps extends React.HTMLAttributes<HTMLDivElement> {
   chatHistory: Message[];
@@ -28,34 +29,33 @@ const ChatContainer: FC<ChatContainerProps> = ({ className, ...props }) => {
   const searchParams = useSearchParams();
 
   const [party, setParty] = useState<string | null>(props.partyId);
+  const { toast } = useToast();
 
   useEffect(() => {
     setParty(searchParams.get("party"));
   }, [searchParams]);
 
   const [input, setInput] = useState<string>("");
-  const [reference, setReference] = useState<Reference>();
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [reference, setReference] = useState<Reference | null>(null);
 
-  async function sendMessage() {
-    console.log(input);
-
-    props.chatHistory.push(createMessage(input, "user"));
-
-    setIsLoading(true);
-
-    const payload: ChatPayload = {
-      political_party: party!.toUpperCase(),
-      chat: input,
-    };
-
-    const { data } = await axios.post("/api/chat", payload);
-
-    props.chatHistory.push(createMessage(data.text, data.sender));
-    setReference(data.reference);
-    setIsLoading(false);
-    setInput("");
-  }
+  const sendMessageMutation = useMutation({
+    mutationFn: (payload: ChatPayload) => axios.post("/api/chat", payload),
+    onSuccess: (data, variables, context) => {
+      const res = ChatResponseValidator.parse(data.data);
+      props.chatHistory.push(res);
+      setInput("");
+    },
+    onError(error, variables, context) {
+      props.chatHistory.pop();
+      // FIXME send toast
+      toast({
+        title: "Houve um problema.",
+        description: "Não conseguimos enviar a mensagem.",
+        variant: "destructive",
+      });
+      console.log(error);
+    },
+  });
 
   return (
     <div className={cn("w-screen flex flex-row", className)}>
@@ -63,15 +63,15 @@ const ChatContainer: FC<ChatContainerProps> = ({ className, ...props }) => {
         <ScrollArea className="mb-16 h-full">
           <ul className="flex flex-col gap-4 mx-4">
             {props.chatHistory.map((msg, index) => (
-              // FIXME also add reference button
               <MessageCard
                 key={index}
-                msg={msg.text}
-                reference={msg.reference}
-                sender={msg.sender}
+                msg={msg.message}
+                references={msg.references}
+                sender={msg.role}
+                setReference={setReference}
               />
             ))}
-            {isLoading && <MessageSkeleton />}
+            {sendMessageMutation.isPending && <MessageSkeleton />}
           </ul>
         </ScrollArea>
         <div className="relative">
@@ -81,22 +81,43 @@ const ChatContainer: FC<ChatContainerProps> = ({ className, ...props }) => {
             onKeyDown={(e) => {
               if (e.key === "Enter" && !e.shiftKey) {
                 e.preventDefault();
-                sendMessage();
+                  props.chatHistory.push({
+                    role: "user",
+                    message: input,
+                    references: null,
+                  });
+                sendMessageMutation.mutate({
+                  party: party!.toUpperCase(),
+                  message: input,
+                  previous_messages: props.chatHistory,
+                });
               }
             }}
             placeholder="Type your message here."
             className="absolute bottom-0 p-4 pr-16"
           />
 
-          <Button onClick={sendMessage}>
+          <Button
+            onClick={() => {
+              props.chatHistory.push({
+                role: "user",
+                message: input,
+                references: null,
+              });
+              sendMessageMutation.mutate({
+                party: party!.toUpperCase(),
+                message: input,
+                previous_messages: props.chatHistory,
+              });
+            }}
+          >
             <ChevronRightCircle className="text-primary-foreground hover:text-primary absolute bottom-8 right-8" />
           </Button>
         </div>
       </div>
       <ReferenceCard
         className=""
-        partyId={party as string}
-        pages={reference?.pages}
+        reference={reference}
       />
     </div>
   );

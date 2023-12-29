@@ -14,7 +14,7 @@ export const CreateConversationResponseValidator = z.object({
 
 export const LoginUserValidator = z.object({
   email: z.string().email(),
-  password: z.string().min(6, "Password must have atleast 6 characters"),
+  password: z.string(),
 });
 
 export const CreateUserValidator = z.object({
@@ -23,25 +23,32 @@ export const CreateUserValidator = z.object({
   name: z.string().min(2),
 });
 
-export const LLamaIndexChatValidator = z.object({
+
+export const MessageValidator = z.object({
   role: z.string(),
-  content: z.string(),
+  message: z.string(),
 });
+
 
 export const ChatValidator = z.object({
-  political_party: z.string(),
-  chat: z.string(),
+  party: z.string(),
+  message: z.string(),
+  previous_messages: z.array(MessageValidator),
 });
 
-export const ChatCoordinateValidator = z.object({
-  file_name: z.string(),
-  page_label: z.string(),
+export const ReferenceValidator = z.object({
+  party: z.string(),
+  document: z.string(),
+  pages: z.array(z.number()),
 });
 
 export const ChatResponseValidator = z.object({
-  answer: z.string(),
-  coordinates: z.array(ChatCoordinateValidator),
+  role: z.string(),
+  message: z.string(),
+  references: ReferenceValidator, // FIXME change this to an array in multi party configs
 });
+
+
 
 export type CreateUserPayload = z.infer<typeof CreateUserValidator>;
 
@@ -55,7 +62,7 @@ export type CreateConversationResponse = z.infer<
   typeof CreateConversationResponseValidator
 >;
 
-export type LLamaIndexChatPayload = z.infer<typeof LLamaIndexChatValidator>;
+export type MessagePayload = z.infer<typeof MessageValidator>;
 
 export type ChatPayload = z.infer<typeof ChatValidator>;
 

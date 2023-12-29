@@ -1,12 +1,30 @@
 "use client";
 
-import * as React from "react";
+import { useState } from "react";
+import Link from "next/link";
 
-import { cn } from "@/lib/utils";
-
-import { parties } from "@/lib/constants";
-import { Button, buttonVariants } from "@/components/ui/button";
+import { Viewer } from "@react-pdf-viewer/core";
+import {
+  RenderZoomInProps,
+  RenderZoomOutProps,
+  zoomPlugin,
+} from "@react-pdf-viewer/zoom";
 import { pageNavigationPlugin } from "@react-pdf-viewer/page-navigation";
+import "@react-pdf-viewer/core/lib/styles/index.css";
+import "@react-pdf-viewer/zoom/lib/styles/index.css";
+
+import { Button, buttonVariants } from "@/components/ui/button";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible";
 import {
   ChevronsLeft,
   ChevronsRight,
@@ -14,30 +32,21 @@ import {
   ZoomIn as ZoomInIcon,
   ZoomOut as ZoomOutIcon,
 } from "lucide-react";
-import Link from "next/link";
-import {
-  RenderZoomInProps,
-  RenderZoomOutProps,
-  zoomPlugin,
-} from "@react-pdf-viewer/zoom";
-import { Collapsible, CollapsibleContent } from "../ui/collapsible";
-import { CollapsibleTrigger } from "@radix-ui/react-collapsible";
-import { Viewer } from "@react-pdf-viewer/core";
 
-import "@react-pdf-viewer/core/lib/styles/index.css";
-import "@react-pdf-viewer/zoom/lib/styles/index.css";
+import { Reference } from "@/lib/types";
+import { cn } from "@/lib/utils";
+import { parties } from "@/lib/constants";
 
 interface ReferencesCardProps extends React.HTMLAttributes<HTMLDivElement> {
-  partyId: string;
-  pages: number[] | undefined;
+  reference: Reference | null;
 }
 
 export function ReferencesCard({ className, ...props }: ReferencesCardProps) {
-  const [open, setOpen] = React.useState<boolean>(false);
+  const [open, setOpen] = useState<boolean>(false);
 
   // the following is always true
-  const party = parties.find((party) => party.id === props.partyId)!;
-  const referencePages = props.pages?.sort((a, b) => a - b);
+  const party = parties.find((party) => party.id === props.reference?.party)!;
+  const referencePages = props.reference?.pages.sort((a, b) => a - b);
 
   const pageNavigationPluginInstance = pageNavigationPlugin({
     enableShortcuts: false,
@@ -57,8 +66,20 @@ export function ReferencesCard({ className, ...props }: ReferencesCardProps) {
     >
       <div className="h-full border-l">
         <div className="flex flex-row items-center mx-8 h-24">
-          <CollapsibleTrigger className={buttonVariants({ variant: "ghost" })}>
-            {open ? <ChevronsRight /> : <ChevronsLeft />}
+          <CollapsibleTrigger
+            className={buttonVariants({ variant: "ghost" })}
+            disabled={props.reference === null}
+          >
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                {open ? <ChevronsRight /> : <ChevronsLeft />}
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>Add to library</p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
           </CollapsibleTrigger>
           {open && (
             <div className="flex flex-row justify-between items-center w-full ">
@@ -108,15 +129,19 @@ export function ReferencesCard({ className, ...props }: ReferencesCardProps) {
             </div>
           )}
         </div>
-        {/* # FIXME ideally h would go flush with the viewport end*/}
-        <CollapsibleContent className="overflow-hidden h-[84vh]">
-          <Viewer
-            initialPage={props.pages ? props.pages[0] - 1 : 0}
-            theme={"auto"}
-            fileUrl={party.path}
-            plugins={[pageNavigationPluginInstance, zoomPluginInstance]}
-          />
-        </CollapsibleContent>
+        {
+          /* # FIXME ideally h would go flush with the viewport end*/
+          open && (
+            <CollapsibleContent className="overflow-hidden h-[84vh]">
+              <Viewer
+                initialPage={referencePages ? referencePages[0] - 1 : 0}
+                theme={"auto"}
+                fileUrl={props.reference!.document}
+                plugins={[pageNavigationPluginInstance, zoomPluginInstance]}
+              />
+            </CollapsibleContent>
+          )
+        }
       </div>
     </Collapsible>
   );

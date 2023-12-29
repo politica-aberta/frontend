@@ -20,8 +20,8 @@ export default async function Chat({
   const history: Message[] = [];
 
   const defaultMessage: Message = {
-    sender: "assistant",
-    text: "Olá! Como posso ser útil?",
+    role: "assistant",
+    message: "Olá! Como posso ser útil?",
     reference: null,
   };
 
@@ -43,7 +43,7 @@ export default async function Chat({
       {
         // whenever no chat is selected, show the create chat message
         searchParamsChatId == undefined && routeChatId == undefined ? (
-          <CreateChatMessage className="max-w-3xl h-fit mx-auto mt-16 items-center " />
+          <CreateChatMessage className="max-w-3xl h-fit mx-auto mt-16 items-center" />
         ) : (
           <ChatContainer partyId={partyId as string} chatHistory={history} />
         )

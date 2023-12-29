@@ -1,7 +1,7 @@
 import axios from "axios";
 import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
-import { ChatResponseValidator, ChatValidator } from "@/lib/validators";
+import { ChatResponse, ChatResponseValidator, ChatValidator } from "@/lib/validators";
 import { ZodError } from "zod";
 import { Reference } from "@/lib/types";
 
@@ -35,24 +35,36 @@ export async function POST(req: NextRequest) {
     }
 
     const body = await req.json();
-    const { political_party, chat } = ChatValidator.parse(body);
+    const { party, message, previous_messages } = ChatValidator.parse(body);
 
     const payload = {
       access_token: session!.access_token,
-      political_party: political_party,
-      chat: chat,
+      party: party,
+      message: message,
+      previous_messages: previous_messages,
       infer_chat_mode: true,
     };
 
     // sleep for 2 seconds
     await new Promise((resolve) => setTimeout(resolve, 2000));
 
+
+    const { data } = await axios.post<ChatResponse>(
+      // `${getBackendUrl()}chat`,
+      "http://localhost/chat",
+      payload
+    );
+    console.log(data);
+
+    // FIXME inconsistency between references array/no array
+
     return NextResponse.json(
       {
-        sender: "Assistant",
-        text: chat,
-        reference: {
-          document: "ps-legislativas22.pdf",
+        role: "Assistant",
+        message: message,
+        references:{
+          party: "ps",
+          document: "https://dzwdgfmvuevjqjutrpye.supabase.co/storage/v1/object/public/documents/ps-legislativas22.pdf",
           pages: [1, 2, 3],
         },
       },

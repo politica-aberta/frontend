@@ -8,17 +8,18 @@ import {
   CardHeader,
 } from "@/components/ui/card";
 import { LogIn } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { Toggle } from "../ui/toggle";
 
 interface MessageCardProps extends React.HTMLAttributes<HTMLDivElement> {
   msg: string;
   sender: string;
-  reference: Reference | null;
+  references: Reference | null;
+  setReference: React.Dispatch<React.SetStateAction<Reference | null>>;
 }
 
 const MessageCard: FC<MessageCardProps> = ({ className, ...props }) => {
-  const referencePages = props.reference?.pages.sort((a, b) => a - b);
+  const referencePages = props.references?.pages.sort((a, b) => a - b);
   const color = props.sender === "user" ? "bg-muted" : "";
   const sender = props.sender === "user" ? "Utilizador" : "Assistente";
 
@@ -32,19 +33,15 @@ const MessageCard: FC<MessageCardProps> = ({ className, ...props }) => {
           <p className="whitespace-pre-wrap">{props.msg}</p>
         </CardContent>
       </div>
-      {props.reference && (
+      {props.references && (
         <div className="basis-1/5 border-l">
           <h2 className="component-header text-description">References</h2>
           <div className="w-full flex flex-row justify-between p-6 pt-0 ">
             <div>{referencePages?.join(" ")}</div>
-            <Button
-              onClick={() => {}}
-              className="p-2 -mt-2"
-              variant={"ghost"}
-              size={"icon"}
-            >
+
+            <Toggle className="-mt-2"  onClick={() => {props.setReference(props.references)}}>
               <LogIn />
-            </Button>
+            </Toggle>
           </div>
         </div>
       )}
