@@ -49,12 +49,12 @@ export async function POST(req: NextRequest) {
     await new Promise((resolve) => setTimeout(resolve, 2000));
 
 
-    const { data } = await axios.post<ChatResponse>(
-      // `${getBackendUrl()}chat`,
-      "http://localhost/chat",
-      payload
-    );
-    console.log(data);
+    // const { data } = await axios.post<ChatResponse>(
+    //   // `${getBackendUrl()}chat`,
+    //   "http://localhost/chat",
+    //   payload
+    // );
+    // console.log(data);
 
     // FIXME inconsistency between references array/no array
 
