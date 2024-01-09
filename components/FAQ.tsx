@@ -13,7 +13,7 @@ interface FAQProps extends React.HTMLAttributes<HTMLDivElement> {}
 
 export default function FAQ({ className, ...props }: FAQProps) {
   return (
-    <div id="faq" className={cn("max-w-5xl lg:mx-auto  px-6", className)}>
+    <div id="faq" className={cn("max-w-5xl lg:mx-auto mx-6", className)}>
       <h1 className="py-8 component-title text-center">Perguntas Frequentes</h1>
 
       <Accordion type="single" collapsible className="">

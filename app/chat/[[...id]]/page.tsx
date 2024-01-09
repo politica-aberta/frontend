@@ -22,7 +22,7 @@ export default async function Chat({
   const defaultMessage: Message = {
     role: "assistant",
     message: "Olá! Como posso ser útil?",
-    reference: null,
+    references: null,
   };
 
   let partyId: string | string[] | undefined = "";

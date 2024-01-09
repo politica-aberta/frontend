@@ -13,11 +13,16 @@ import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 
 import { parties } from "@/lib/constants";
 import React from "react";
-import { CreateConversationPayload } from "@/lib/validators";
-import axios from "axios";
+import {
+  CreateConversationPayload,
+  CreateConversationResponse,
+  CreateConversationResponseValidator,
+} from "@/lib/validators";
+import axios, { AxiosError } from "axios";
 
 import { useToast } from "@/components/ui/use-toast";
 import { useRouter } from "next/navigation";
+import { useMutation } from "@tanstack/react-query";
 
 interface CreateChatMessageProps extends React.HTMLAttributes<HTMLDivElement> {}
 
@@ -25,43 +30,31 @@ const CreateChatMessage: FC<CreateChatMessageProps> = ({
   className,
   ...props
 }) => {
-  const [isLoading, setIsLoading] = React.useState<boolean>(false);
-
   const { toast } = useToast();
   const router = useRouter();
 
-  const createChat = async (value: string) => {
-    const payload: CreateConversationPayload = {
-      party: value,
-    };
-
-    setIsLoading(true);
-    // FIXME use react query for this
-
-    try {
-      const {
-        data: { id, party },
-      } = await axios.post("/api/chat/create", payload);
-      router.replace(`/chat?id=${id}&party=${party}`);
-    } catch (error: any) {
-      console.log(error);
-      if (error.response.status === 401) {
+  const createChatMutation = useMutation({
+    mutationFn: (payload: CreateConversationPayload) => axios.post<CreateConversationResponse>("/api/chat/create", payload),
+    onSuccess: (data , variables, context) => {
+      const {id, party} = CreateConversationResponseValidator.parse(data.data);
+      router.replace(`/chat?id=${id}&party=${party}`)
+    },
+    onError(error: AxiosError) {
+      if (error.response?.status === 401) {
         toast({
           title: "Houve um problema.",
           description: "Tens que fazer login primeiro.",
           variant: "destructive",
         });
-      } else if (error.response.status === 500) {
+      } else {
         toast({
           title: "Houve um problema.",
           description: "Não conseguimos criar a conversa.",
           variant: "destructive",
         });
       }
-    }
-    setIsLoading(false);
-  };
-
+    },
+  });
   return (
     <Card className={cn("", className)}>
       <CardHeader>
@@ -81,7 +74,9 @@ const CreateChatMessage: FC<CreateChatMessageProps> = ({
               key={party.id}
               value={party.id}
               onClick={() => {
-                createChat(party.id);
+                createChatMutation.mutate({
+                  party: party.id,
+                });
               }}
             >
               {party.title}

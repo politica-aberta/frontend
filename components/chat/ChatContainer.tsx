@@ -1,24 +1,23 @@
 "use client";
 import { cn } from "@/lib/utils";
 import { FC, useEffect, useState } from "react";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import MessageCard from "./MessageCard";
-import ReferenceCard from "./ReferenceCard";
-import { Message, Reference } from "@/lib/types";
-import { useSearchParams } from "next/navigation";
-import { Textarea } from "../ui/textarea";
-import { Button } from "../ui/button";
-import { ChevronRightCircle } from "lucide-react";
 import axios from "axios";
-import MessageSkeleton from "./MessageSkeleton";
-
+import { useSearchParams } from "next/navigation";
 import { useMutation } from "@tanstack/react-query";
 
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { Button } from "@/components/ui/button";
+import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/components/ui/use-toast";
-import {
-  ChatPayload,
-  ChatResponseValidator,
-} from "@/lib/validators";
+import { ChevronRightCircle } from "lucide-react";
+
+import MessageCard from "@/components/chat/MessageCard";
+import MessageSkeleton from "@/components/chat/MessageSkeleton";
+import ReferenceCard from "@/components/chat/ReferenceCard";
+
+import { Message, Reference } from "@/lib/types";
+import { ChatPayload, ChatResponseValidator } from "@/lib/validators";
+
 
 interface ChatContainerProps extends React.HTMLAttributes<HTMLDivElement> {
   chatHistory: Message[];
@@ -33,19 +32,20 @@ const ChatContainer: FC<ChatContainerProps> = ({ className, ...props }) => {
 
   useEffect(() => {
     setParty(searchParams.get("party"));
+    setReferences(null);
   }, [searchParams]);
 
   const [input, setInput] = useState<string>("");
-  const [reference, setReference] = useState<Reference | null>(null);
+  const [references, setReferences] = useState<Reference[] | null>(null);
 
   const sendMessageMutation = useMutation({
     mutationFn: (payload: ChatPayload) => axios.post("/api/chat", payload),
-    onSuccess: (data, variables, context) => {
+    onSuccess: (data) => {
       const res = ChatResponseValidator.parse(data.data);
       props.chatHistory.push(res);
       setInput("");
     },
-    onError(error, variables, context) {
+    onError(error) {
       props.chatHistory.pop();
       // FIXME send toast
       toast({
@@ -59,16 +59,16 @@ const ChatContainer: FC<ChatContainerProps> = ({ className, ...props }) => {
 
   return (
     <div className={cn("w-screen flex flex-row", className)}>
-      <div className="flex flex-col justify-between py-16 mx-auto basis-1/2 max-w-3xl">
+      <div className="flex flex-col justify-between py-8 mx-auto basis-1/2 max-w-3xl">
         <ScrollArea className="mb-16 h-full">
-          <ul className="flex flex-col gap-4 mx-4">
+          <ul className="flex flex-col gap-4 ">
             {props.chatHistory.map((msg, index) => (
               <MessageCard
                 key={index}
+                sender={msg.role}
                 msg={msg.message}
                 references={msg.references}
-                sender={msg.role}
-                setReference={setReference}
+                setReferences={setReferences}
               />
             ))}
             {sendMessageMutation.isPending && <MessageSkeleton />}
@@ -81,11 +81,11 @@ const ChatContainer: FC<ChatContainerProps> = ({ className, ...props }) => {
             onKeyDown={(e) => {
               if (e.key === "Enter" && !e.shiftKey) {
                 e.preventDefault();
-                  props.chatHistory.push({
-                    role: "user",
-                    message: input,
-                    references: null,
-                  });
+                props.chatHistory.push({
+                  role: "user",
+                  message: input,
+                  references: null,
+                });
                 sendMessageMutation.mutate({
                   party: party!.toUpperCase(),
                   message: input,
@@ -115,10 +115,9 @@ const ChatContainer: FC<ChatContainerProps> = ({ className, ...props }) => {
           </Button>
         </div>
       </div>
-      <ReferenceCard
-        className=""
-        reference={reference}
-      />
+      {references?.map((ref, index) => (
+        <ReferenceCard key={ref.party} reference={ref} index={index} />
+      ))}
     </div>
   );
 };

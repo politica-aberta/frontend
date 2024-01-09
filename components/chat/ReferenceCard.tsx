@@ -39,13 +39,12 @@ import { parties } from "@/lib/constants";
 
 interface ReferencesCardProps extends React.HTMLAttributes<HTMLDivElement> {
   reference: Reference | null;
+  index: number;
 }
 
 export function ReferencesCard({ className, ...props }: ReferencesCardProps) {
   const [open, setOpen] = useState<boolean>(false);
-
-  // the following is always true
-  const party = parties.find((party) => party.id === props.reference?.party)!;
+  const party = parties.find((party) => party.id === props.reference?.party.toLowerCase())!;
   const referencePages = props.reference?.pages.sort((a, b) => a - b);
 
   const pageNavigationPluginInstance = pageNavigationPlugin({
@@ -61,7 +60,8 @@ export function ReferencesCard({ className, ...props }: ReferencesCardProps) {
       className={cn(
         "h-screen -mt-16 pt-16",
         "data-[state=open]:w-1/2",
-        className
+        className,
+        
       )}
     >
       <div className="h-full border-l">
@@ -73,7 +73,7 @@ export function ReferencesCard({ className, ...props }: ReferencesCardProps) {
             <TooltipProvider>
               <Tooltip>
                 <TooltipTrigger asChild>
-                {open ? <ChevronsRight /> : <ChevronsLeft />}
+                  {open ? <ChevronsRight /> : <ChevronsLeft />}
                 </TooltipTrigger>
                 <TooltipContent>
                   <p>Add to library</p>

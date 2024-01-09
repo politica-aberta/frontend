@@ -21,7 +21,7 @@ export const parties: Party[] = [
     subtitle: "Programa eleitoral para as legislativas de 2022",
   },
   {
-    id: "livre",
+    id: "l",
     path: "https://dzwdgfmvuevjqjutrpye.supabase.co/storage/v1/object/public/documents/livre-legislativas22.pdf",
     title: "Partido Livre",
     subtitle: "Programa eleitoral para as legislativas de 2022",

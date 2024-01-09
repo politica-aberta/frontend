@@ -31,7 +31,7 @@ interface FooterProps extends React.HTMLAttributes<HTMLDivElement> {}
 
 export default function Footer({ className, ...props }: FooterProps) {
   return (
-    <footer className={cn("max-w-5xl lg:mx-auto px-6", className)}>
+    <footer className={cn("max-w-5xl lg:mx-auto mx-6", className)}>
       <div className="py-8 grid grid-cols-3">
         {cols.map((col, index) => (
           <div key={index}>

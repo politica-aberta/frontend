@@ -9,7 +9,7 @@ export const CreateConversationValidator = z.object({
 
 export const CreateConversationResponseValidator = z.object({
   id: z.string().uuid(),
-  entity: z.string(),
+  party: z.string(),
 });
 
 export const LoginUserValidator = z.object({
@@ -45,7 +45,7 @@ export const ReferenceValidator = z.object({
 export const ChatResponseValidator = z.object({
   role: z.string(),
   message: z.string(),
-  references: ReferenceValidator, // FIXME change this to an array in multi party configs
+  references: z.array(ReferenceValidator), // FIXME change this to an array in multi party configs
 });
 
 
