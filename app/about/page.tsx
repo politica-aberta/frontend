@@ -5,12 +5,12 @@ import SMPDark from "@/images/SMPTechnologies-dark-2400x1800.png";
 
 import Footer from "@/components/Footer";
 import Link from "next/link";
+import { Landmark } from "lucide-react";
 
 const contributors: string[] = [
   "xtwigs",
   "jmartinhoj",
   "diogosoares22",
-  "go-liv",
 ];
 
 export default async function About() {
@@ -28,20 +28,9 @@ export default async function About() {
           }}
         ></div>
       </div>
-      <div className="h-screen grid content-center lg:-mt-16 mx-auto max-w-7xl">
+      <div className="h-screen grid content-center lg:-mt-16 mx-auto max-w-5xl">
         <div id="team" className="h-full grid lg:grid-cols-2 lg:-ml-20 ">
-          <Image
-            className="block dark:hidden "
-            src={SMPWhite}
-            alt="SMP Technologies"
-            placeholder="blur"
-          />
-          <Image
-            className="hidden dark:block"
-            src={SMPDark}
-            alt="SMP Technologies"
-            placeholder="blur"
-          />
+          <Landmark className="place-self-center lg:mt-24" size={192} />
 
           <div className="mx-8 text-lg">
             <h1 className="pt-24 pb-16 component-title ">Made with love</h1>
@@ -58,24 +47,9 @@ export default async function About() {
         </div>
       </div>
 
-      <div className="max-w-5xl lg:mx-auto mx-8">
+      <div className="max-w-5xl lg:mx-auto mx-6">
         <div className="">
-          <h2>Interessado em contribuir?</h2>
-          <p>
-            O código está disponível publicamente no{" "}
-            <Link
-              className="font-bold"
-              target="_blank"
-              href={"https://github.com/politica-aberta"}
-            >
-              Github
-            </Link>
-            . Ainda, esperamos manter uma comunidade politicamente interessada e
-            ativa no Discord.
-          </p>
-        </div>
-        <div className="pt-24">
-          <h2>Profundos agradecimentos a quem contribuiu para o projeto.</h2>
+          <h2>Profundos agradecimentos a quem nos ajudou com o projeto.</h2>
           <ul className="pt-2">
             {contributors.map((col, index) => (
               <div key={index}>
@@ -84,11 +58,27 @@ export default async function About() {
                   rel="noopener noreferrer"
                   target="_blank"
                 >
-                  <h2 className="text-md font-bold">{col}</h2>
+                  <h2 className="text-md font-bold hover:text-muted-foreground">
+                    {col}
+                  </h2>
                 </Link>
               </div>
             ))}
           </ul>
+        </div>
+        <div className="pt-24 ">
+          <h2 className="component-title">Interessado em contribuir?</h2>
+          <p className="pt-8">
+            O código-fonte está disponível publicamente no{" "}
+            <Link
+              className="font-bold hover:text-muted-foreground"
+              target="_blank"
+              href={"https://github.com/politica-aberta"}
+            >
+              Github
+            </Link>
+            .
+          </p>
         </div>
       </div>
 
