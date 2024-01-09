@@ -7,9 +7,17 @@ import {
   CardDescription,
   CardHeader,
 } from "@/components/ui/card";
-import { ArrowRightCircle, LogIn } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "../ui/button";
+
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+
 
 interface MessageCardProps extends React.HTMLAttributes<HTMLDivElement> {
   msg: string;
@@ -24,7 +32,7 @@ const MessageCard: FC<MessageCardProps> = ({ className, ...props }) => {
 
   return (
     <Card className={cn("w-full flex flex-row ", className, color)}>
-      <div className="basis-5/6 flex-shrink-0">
+      <div className=" basis-11/12 flex-shrink-0">
         <CardHeader>
           <CardDescription>{sender}</CardDescription>
         </CardHeader>
@@ -41,7 +49,16 @@ const MessageCard: FC<MessageCardProps> = ({ className, ...props }) => {
             props.setReferences(props.references);
           }}
         >
-          <ArrowRightCircle className="mx-auto" size={32} />
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger>
+                <ArrowRight className="mx-auto" size={20} />
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>Ver Referências</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
         </Button>
       ) : null}
     </Card>
