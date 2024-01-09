@@ -18,7 +18,7 @@ export default async function Header() {
 
   return (
     <header className="absolute z-10 w-full flex justify-center border-b border-b-foreground/10 h-16">
-      <div className="hidden lg:flex max-w-5xl w-full justify-between items-center p-3 text-sm text-foreground">
+      <div className="hidden lg:flex max-w-5xl w-full justify-between items-center py-3 text-sm text-foreground">
         <div className="flex gap-2">
           <Link href="/" className={buttonVariants({ variant: "ghost" })}>
             <Smile size={28} />
