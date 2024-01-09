@@ -7,44 +7,43 @@ import {
   CardDescription,
   CardHeader,
 } from "@/components/ui/card";
-import { LogIn } from "lucide-react";
+import { ArrowRightCircle, LogIn } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { Toggle } from "../ui/toggle";
+import { Button } from "../ui/button";
 
 interface MessageCardProps extends React.HTMLAttributes<HTMLDivElement> {
   msg: string;
   sender: string;
-  references: Reference | null;
-  setReference: React.Dispatch<React.SetStateAction<Reference | null>>;
+  setReferences: React.Dispatch<React.SetStateAction<Reference[] | null>>;
+  references: Reference[] | null;
 }
 
 const MessageCard: FC<MessageCardProps> = ({ className, ...props }) => {
-  const referencePages = props.references?.pages.sort((a, b) => a - b);
   const color = props.sender === "user" ? "bg-muted" : "";
   const sender = props.sender === "user" ? "Utilizador" : "Assistente";
 
   return (
     <Card className={cn("w-full flex flex-row ", className, color)}>
-      <div className="basis-4/5">
+      <div className="basis-5/6 flex-shrink-0">
         <CardHeader>
           <CardDescription>{sender}</CardDescription>
         </CardHeader>
         <CardContent>
-          <p className="whitespace-pre-wrap">{props.msg}</p>
+          <p className="whitespace-pre-wrap w-full">{props.msg}</p>
         </CardContent>
       </div>
-      {props.references && (
-        <div className="basis-1/5 border-l">
-          <h2 className="component-header text-description">References</h2>
-          <div className="w-full flex flex-row justify-between p-6 pt-0 ">
-            <div>{referencePages?.join(" ")}</div>
 
-            <Toggle className="-mt-2"  onClick={() => {props.setReference(props.references)}}>
-              <LogIn />
-            </Toggle>
-          </div>
-        </div>
-      )}
+      {props.references && props.references.length > 0 ? (
+        <Button
+          className="w-full border-l rounded-l-none h-auto"
+          variant={"ghost"}
+          onClick={() => {
+            props.setReferences(props.references);
+          }}
+        >
+          <ArrowRightCircle className="mx-auto" size={32} />
+        </Button>
+      ) : null}
     </Card>
   );
 };

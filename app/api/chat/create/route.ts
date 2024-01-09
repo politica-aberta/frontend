@@ -29,20 +29,19 @@ export async function POST(request: NextRequest) {
     user_id: session.session!.user.id,
   };
 
-  const { data, error } = await supabase
+  const { data , error } = await supabase
     .from("conversation_data")
     .insert([newReq])
     .select("id, entity");
 
   if (data) {
-    const { id, entity } = CreateConversationResponseValidator.parse(data[0]);
+    const {id, entity} = data[0];
     return NextResponse.json(
       { id: id, party: entity.toLowerCase() },
       { status: 200 }
     );
-  } else if (error) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
   } else {
+    console.log(error);
     return NextResponse.json({ error: "Unknown error" }, { status: 500 });
   }
 }

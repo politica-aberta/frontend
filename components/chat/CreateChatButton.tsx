@@ -1,8 +1,11 @@
 "use client";
 import React, { FC } from "react";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { useRouter } from "next/navigation";
-import { CreateConversationPayload } from "@/lib/validators";
+import {
+  CreateConversationPayload,
+  CreateConversationResponseValidator,
+} from "@/lib/validators";
 
 import { parties } from "@/lib/constants";
 
@@ -23,6 +26,7 @@ import {
 } from "@/components/ui/popover";
 import { Check, ChevronsUpDown, Loader2, Plus } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
+import { useMutation } from "@tanstack/react-query";
 
 interface CreateChatButtonProps extends React.HTMLAttributes<HTMLDivElement> {}
 
@@ -33,41 +37,33 @@ const CreateChatButton: FC<CreateChatButtonProps> = ({
   const [open, setOpen] = React.useState<boolean>(false);
   const [openSearch, setOpenSearch] = React.useState<boolean>(false);
   const [value, setValue] = React.useState<string>("");
-  const [isLoading, setIsLoading] = React.useState<boolean>(false);
-  const { toast } = useToast();
   const router = useRouter();
+  const { toast } = useToast();
 
-  const createChat = async () => {
-    const payload: CreateConversationPayload = {
-      party: value,
-    };
-
-    setIsLoading(true);
-    // FIXME use react query for this
-
-    try {
-      const {
-        data: { id, party },
-      } = await axios.post("/api/chat/create", payload);
-      router.replace(`/chat?id=${id}&party=${party}`);
-    } catch (error: any) {
-      console.log(error);
-      if (error.response.status === 401) {
+  const createChatMutation = useMutation({
+    mutationFn: (payload: CreateConversationPayload) =>
+      axios.post("/api/chat/create", payload),
+    onSuccess: (data, variables, context) => {
+      const {id, party} = CreateConversationResponseValidator.parse(data.data);
+      router.push(`/chat?id=${id}&party=${party}`);
+      setOpen(false);
+    },
+    onError(error: AxiosError) {
+      if (error.response?.status === 401) {
         toast({
           title: "Houve um problema.",
           description: "Tens que fazer login primeiro.",
           variant: "destructive",
         });
-      } else if (error.response.status === 500) {
+      } else {
         toast({
           title: "Houve um problema.",
           description: "Não conseguimos criar a conversa.",
           variant: "destructive",
         });
       }
-    }
-    setIsLoading(false);
-  };
+    },
+  });
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -83,14 +79,14 @@ const CreateChatButton: FC<CreateChatButtonProps> = ({
         avoidCollisions={false}
       >
         <div className="component-header p-0">
-          <h1 className="text-title">Create Chat</h1>
+          <h1 className="text-title">Criar Conversa</h1>
           <h2 className="text-description">
-            Connect with your party through AI
+            Aproxima-te do teu partido
           </h2>
         </div>
         <div className="grid w-full items-center gap-4 pt-4  ">
           <div className="flex flex-col space-y-1.5">
-            <Label htmlFor="party">Party</Label>
+            <Label htmlFor="party">Partido</Label>
             <div className="">
               <Popover open={openSearch} onOpenChange={setOpenSearch}>
                 <PopoverTrigger asChild>
@@ -143,10 +139,14 @@ const CreateChatButton: FC<CreateChatButtonProps> = ({
           className="w-full"
           type="submit"
           onClick={() => {
-            createChat();
+            createChatMutation.mutate({party: value});
           }}
         >
-          {isLoading ? <Loader2 className="animate-spin" /> : "Create"}
+          {createChatMutation.isPending ? (
+            <Loader2 className="animate-spin" />
+          ) : (
+            "Create"
+          )}
         </Button>
       </PopoverContent>
     </Popover>
