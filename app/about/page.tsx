@@ -6,6 +6,13 @@ import SMPDark from "@/images/SMPTechnologies-dark-2400x1800.png";
 import Footer from "@/components/Footer";
 import Link from "next/link";
 
+const contributors: string[] = [
+  "xtwigs",
+  "jmartinhoj",
+  "diogosoares22",
+  "go-liv",
+];
+
 export default async function About() {
   return (
     <div className="relative isolate pt-16 ">
@@ -39,16 +46,9 @@ export default async function About() {
           <div className="mx-8 text-lg">
             <h1 className="pt-24 pb-16 component-title ">Made with love</h1>
             <p>
-              Este projeto foi criado pela equipa da{" "}
-              <Link
-                className=" underline hover:text-muted-foreground"
-                href="https://smptech.pt"
-              >
-                SMP Technologies
-              </Link>
-              , uma empresa de tecnologia baseada em Portugal. Nós
-              especializamo-nos em tecnologias AI e acreditamos no seu potencial
-              disruptivo, não só economicamente como socialmente.
+              Este projeto foi criado por um pequeno grupo de amigos e
+              developers. Nós formámo-nos em tecnologias AI e acreditamos no seu
+              potencial disruptivo, não só economicamente como socialmente.
             </p>
             <p className="pt-8">
               O nosso objetivo é aproximar a democracia portuguesa destas
@@ -57,6 +57,43 @@ export default async function About() {
           </div>
         </div>
       </div>
+
+      <div className="max-w-5xl lg:mx-auto mx-8">
+        <div className="">
+          <h2>Interessado em contribuir?</h2>
+          <p>
+            O código está disponível publicamente no{" "}
+            <Link
+              className="font-bold"
+              target="_blank"
+              href={"https://github.com/politica-aberta"}
+            >
+              Github
+            </Link>
+            . Ainda, esperamos manter uma comunidade politicamente interessada e
+            ativa no Discord.
+          </p>
+        </div>
+        <div className="pt-24">
+          <h2>Profundos agradecimentos a quem contribuiu para o projeto.</h2>
+          <ul className="pt-2">
+            {contributors.map((col, index) => (
+              <div key={index}>
+                <Link
+                  href={`https://github.com/${col}`}
+                  rel="noopener noreferrer"
+                  target="_blank"
+                >
+                  <h2 className="text-md font-bold">{col}</h2>
+                </Link>
+              </div>
+            ))}
+          </ul>
+        </div>
+      </div>
+
+      <Footer className="pt-24" />
+
       <div
         className="absolute inset-x-0 -z-10 transform-gpu overflow-hidden blur-3xl top-[calc(90%-30rem)]"
         aria-hidden="true"
@@ -69,7 +106,6 @@ export default async function About() {
           }}
         ></div>
       </div>
-      <Footer  className="pt-24 lg:pt-0" />
     </div>
   );
 }
