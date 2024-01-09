@@ -1,0 +1,22 @@
+version: "3.7"
+
+services:
+    nextjs:
+        build: ./
+        env_file: .env.local
+        restart: "always"
+        ports:
+            - "3000:3000"
+        environment:
+            - TZ=Europe/Lisbon
+            - NEXT_PUBLIC_SUPABASE_URL=${NEXT_PUBLIC_SUPABASE_URL}
+            - NEXT_PUBLIC_SUPABASE_ANON_KEY=${NEXT_PUBLIC_SUPABASE_ANON_KEY}
+            - NEXT_PUBLIC_BACKEND_URL=${NEXT_PUBLIC_BACKEND_URL}
+            - NEXT_PUBLIC_DEV_BACKEND_URL=${NEXT_PUBLIC_DEV_BACKEND_URL}
+            - NEXT_PUBLIC_FRONTEND_URL=${NEXT_PUBLIC_FRONTEND_URL}
+            - NEXT_PUBLIC_DEV_FRONTEND_URL=${NEXT_PUBLIC_DEV_FRONTEND_URL}
+        networks:
+            - political_net
+networks:
+  political_net:
+    external: true
