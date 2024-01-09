@@ -29,6 +29,18 @@ export default async function Chat({
 
   if (searchParamsChatId != undefined) {
     history.push(defaultMessage);
+    // history.push({
+    //   role: "assistant",
+    //   message: "Olá! Como posso ser útil?",
+    //   references: [
+    //     {
+    //       party: "chega",
+    //       document:
+    //         "https://dzwdgfmvuevjqjutrpye.supabase.co/storage/v1/object/public/documents/chega-legislativas22.pdf",
+    //       pages: [1, 2, 3],
+    //     },
+    //   ],
+    // });
     partyId = searchParamsPartyId;
   } else if (routeChatId != undefined) {
     // TODO saving chats logic still missing
@@ -51,3 +63,4 @@ export default async function Chat({
     </div>
   );
 }
+
