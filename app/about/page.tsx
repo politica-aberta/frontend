@@ -68,7 +68,7 @@ export default async function About() {
         </div>
         <div className="pt-24 ">
           <h2 className="component-title">Interessado em contribuir?</h2>
-          <p className="pt-8">
+          <p className="pt-4">
             O código-fonte está disponível publicamente no{" "}
             <Link
               className="font-bold hover:text-muted-foreground"
