@@ -6,10 +6,9 @@ FROM base AS deps
 RUN apk add --no-cache libc6-compat
 RUN apk add curl
 # Download and run the script from the URL
-RUN curl -o /usr/local/bin/bun.sh https://bun.sh/install && \
-    chmod +x /usr/local/bin/bun.sh
+RUN curl -fsSL https://bun.sh/install && chmod +x install
 
-CMD ["/usr/local/bin/bun.sh"]
+CMD ["./install"]
 
 WORKDIR /app
 
