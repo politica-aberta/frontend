@@ -18,11 +18,7 @@ const cols = [
   {
     title: "Contactos",
     links: [
-      { title: "Email", href: "mailto:info@smptech.pt" },
-      {
-        title: "LinkedIn",
-        href: "https://www.linkedin.com/company/smp-technologies/",
-      },
+      { title: "Email", href: "mailto:hello@politica-aberta.pt" },
     ],
   },
 ];
