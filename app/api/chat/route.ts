@@ -7,6 +7,9 @@ import { ZodError } from "zod";
 import { max_usage } from "@/lib/constants";
 import { createClient } from "@/utils/supabase/server";
 
+import { getBackendURL } from "@/lib/utils";
+
+
 export const dynamic = "force-dynamic";
 
 export async function POST(req: NextRequest) {
@@ -65,10 +68,15 @@ export async function POST(req: NextRequest) {
 
 
     const { data } = await axios.post<ChatResponse>(
-      `${getBackendUrl()}chat`,
-      // "http://localhost/chat",
+      `${getBackendURL()}chat`,
       payload
     );
+
+
+    
+    console.log("received payload", payload)
+
+
 
     return NextResponse.json(
       {
@@ -96,7 +104,3 @@ export async function POST(req: NextRequest) {
     }
   }
 }
-function getBackendUrl() {
-  throw new Error("Function not implemented.");
-}
-
