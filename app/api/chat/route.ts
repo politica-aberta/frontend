@@ -65,8 +65,8 @@ export async function POST(req: NextRequest) {
 
 
     const { data } = await axios.post<ChatResponse>(
-      // `${getBackendUrl()}chat`,
-      "http://localhost/chat",
+      `${getBackendUrl()}chat`,
+      // "http://localhost/chat",
       payload
     );
 
@@ -96,3 +96,7 @@ export async function POST(req: NextRequest) {
     }
   }
 }
+function getBackendUrl() {
+  throw new Error("Function not implemented.");
+}
+
