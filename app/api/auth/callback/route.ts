@@ -15,16 +15,19 @@ export async function GET(request: Request) {
   if (code) {
     const cookieStore = cookies();
     const supabase = createClient(cookieStore);
-    const { data: {user} } = await supabase.auth.exchangeCodeForSession(code);
+    const {
+      data: { user },
+    } = await supabase.auth.exchangeCodeForSession(code);
     const userId = user?.id;
     const name = user?.user_metadata?.name;
 
     const { data, error } = await supabase
-      .from("users")
-      .insert({ id: userId, name: name, usage: 0 });
+      .from("user_data")
+      .insert([{ id: userId, name: name, usage: 0 }])
+      .select();
 
     // FIXME for some reasone error is an empty object instead of null
-    if (JSON.stringify(error) !== "{}") {
+    if (error !== null) {
       return NextResponse.json({ error: error?.message }, { status: 500 });
     }
   }
