@@ -89,6 +89,7 @@ export async function POST(req: NextRequest) {
 
  
   } catch (error) {
+    console.log(error);
     if (error instanceof ZodError) {
       return NextResponse.json(
         {
