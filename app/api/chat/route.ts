@@ -77,10 +77,9 @@ export async function POST(req: NextRequest) {
     console.log("received payload", payload)
 
 
-
     return NextResponse.json(
       {
-        role: "Assistant",
+        role: "assistant",
         message: data.message,
         references: data.references,
       },
