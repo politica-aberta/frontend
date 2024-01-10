@@ -16,7 +16,18 @@ services:
             - NEXT_PUBLIC_FRONTEND_URL=${NEXT_PUBLIC_FRONTEND_URL}
             - NEXT_PUBLIC_DEV_FRONTEND_URL=${NEXT_PUBLIC_DEV_FRONTEND_URL}
         networks:
-            - political_net
+            - net
+    nginx:
+        image: nginx:alpine
+        volumes:
+            - ./nginx.conf:/etc/nginx/conf.d/default.conf
+        ports:
+            - "80:80"
+        depends_on:
+            - nextjs
+        networks:
+            - net
 networks:
-  political_net:
+  net:
+    name: network-name
     external: true
