@@ -17,30 +17,45 @@ import {
   FormLabel,
   FormMessage,
 } from "./ui/form";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { Loader2 } from "lucide-react";
 import { useToast } from "./ui/use-toast";
+import { useMutation } from "@tanstack/react-query";
 
 interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {}
 
 export function CreateUserForm({ className, ...props }: UserAuthFormProps) {
   const { toast } = useToast();
 
-  const [isLoading, setIsLoading] = React.useState<boolean>(false);
-
-  async function onSubmit(values: CreateUserPayload) {
-    try {
-      setIsLoading(true);
-      const data = await axios.post("/v1/auth/sign-up", values);
-
+  const createUserMutation = useMutation({
+    mutationFn: (payload: CreateUserPayload) =>
+      axios.post("/api/auth/sign-up", payload),
+    onSuccess: (data, variables, context) => {
+      console.log(data);
       toast({
         title: "Confirmação por email",
         description: "Verifica a tua conta seguindo o link que enviámos.",
       });
-    } catch (error) {
-    } finally {
-      setIsLoading(false);
+    },
+    onError(error: AxiosError) {
+      if (error.response?.status === 400) {
+        toast({
+          title: "Houve um problema.",
+          description: "Já tens um login ativo.",
+          variant: "destructive",
+        });
+      } else {
+        toast({
+          title: "Houve um problema.",
+          description: "Não te conseguimos registar.",
+          variant: "destructive",
+        });
+      }
     }
+  });
+
+  async function onSubmit(data: CreateUserPayload) {
+    createUserMutation.mutate(data);
   }
 
   const form = useForm<CreateUserPayload>({
@@ -97,7 +112,11 @@ export function CreateUserForm({ className, ...props }: UserAuthFormProps) {
             )}
           />
           <Button className="w-full" type="submit">
-            {isLoading ? <Loader2 className="animate-spin" /> : "Sign Up"}
+            {createUserMutation.isPending ? (
+              <Loader2 className="animate-spin" />
+            ) : (
+              "Sign Up"
+            )}
           </Button>
         </form>
       </Form>

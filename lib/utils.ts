@@ -12,3 +12,12 @@ export const getBackendURL = () => {
     return process.env.NEXT_PUBLIC_BACKEND_URL;
   }
 }
+
+
+export const getFrontendURL = () => {
+  if (process.env.NODE_ENV === "development") {
+    return process.env.NEXT_PUBLIC_DEV_FRONTEND_URL;
+  } else {
+    return process.env.NEXT_PUBLIC_FRONTEND_URL;
+  }
+}

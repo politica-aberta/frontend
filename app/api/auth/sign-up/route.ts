@@ -1,4 +1,5 @@
 
+import { getFrontendURL } from "@/lib/utils";
 import { CreateUserValidator } from "@/lib/validators";
 import { createClient } from "@/utils/supabase/server";
 
@@ -24,6 +25,7 @@ export async function POST(request: NextRequest) {
     }
 
   const { email, password, name } = CreateUserValidator.parse(body);
+
   const {data} = await supabase.auth.signUp({
     email,
     password,
@@ -31,7 +33,7 @@ export async function POST(request: NextRequest) {
       data: {
         name: name,
       },
-      emailRedirectTo: `/api/auth/callback`,
+      emailRedirectTo: `${getFrontendURL()}api/auth/callback`,
     },
   });
 
