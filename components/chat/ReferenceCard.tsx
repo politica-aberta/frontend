@@ -43,7 +43,7 @@ interface ReferencesCardProps extends React.HTMLAttributes<HTMLDivElement> {
 }
 
 export function ReferencesCard({ className, ...props }: ReferencesCardProps) {
-  const [open, setOpen] = useState<boolean>(false);
+  const [open, setOpen] = useState<boolean>(true);
   const party = parties.find((party) => party.id === props.reference?.party.toLowerCase())!;
   const referencePages = props.reference?.pages.sort((a, b) => a - b);
 

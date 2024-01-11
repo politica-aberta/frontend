@@ -8,7 +8,7 @@ import { max_usage } from "@/lib/constants";
 import { createClient } from "@/utils/supabase/server";
 
 import { getBackendURL } from "@/lib/utils";
-
+import { get } from "http";
 
 export const dynamic = "force-dynamic";
 
@@ -60,18 +60,21 @@ export async function POST(req: NextRequest) {
     //         document: "https://dzwdgfmvuevjqjutrpye.supabase.co/storage/v1/object/public/documents/chega-legislativas22.pdf",
     //         pages: [1,2,3]
     //       },
-        
+
     //     ],
     //   },
     //   { status: 200 }
     // );
-
 
     const { data } = await axios.post<ChatResponse>(
       `${getBackendURL()}chat`,
       payload
     );
 
+    await supabase
+      .from("user_data")
+      .update({ usage: prev_usage + 1 })
+      .eq("id", session!.user.id);
 
     return NextResponse.json(
       {
@@ -81,8 +84,6 @@ export async function POST(req: NextRequest) {
       },
       { status: 200 }
     );
-
- 
   } catch (error) {
     console.log(error);
     if (error instanceof ZodError) {
