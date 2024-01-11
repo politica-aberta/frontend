@@ -2,12 +2,12 @@ import Link from "next/link";
 import ThemeToggle from "./ThemeToggle";
 import { buttonVariants } from "./ui/button";
 import { Smile } from "lucide-react";
-import MobileNav from "./MobileHeader";
 import SignOutButton from "./SignOutButton";
 import { createClient } from "@/utils/supabase/server";
 import { cookies } from "next/headers";
 
 import { LoginUserForm } from "./LoginUserForm";
+import MobileNavbar from "./MobileNavbar";
 
 export default async function Header() {
   const supabase = createClient(cookies());
@@ -24,11 +24,11 @@ export default async function Header() {
             <Smile size={28} />
             <span className="pl-3 ">Início</span>
           </Link>
-          <Link href="/chat" className={buttonVariants({ variant: "ghost" })}>
-            Chat
-          </Link>
           <Link href="/about" className={buttonVariants({ variant: "ghost" })}>
             Equipa
+          </Link>
+          <Link href="/chat" className={buttonVariants({ variant: "ghost" })}>
+            Chat
           </Link>
         </div>
         <div className="flex flex-row gap-4">
@@ -47,12 +47,8 @@ export default async function Header() {
           <ThemeToggle />
         </div>
       </div>
-      <div className="flex lg:hidden w-full justify-between mx-8 p-3 ">
-        <Link href="/" className={buttonVariants({ variant: "ghost" })}>
-          <Smile />
-        </Link>
-        {/* <MobileNav session={session} /> */}
-      </div>
+
+      <MobileNavbar className="flex lg:hidden" session={session} />
     </header>
   );
 }

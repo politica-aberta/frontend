@@ -22,12 +22,32 @@ import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
 import { useRouter } from "next/navigation";
 import { useToast } from "@/components/ui/use-toast";
 import { PopoverClose } from "@radix-ui/react-popover";
+import { useMutation } from "@tanstack/react-query";
+import { set } from "zod";
 
 export function LoginUserForm() {
   const { toast } = useToast();
   const router = useRouter();
 
-  const [isLoading, setIsLoading] = React.useState<boolean>(false);
+
+  const loginMutation = useMutation({
+    mutationFn: (payload: LoginUserPayload) =>
+      axios.post("/api/auth/sign-in", payload),
+    onSuccess: (data, variables, context) => {
+      router.refresh(); // FIXME likely a better way to do this
+    },
+    onError(error) {
+      toast({
+        title: "Houve um problema.",
+        description: "Não conseguimos realizar o login.",
+        variant: "destructive",
+      });
+    },
+  });
+
+  async function onSubmit(values: LoginUserPayload) {
+    loginMutation.mutate(values);
+  }
 
   const form = useForm<LoginUserPayload>({
     resolver: zodResolver(LoginUserValidator),
@@ -36,22 +56,6 @@ export function LoginUserForm() {
       password: "",
     },
   });
-
-  async function onSubmit(values: LoginUserPayload) {
-    try {
-      setIsLoading(true);
-      const { data } = await axios.post("/api/auth/sign-in", values);
-      router.refresh();
-    } catch (error) {
-      toast({
-        title: "Houve um problema.",
-        description: "Não conseguimos fazer-te o login. Tenta outra vez.",
-        variant: "destructive",
-      });
-    } finally {
-      setIsLoading(false);
-    }
-  }
 
   return (
     <Popover>
@@ -89,7 +93,11 @@ export function LoginUserForm() {
               )}
             />
             <Button className="w-full" type="submit">
-              {isLoading ? <Loader2 className="animate-spin" /> : "Sign In"}
+              {loginMutation.isPending ? (
+                <Loader2 className="animate-spin" />
+              ) : (
+                "Sign In"
+              )}
             </Button>
 
             <div className="text-sm text-muted-foreground text-center mt-4">

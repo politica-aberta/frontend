@@ -6,6 +6,7 @@ import { Loader2 } from "lucide-react";
 import React from "react";
 import { useRouter } from "next/navigation";
 import { useToast } from "./ui/use-toast";
+import { useMutation } from "@tanstack/react-query";
 
 interface SignOutButtonProps extends React.HTMLAttributes<HTMLDivElement> {}
 
@@ -14,25 +15,27 @@ export function SignOutButton() {
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
   const router = useRouter();
 
-  async function handleSignOut() {
-    try {
-      setIsLoading(true);
-      const { data } = await axios.post("/api/auth/sign-out", {});
-      router.refresh();
-    } catch (error) {
+  const signOutMutation = useMutation({
+    mutationFn: () => axios.post("/api/auth/sign-out", {}),
+    onSuccess: (data) => {
+      router.refresh(); // FIXME likely a better way to do this
+    },
+    onError(error) {
       toast({
         title: "Houve um problema.",
-        description: "Não te conseguimos fazer logout. Tenta outra vez.",
+        description: "Não conseguimos realizar o logout.",
         variant: "destructive",
       });
-    } finally {
-      setIsLoading(false);
-    }
-  }
+    },
+  });
 
   return (
-    <Button onClick={handleSignOut} variant={"secondary"}>
-      {isLoading ? <Loader2 className="animate-spin" /> : "Logout"}
+    <Button onClick={() => signOutMutation.mutate()} variant={"secondary"}>
+      {signOutMutation.isPending ? (
+        <Loader2 className="animate-spin" />
+      ) : (
+        "Logout"
+      )}
     </Button>
   );
 }
