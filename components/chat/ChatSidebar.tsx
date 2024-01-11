@@ -22,7 +22,7 @@ const ChatSidebar: FC<ChatSidebarProps> = ({ className, ...props }) => {
 
   return (
     <Collapsible
-      className={cn("hidden lg:grid h-full border-r px-10 pt-6 py-16", className)}
+      className={cn("hidden lg:block h-full border-r px-10 pt-6 py-16", className)}
       open={openMenu}
       onOpenChange={setOpenMenu}
     >
