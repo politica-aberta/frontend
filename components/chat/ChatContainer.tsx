@@ -48,7 +48,7 @@ const ChatContainer: FC<ChatContainerProps> = ({ className, ...props }) => {
 
   const sendMessageMutation = useMutation({
     mutationFn: (payload: ChatPayload) => {
-      console.log(payload)
+      console.log(payload);
       setChatHistory(
         chatHistory.concat({
           role: "user",
@@ -83,11 +83,12 @@ const ChatContainer: FC<ChatContainerProps> = ({ className, ...props }) => {
     },
   });
 
+
   return (
     <div className={cn("w-screen flex flex-row", className)}>
       {/* {<ChatNotFoundDialog open={props.invalidParams} />} */}
       <div className="flex flex-col justify-between py-8 mx-auto basis-1/2 max-w-3xl">
-        <ScrollArea className="mb-16 h-full">
+        <ScrollArea className="mb-16 h-full pr-8">
           <ul className="flex flex-col gap-4 ">
             {chatHistory &&
               chatHistory.map((msg, index) => (
@@ -102,7 +103,7 @@ const ChatContainer: FC<ChatContainerProps> = ({ className, ...props }) => {
             {sendMessageMutation.isPending && <MessageSkeleton />}
           </ul>
         </ScrollArea>
-        <div className="relative">
+        <div className="relative mr-8">
           <Textarea
             value={input}
             onChange={(e) => setInput(e.target.value)}

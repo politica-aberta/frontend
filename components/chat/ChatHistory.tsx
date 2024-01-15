@@ -1,13 +1,13 @@
-import { cookies } from "next/headers";
-import { createClient } from "@/utils/supabase/server";
 import { FC } from "react";
 import { ScrollArea } from "../ui/scroll-area";
 import Link from "next/link";
 
+import { getSupabaseServerClient } from "@/lib/supabase_utils";
+
 interface ChatHistoryProps extends React.HTMLAttributes<HTMLDivElement> {}
 
 const ChatHistory: FC<ChatHistoryProps> = async ({ className, ...props }) => {
-  const supabase = createClient(cookies());
+  const supabase = getSupabaseServerClient();
 
   let { data, error } = await supabase
     .from("conversation_data")
@@ -31,7 +31,7 @@ const ChatHistory: FC<ChatHistoryProps> = async ({ className, ...props }) => {
     <div>
       <p className="text-description pl-2">Historico</p>
       <ul className="flex flex-col  ">
-        <ScrollArea className=" h-[60vh] mt-4 ">
+        <ScrollArea className=" h-[70vh] mt-4 ">
           <ul className="flex flex-col ">
             {data?.reverse().map((entry) => (
               <Link

@@ -3,14 +3,13 @@ import ThemeToggle from "./ThemeToggle";
 import { buttonVariants } from "./ui/button";
 import { Smile } from "lucide-react";
 import SignOutButton from "./SignOutButton";
-import { createClient } from "@/utils/supabase/server";
-import { cookies } from "next/headers";
 
 import { LoginUserForm } from "./LoginUserForm";
 import MobileNavbar from "./MobileNavbar";
+import { getSupabaseServerClient } from "@/lib/supabase_utils";
 
 export default async function Header() {
-  const supabase = createClient(cookies());
+  const supabase = getSupabaseServerClient();
 
   const {
     data: { session: session },
