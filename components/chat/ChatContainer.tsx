@@ -1,7 +1,7 @@
 "use client";
 import { cn } from "@/lib/utils";
 import { FC, useEffect, useState } from "react";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { useSearchParams } from "next/navigation";
 import { useMutation } from "@tanstack/react-query";
 
@@ -16,61 +16,89 @@ import MessageSkeleton from "@/components/chat/MessageSkeleton";
 import ReferenceCard from "@/components/chat/ReferenceCard";
 
 import { Message, Reference } from "@/lib/types";
-import { ChatPayload, ChatResponseValidator } from "@/lib/validators";
-
+import { ChatPayload, MessageValidator } from "@/lib/validators";
 
 interface ChatContainerProps extends React.HTMLAttributes<HTMLDivElement> {
   chatHistory: Message[];
-  partyId: string | null;
+  chatId: string;
+  partyId: string;
 }
 
 const ChatContainer: FC<ChatContainerProps> = ({ className, ...props }) => {
   const searchParams = useSearchParams();
-
-  const [party, setParty] = useState<string | null>(props.partyId);
   const { toast } = useToast();
+  const [input, setInput] = useState<string>("");
+  const [reference, setReference] = useState<Reference | null>(null);
+  const [chatHistory, setChatHistory] = useState<Message[]>([]);
 
   useEffect(() => {
-    setParty(searchParams.get("party"));
-    setReferences(null);
+    setChatHistory(
+      !props.chatHistory || props.chatHistory.length === 0
+        ? [
+            {
+              role: "assistant",
+              message: "Olá! Como posso ser útil?",
+              references: null,
+            },
+          ]
+        : props.chatHistory
+    );
+    setReference(null);
   }, [searchParams]);
 
-  const [input, setInput] = useState<string>("");
-  const [references, setReferences] = useState<Reference[] | null>(null);
-
   const sendMessageMutation = useMutation({
-    mutationFn: (payload: ChatPayload) => axios.post("/api/chat", payload),
+    mutationFn: (payload: ChatPayload) => {
+      console.log(payload)
+      setChatHistory(
+        chatHistory.concat({
+          role: "user",
+          message: input,
+          references: null,
+        })
+      );
+      return axios.post("/api/chat", payload);
+    },
     onSuccess: (data) => {
-      const res = ChatResponseValidator.parse(data.data);
-      props.chatHistory.push(res);
+      const res = MessageValidator.parse(data.data);
+      setChatHistory(chatHistory.concat(res));
       setInput("");
     },
-    onError(error) {
-      props.chatHistory.pop();
-      // FIXME send toast
-      toast({
-        title: "Houve um problema.",
-        description: "Não conseguimos enviar a mensagem.",
-        variant: "destructive",
-      });
-      console.log(error);
+    onError(error: AxiosError) {
+      if (error.response?.status === 403) {
+        toast({
+          title: "Houve um problema.",
+          description:
+            "Excedeste o limite de utilizacão. Contacta os admins por favor.",
+          variant: "destructive",
+        });
+      } else {
+        toast({
+          title: "Houve um problema.",
+          description: "Não conseguimos enviar a mensagem.",
+          variant: "destructive",
+        });
+      }
+      // FIXME remove last message from the chat
+      setChatHistory(chatHistory.slice(0, -1));
     },
   });
 
   return (
     <div className={cn("w-screen flex flex-row", className)}>
+      {/* {<ChatNotFoundDialog open={props.invalidParams} />} */}
       <div className="flex flex-col justify-between py-8 mx-auto basis-1/2 max-w-3xl">
         <ScrollArea className="mb-16 h-full">
           <ul className="flex flex-col gap-4 ">
-            {props.chatHistory.map((msg, index) => (
-              <MessageCard
-                key={index}
-                sender={msg.role}
-                msg={msg.message}
-                references={msg.references}
-                setReferences={setReferences}
-              />
-            ))}
+            {chatHistory &&
+              chatHistory.map((msg, index) => (
+                <MessageCard
+                  key={index}
+                  sender={msg.role}
+                  msg={msg.message}
+                  references={msg.references}
+                  setReference={setReference}
+                />
+              ))}
             {sendMessageMutation.isPending && <MessageSkeleton />}
           </ul>
         </ScrollArea>
@@ -81,15 +109,21 @@ const ChatContainer: FC<ChatContainerProps> = ({ className, ...props }) => {
             onKeyDown={(e) => {
               if (e.key === "Enter" && !e.shiftKey) {
                 e.preventDefault();
-                props.chatHistory.push({
-                  role: "user",
-                  message: input,
-                  references: null,
-                });
+
+                if (!props.partyId) {
+                  toast({
+                    title: "Houve um problema.",
+                    description: "Não conseguimos enviar a mensagem.",
+                    variant: "destructive",
+                  });
+                  return;
+                }
+
                 sendMessageMutation.mutate({
-                  party: party!.toUpperCase(),
+                  id: props.chatId,
+                  party: props.partyId.toLowerCase(),
                   message: input,
-                  previous_messages: props.chatHistory,
+                  previous_messages: chatHistory,
                 });
               }
             }}
@@ -99,15 +133,21 @@ const ChatContainer: FC<ChatContainerProps> = ({ className, ...props }) => {
 
           <Button
             onClick={() => {
-              props.chatHistory.push({
-                role: "user",
-                message: input,
-                references: null,
-              });
+              if (!props.partyId) {
+                console.log();
+                toast({
+                  title: "Houve um problema.",
+                  description: "Não conseguimos enviar a mensagem.",
+                  variant: "destructive",
+                });
+                return;
+              }
+
               sendMessageMutation.mutate({
-                party: party!.toUpperCase(),
+                id: props.chatId,
+                party: props.partyId.toLowerCase(),
                 message: input,
-                previous_messages: props.chatHistory,
+                previous_messages: chatHistory,
               });
             }}
           >
@@ -115,9 +155,7 @@ const ChatContainer: FC<ChatContainerProps> = ({ className, ...props }) => {
           </Button>
         </div>
       </div>
-      {references?.map((ref, index) => (
-        <ReferenceCard key={ref.party} reference={ref} index={index} />
-      ))}
+      {reference && <ReferenceCard reference={reference} />}
     </div>
   );
 };

@@ -1,14 +1,13 @@
 import axios from "axios";
 import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
-import { ChatResponse, ChatValidator } from "@/lib/validators";
+import { MessageResponse, ChatValidator } from "@/lib/validators";
 import { ZodError } from "zod";
 
 import { max_usage } from "@/lib/constants";
 import { createClient } from "@/utils/supabase/server";
 
 import { getBackendURL } from "@/lib/utils";
-import { get } from "http";
 
 export const dynamic = "force-dynamic";
 
@@ -37,11 +36,12 @@ export async function POST(req: NextRequest) {
     }
 
     const body = await req.json();
-    const { party, message, previous_messages } = ChatValidator.parse(body);
+
+    const { id, party, message, previous_messages } = ChatValidator.parse(body);
 
     const payload = {
       access_token: session!.access_token,
-      party: party,
+      party: party.toUpperCase(), // backend expects upper case
       message: message,
       previous_messages: previous_messages,
       infer_chat_mode: true,
@@ -66,7 +66,7 @@ export async function POST(req: NextRequest) {
     //   { status: 200 }
     // );
 
-    const { data } = await axios.post<ChatResponse>(
+    const { data } = await axios.post<MessageResponse>(
       `${getBackendURL()}chat`,
       payload
     );
@@ -76,14 +76,28 @@ export async function POST(req: NextRequest) {
       .update({ usage: prev_usage + 1 })
       .eq("id", session!.user.id);
 
-    return NextResponse.json(
-      {
-        role: "assistant",
-        message: data.message,
-        references: data.references,
-      },
-      { status: 200 }
-    );
+    const question: MessageResponse = {
+      role: "user",
+      message: message,
+      references: null,
+    };
+
+    const reply: MessageResponse = {
+      role: "assistant",
+      message: data.message,
+      references: data.references,
+    };
+
+    await supabase
+      .from("conversation_data")
+      .update({
+        conversation_history: previous_messages.concat([question, reply]),
+      })
+      .eq("id", id)
+      .select("conversation_history");
+
+
+    return NextResponse.json(reply, { status: 200 });
   } catch (error) {
     console.log(error);
     if (error instanceof ZodError) {

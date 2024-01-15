@@ -1,17 +1,8 @@
-import Image from "next/image";
-
-import SMPWhite from "@/images/SMPTechnologies-white-2400x1800.png";
-import SMPDark from "@/images/SMPTechnologies-dark-2400x1800.png";
-
 import Footer from "@/components/Footer";
+import { Smile } from "lucide-react";
 import Link from "next/link";
-import { Landmark } from "lucide-react";
 
-const contributors: string[] = [
-  "xtwigs",
-  "jmartinhoj",
-  "diogosoares22",
-];
+const contributors: string[] = ["xtwigs", "jmartinhoj", "diogosoares22"];
 
 export default async function About() {
   return (
@@ -30,9 +21,9 @@ export default async function About() {
       </div>
       <div className="h-screen grid content-center lg:-mt-16 mx-auto max-w-5xl">
         <div id="team" className="h-full grid lg:grid-cols-2 lg:-ml-20 ">
-          <Landmark className="place-self-center lg:mt-24" size={192} />
+          <Smile className="place-self-center lg:mt-24" size={192} />
 
-          <div className="mx-8 text-lg">
+          <div className="mx-6 text-lg">
             <h1 className="pt-24 pb-16 component-title ">Made with love</h1>
             <p>
               Este projeto foi criado por um pequeno grupo de amigos e

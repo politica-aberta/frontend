@@ -29,6 +29,7 @@ export async function POST(request: NextRequest) {
     user_id: session.session!.user.id,
   };
 
+
   const { data , error } = await supabase
     .from("conversation_data")
     .insert([newReq])

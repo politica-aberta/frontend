@@ -18,12 +18,11 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 
-
 interface MessageCardProps extends React.HTMLAttributes<HTMLDivElement> {
   msg: string;
   sender: string;
-  setReferences: React.Dispatch<React.SetStateAction<Reference[] | null>>;
   references: Reference[] | null;
+  setReference: React.Dispatch<React.SetStateAction<Reference | null>>;
 }
 
 const MessageCard: FC<MessageCardProps> = ({ className, ...props }) => {
@@ -31,7 +30,7 @@ const MessageCard: FC<MessageCardProps> = ({ className, ...props }) => {
   const sender = props.sender === "user" ? "Utilizador" : "Assistente";
 
   return (
-    <Card className={cn("w-full flex flex-row ", className, color)}>
+    <Card className={cn("w-full flex flex-row  mr-4", className, color)}>
       <div className=" basis-11/12 flex-shrink-0">
         <CardHeader>
           <CardDescription>{sender}</CardDescription>
@@ -46,7 +45,7 @@ const MessageCard: FC<MessageCardProps> = ({ className, ...props }) => {
           className="w-full border-l rounded-l-none h-auto"
           variant={"ghost"}
           onClick={() => {
-            props.setReferences(props.references);
+            props.setReference(props.references?.at(0) ?? null);
           }}
         >
           <TooltipProvider>
@@ -60,7 +59,9 @@ const MessageCard: FC<MessageCardProps> = ({ className, ...props }) => {
             </Tooltip>
           </TooltipProvider>
         </Button>
-      ) : null}
+      ) : (
+        <></>
+      )}
     </Card>
   );
 };

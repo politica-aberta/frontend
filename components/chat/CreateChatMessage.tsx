@@ -34,10 +34,13 @@ const CreateChatMessage: FC<CreateChatMessageProps> = ({
   const router = useRouter();
 
   const createChatMutation = useMutation({
-    mutationFn: (payload: CreateConversationPayload) => axios.post<CreateConversationResponse>("/api/chat/create", payload),
-    onSuccess: (data , variables, context) => {
-      const {id, party} = CreateConversationResponseValidator.parse(data.data);
-      router.replace(`/chat?id=${id}&party=${party}`)
+    mutationFn: (payload: CreateConversationPayload) =>
+      axios.post<CreateConversationResponse>("/api/chat/create", payload),
+    onSuccess: (data, variables, context) => {
+      const { id, party } = CreateConversationResponseValidator.parse(
+        data.data
+      );
+      router.replace(`/chat?id=${id}&party=${party}`);
     },
     onError(error: AxiosError) {
       if (error.response?.status === 401) {

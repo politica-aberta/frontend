@@ -31,7 +31,6 @@ export function CreateUserForm({ className, ...props }: UserAuthFormProps) {
     mutationFn: (payload: CreateUserPayload) =>
       axios.post("/api/auth/sign-up", payload),
     onSuccess: (data, variables, context) => {
-      console.log(data);
       toast({
         title: "Confirmação por email",
         description: "Verifica a tua conta seguindo o link que enviámos.",

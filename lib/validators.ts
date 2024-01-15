@@ -23,30 +23,26 @@ export const CreateUserValidator = z.object({
   name: z.string().min(2),
 });
 
-
-export const MessageValidator = z.object({
-  role: z.string(),
-  message: z.string(),
-});
-
-
-export const ChatValidator = z.object({
-  party: z.string(),
-  message: z.string(),
-  previous_messages: z.array(MessageValidator),
-});
-
 export const ReferenceValidator = z.object({
   party: z.string(),
   document: z.string(),
   pages: z.array(z.number()),
 });
 
-export const ChatResponseValidator = z.object({
+export const MessageValidator = z.object({
   role: z.string(),
   message: z.string(),
-  references: z.array(ReferenceValidator), // FIXME change this to an array in multi party configs
+  references: z.array(ReferenceValidator).nullable(),
 });
+
+
+export const ChatValidator = z.object({
+  id: z.string().uuid(),
+  party: z.enum(partyValues as [string, ...string[]]),
+  message: z.string(),
+  previous_messages: z.array(MessageValidator),
+});
+
 
 
 
@@ -66,4 +62,4 @@ export type MessagePayload = z.infer<typeof MessageValidator>;
 
 export type ChatPayload = z.infer<typeof ChatValidator>;
 
-export type ChatResponse = z.infer<typeof ChatResponseValidator>;
+export type MessageResponse = z.infer<typeof MessageValidator>;

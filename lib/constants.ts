@@ -91,4 +91,4 @@ export const faq: FAQQuestion[] = [
   },
 ];
 
-export const max_usage: number = 25;
+export const max_usage: number = 50;

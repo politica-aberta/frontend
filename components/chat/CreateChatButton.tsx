@@ -45,7 +45,7 @@ const CreateChatButton: FC<CreateChatButtonProps> = ({
       axios.post("/api/chat/create", payload),
     onSuccess: (data, variables, context) => {
       const {id, party} = CreateConversationResponseValidator.parse(data.data);
-      router.push(`/chat?id=${id}&party=${party}`);
+      router.replace(`/chat?id=${id}&party=${party}`);
       setOpen(false);
     },
     onError(error: AxiosError) {

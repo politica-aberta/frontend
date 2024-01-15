@@ -39,7 +39,6 @@ import { parties } from "@/lib/constants";
 
 interface ReferencesCardProps extends React.HTMLAttributes<HTMLDivElement> {
   reference: Reference | null;
-  index: number;
 }
 
 export function ReferencesCard({ className, ...props }: ReferencesCardProps) {
