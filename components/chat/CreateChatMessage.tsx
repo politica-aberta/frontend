@@ -60,7 +60,12 @@ const CreateChatMessage: FC<CreateChatMessageProps> = ({
     },
   });
   return (
-    <div className={cn("", className)}>
+    <div
+      className={cn(
+        "flex flex-col space-y-16 mt-16 mx-6 lg:mx-auto lg:max-w-3xl ",
+        className
+      )}
+    >
       <Card>
         <CardHeader>
           <CardDescription>Assistente</CardDescription>
@@ -90,28 +95,31 @@ const CreateChatMessage: FC<CreateChatMessageProps> = ({
           </ToggleGroup>
         </CardContent>
       </Card>
-      <Card className="mt-8">
-        <CardHeader>
-          <CardDescription>Assistente</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <p>
-            Também dispomos de uma opção para comparar partidos. Podes
-            utilizá-la seguindo o botão abaixo.
-          </p>
-          <Button
-            className="mt-6"
-            variant={"outline"}
-            onClick={() => {
-              createChatMutation.mutate({
-                party: "multi",
-              });
-            }}
-          >
-            Comparação
-          </Button>
-        </CardContent>
-      </Card>
+      {/* #FIXME wrapper div because this page has parent h-screen and I wanted padding below on mobile */}
+      <div className="pb-16">
+        <Card className="">
+          <CardHeader>
+            <CardDescription>Assistente</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <p>
+              Também disponho de uma opção para comparar partidos. Podes
+              utilizá-la seguindo o botão abaixo.
+            </p>
+            <Button
+              className="mt-6"
+              variant={"outline"}
+              onClick={() => {
+                createChatMutation.mutate({
+                  party: "multi",
+                });
+              }}
+            >
+              Comparação
+            </Button>
+          </CardContent>
+        </Card>
+      </div>
     </div>
   );
 };
