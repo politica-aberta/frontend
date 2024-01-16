@@ -91,11 +91,12 @@ const ChatContainer: FC<ChatContainerProps> = ({ className, ...props }) => {
 
   return (
     <div className={cn("w-screen flex flex-row ", className)}>
-      {/* {<ChatNotFoundDialog open={props.invalidParams} />} */}
-
       <div className="flex flex-col  justify-between py-8 md:mx-auto mx-5 w-full md:basis-1/2 md:max-w-3xl">
         <ScrollArea className="mb-16 h-full lg:pr-8 w-full">
-          <ChatSidebarMobile   conversationHistory={props.conversationHistory} className="lg:hidden mb-4" />
+          <ChatSidebarMobile
+            conversationHistory={props.conversationHistory}
+            className="lg:hidden mb-4"
+          />
           <ul className="flex flex-col gap-4 w-full">
             {chatHistory &&
               chatHistory.map((msg, index) => (

@@ -29,12 +29,19 @@ import { Label } from "@radix-ui/react-label";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { parties } from "@/lib/constants";
 import {
-  Command,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-} from "../ui/command";
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible";
+
 import { Toggle } from "../ui/toggle";
 
 interface ChatSidebarMobileProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -45,8 +52,6 @@ const ChatSidebarMobile: FC<ChatSidebarMobileProps> = ({
   className,
   ...props
 }) => {
-  const [open, setOpen] = React.useState<boolean>(false);
-  const [openSearch, setOpenSearch] = React.useState<boolean>(false);
   const [pressed, setPressed] = React.useState<boolean>(false);
   const [value, setValue] = React.useState<string>("");
   const router = useRouter();
@@ -77,6 +82,7 @@ const ChatSidebarMobile: FC<ChatSidebarMobileProps> = ({
       }
     },
   });
+
   return (
     <Sheet>
       {/* #FIXME ideally this would be <CreateChatButton/> */}
@@ -91,95 +97,87 @@ const ChatSidebarMobile: FC<ChatSidebarMobileProps> = ({
         <span>Novo Chat</span>
       </SheetTrigger>
 
-      <SheetContent side="left">
-        <SheetHeader className="pt-8">
-          <SheetTitle>
-            Criar Conversa
-            <SheetDescription className="">
-              Aproxima-te do teu partido
-            </SheetDescription>
-          </SheetTitle>
-        </SheetHeader>
+      <SheetContent
+        side="left"
+        className="h-screen flex flex-col justify-between"
+      >
+        <div>
+          <SheetHeader className="pt-8">
+            <SheetTitle>
+              Criar Conversa
+              <SheetDescription className="">
+                Aproxima-te do teu partido
+              </SheetDescription>
+            </SheetTitle>
+          </SheetHeader>
 
-        <div className=" w-full items-center gap-4 pt-4  ">
-          <div className="flex flex-col space-y-3">
-            <Label htmlFor="party">Partido</Label>
-            <div className="">
-              <Popover open={openSearch} onOpenChange={setOpenSearch}>
-                <PopoverTrigger asChild>
-                  <Button
-                    variant="outline"
-                    role="combobox"
-                    aria-expanded={openSearch}
-                    className="w-full justify-between"
-                  >
-                    {value
-                      ? parties.find((party) => party.id === value)?.title
-                      : "Escolhe o teu partido..."}
-                    <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-                  </Button>
-                </PopoverTrigger>
-                <PopoverContent className="w-full p-0">
-                  <Command>
-                    <CommandInput placeholder="Escolhe o teu partido..." />
-                    <CommandEmpty>No party found.</CommandEmpty>
-                    <CommandGroup>
-                      {parties.map((party, index) => (
-                        <CommandItem
-                          key={index}
-                          value={party.id}
-                          onSelect={(currentValue) => {
-                            setValue(
-                              currentValue === value ? "" : currentValue
-                            );
-                            setOpenSearch(false);
-                            setPressed(false);
-                          }}
-                        >
-                          <Check
-                            className={cn(
-                              "mr-2 h-4 w-4",
-                              value === party.id ? "opacity-100" : "opacity-0"
-                            )}
-                          />
-                          {party.title}
-                        </CommandItem>
-                      ))}
-                    </CommandGroup>
-                  </Command>
-                </PopoverContent>
-              </Popover>
+          <div className=" w-full items-center gap-4 pt-4  ">
+            <div className="flex flex-col space-y-3">
+              <Label htmlFor="party">Partido</Label>
+
+              <Select
+                value={value}
+                onValueChange={(value) => {
+                  setValue(value);
+                  setPressed(false);
+                }}
+              >
+                <SelectTrigger className="w-full">
+                  <SelectValue placeholder="Escolhe o teu partido" />
+                </SelectTrigger>
+                <SelectContent>
+                  {parties.map((party) => (
+                    <SelectItem key={party.id} value={party.id}>
+                      {party.title}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+
+              <Toggle
+                pressed={pressed}
+                onPressedChange={setPressed}
+                className="w-full"
+                variant="outline"
+                onClick={() => {
+                  setValue("multi");
+                }}
+              >
+                Comparação
+              </Toggle>
             </div>
-            <Toggle
-              pressed={pressed}
-              className="w-full"
-              variant="outline"
-              onClick={() => {
-                setPressed(!pressed);
-                setValue("multi");
-              }}
-            >
-              Comparação
-            </Toggle>
-
-            <Button
-              disabled={value === ""}
-              className="w-full"
-              type="submit"
-              onClick={() => {
-                createChatMutation.mutate({ party: value });
-              }}
-            >
-              {createChatMutation.isPending ? (
-                <Loader2 className="animate-spin" />
-              ) : (
-                "Continuar"
-              )}
-            </Button>
           </div>
         </div>
 
-        <div className="pt-16">{props.conversationHistory}</div>
+        <div />
+
+        <div>
+          <Collapsible>
+            <CollapsibleTrigger
+              className={buttonVariants({ variant: "outline" })}
+            >
+              Conversas Passadas
+            </CollapsibleTrigger>
+            <CollapsibleContent className="pt-2">
+              {props.conversationHistory}
+            </CollapsibleContent>
+          </Collapsible>
+
+          <Button
+            disabled={value === ""}
+            className="w-full mt-8"
+            type="submit"
+            onClick={() => {
+              createChatMutation.mutate({ party: value });
+            }}
+          >
+            {createChatMutation.isPending ? (
+              <Loader2 className="animate-spin" />
+            ) : (
+              "Continuar"
+            )}
+          </Button>
+        </div>
       </SheetContent>
     </Sheet>
   );
