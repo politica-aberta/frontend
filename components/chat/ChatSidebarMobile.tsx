@@ -165,7 +165,7 @@ const ChatSidebarMobile: FC<ChatSidebarMobileProps> = ({
 
           <Button
             disabled={value === ""}
-            className="w-full mt-8"
+            className="w-full mt-8 mb-32"
             type="submit"
             onClick={() => {
               createChatMutation.mutate({ party: value });
