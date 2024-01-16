@@ -19,8 +19,10 @@ export default async function Chat({
       {
         // whenever no chat is selected, show the create chat message
         searchParams.id === undefined || searchParams.party === undefined ? (
-          
-          <CreateChatMessage className="" />
+          <CreateChatMessage
+            className=""
+            conversationHistory={<ConversationHistory />}
+          />
         ) : (
           <ChatContainer
             chatId={searchParams.id as string}
@@ -28,7 +30,6 @@ export default async function Chat({
             chatHistory={[]}
             conversationHistory={<ConversationHistory />}
           />
-          
         )
       }
     </div>
