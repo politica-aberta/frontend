@@ -17,10 +17,9 @@ import ReferenceCard from "@/components/chat/ReferenceCard";
 
 import { Message, Reference } from "@/lib/types";
 import { ChatPayload, MessageValidator } from "@/lib/validators";
+
+import RevampedMessageCard from "./MessageCard";
 import ReferenceModal from "./ReferenceModal";
-import Modal from "react-modal";
-import RevampedMessageCard from "./RevampedMessageCard";
-import RevampedMessageModal from "./RevampedMessageModal";
 
 interface ChatContainerProps extends React.HTMLAttributes<HTMLDivElement> {
   chatHistory: Message[];
@@ -97,7 +96,7 @@ const ChatContainer: FC<ChatContainerProps> = ({ className, ...props }) => {
           <ul className="flex flex-col gap-4 w-full">
             {chatHistory &&
               chatHistory.map((msg, index) => (
-                <RevampedMessageCard
+                <MessageCard
                   key={index}
                   sender={msg.role}
                   msg={msg.message}
@@ -166,7 +165,7 @@ const ChatContainer: FC<ChatContainerProps> = ({ className, ...props }) => {
         <>
           <ReferenceCard className="hidden md:block" reference={reference} />
           <div className="lg:hidden">
-            <RevampedMessageModal
+            <ReferenceModal
               reference={reference}
               open={openMobileReference}
               setOpen={setOpenMobileReference}
