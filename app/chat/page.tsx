@@ -19,6 +19,7 @@ export default async function Chat({
       {
         // whenever no chat is selected, show the create chat message
         searchParams.id === undefined || searchParams.party === undefined ? (
+          
           <CreateChatMessage className="max-w-3xl h-fit mx-auto mt-16 items-center" />
         ) : (
           <ChatContainer

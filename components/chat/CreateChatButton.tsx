@@ -27,6 +27,7 @@ import {
 import { Check, ChevronsUpDown, Loader2, Plus } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
 import { useMutation } from "@tanstack/react-query";
+import { Toggle } from "../ui/toggle";
 
 interface CreateChatButtonProps extends React.HTMLAttributes<HTMLDivElement> {}
 
@@ -36,6 +37,7 @@ const CreateChatButton: FC<CreateChatButtonProps> = ({
 }) => {
   const [open, setOpen] = React.useState<boolean>(false);
   const [openSearch, setOpenSearch] = React.useState<boolean>(false);
+  const [pressed, setPressed] = React.useState<boolean>(false);
   const [value, setValue] = React.useState<string>("");
   const router = useRouter();
   const { toast } = useToast();
@@ -44,7 +46,9 @@ const CreateChatButton: FC<CreateChatButtonProps> = ({
     mutationFn: (payload: CreateConversationPayload) =>
       axios.post("/api/chat/create", payload),
     onSuccess: (data, variables, context) => {
-      const {id, party} = CreateConversationResponseValidator.parse(data.data);
+      const { id, party } = CreateConversationResponseValidator.parse(
+        data.data
+      );
       router.replace(`/chat?id=${id}&party=${party}`);
       setOpen(false);
     },
@@ -80,9 +84,7 @@ const CreateChatButton: FC<CreateChatButtonProps> = ({
       >
         <div className="component-header p-0">
           <h1 className="text-title">Criar Conversa</h1>
-          <h2 className="text-description">
-            Aproxima-te do teu partido
-          </h2>
+          <h2 className="text-description">Aproxima-te do teu partido</h2>
         </div>
         <div className="grid w-full items-center gap-4 pt-4  ">
           <div className="flex flex-col space-y-1.5">
@@ -98,13 +100,13 @@ const CreateChatButton: FC<CreateChatButtonProps> = ({
                   >
                     {value
                       ? parties.find((party) => party.id === value)?.title
-                      : "Choose your party..."}
+                      : "Escolhe o teu partido..."}
                     <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                   </Button>
                 </PopoverTrigger>
                 <PopoverContent className="w-full p-0">
                   <Command>
-                    <CommandInput placeholder="Choose your party..." />
+                    <CommandInput placeholder="Escolhe o teu partido..." />
                     <CommandEmpty>No party found.</CommandEmpty>
                     <CommandGroup>
                       {parties.map((party, index) => (
@@ -116,6 +118,7 @@ const CreateChatButton: FC<CreateChatButtonProps> = ({
                               currentValue === value ? "" : currentValue
                             );
                             setOpenSearch(false);
+                            setPressed(false);
                           }}
                         >
                           <Check
@@ -134,18 +137,30 @@ const CreateChatButton: FC<CreateChatButtonProps> = ({
             </div>
           </div>
         </div>
+        <Toggle
+          pressed={pressed}
+          className="w-full"
+          variant="outline"
+          onClick={() => {
+            setPressed(!pressed);
+            setValue("multi");
+          }}
+        >
+          Comparação
+        </Toggle>
+
         <Button
           disabled={value === ""}
           className="w-full"
           type="submit"
           onClick={() => {
-            createChatMutation.mutate({party: value});
+            createChatMutation.mutate({ party: value });
           }}
         >
           {createChatMutation.isPending ? (
             <Loader2 className="animate-spin" />
           ) : (
-            "Create"
+            "Continuar"
           )}
         </Button>
       </PopoverContent>

@@ -2,14 +2,12 @@ import FAQ from "@/components/FAQ";
 import Features from "@/components/Features";
 import Footer from "@/components/Footer";
 import { buttonVariants } from "@/components/ui/button";
-import { createClient } from "@/utils/supabase/server";
-
+import { getSupabaseServerClient } from "@/lib/supabase_utils";
 import { ArrowRight } from "lucide-react";
-import { cookies } from "next/headers";
 import Link from "next/link";
 
 export default async function Index() {
-  const supabase = createClient(cookies());
+  const supabase = getSupabaseServerClient();
 
   const {
     data: { session: session },
@@ -35,8 +33,7 @@ export default async function Index() {
             Política Aberta
           </h1>
           <p className="mt-6 text-lg leading-8">
-            Onde te aproximas daqueles que são os valores democráticos do nosso
-            país.
+            Onde te aproximas dos valores democráticos do nosso país.
           </p>
           <div className="mt-10 flex items-center justify-center gap-x-6">
             <Link

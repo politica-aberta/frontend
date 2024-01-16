@@ -1,7 +1,7 @@
-import { createClient } from "@/utils/supabase/server";
 import { NextResponse } from "next/server";
-import { cookies } from "next/headers";
 import { getFrontendURL } from "@/lib/utils";
+
+import { getSupabaseRouteClient } from "@/lib/supabase_utils";
 
 export const dynamic = "force-dynamic";
 
@@ -13,8 +13,7 @@ export async function GET(request: Request) {
   const code = requestUrl.searchParams.get("code");
 
   if (code) {
-    const cookieStore = cookies();
-    const supabase = createClient(cookieStore);
+    const supabase = getSupabaseRouteClient();
     const {
       data: { user },
     } = await supabase.auth.exchangeCodeForSession(code);

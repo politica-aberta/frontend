@@ -1,16 +1,15 @@
 
+import { getSupabaseRouteClient } from "@/lib/supabase_utils";
 import { getFrontendURL } from "@/lib/utils";
 import { CreateUserValidator } from "@/lib/validators";
-import { createClient } from "@/utils/supabase/server";
 
-import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
 
 export const dynamic = "force-dynamic";
 
 export async function POST(request: NextRequest) {
 
-  const supabase = createClient(cookies());
+  const supabase = getSupabaseRouteClient();
   const body = await request.json();
 
   const { data: session } = await supabase.auth.getSession();

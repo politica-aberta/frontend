@@ -7,16 +7,17 @@ import {
   CardDescription,
   CardHeader,
 } from "@/components/ui/card";
-import { ArrowBigUpIcon, ArrowRight } from "lucide-react";
+import { ArrowRight, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "../ui/button";
 
 import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+
+import { parties } from "@/lib/constants";
 
 interface MessageCardProps extends React.HTMLAttributes<HTMLDivElement> {
   msg: string;
@@ -30,66 +31,43 @@ const MessageCard: FC<MessageCardProps> = ({ className, ...props }) => {
   const sender = props.sender === "user" ? "Utilizador" : "Assistente";
 
   return (
-    <Card className={cn("w-full flex flex-row  mr-4", className, color)}>
+    <Card className={cn("w-full flex flex-row ", className, color)}>
       <div className=" basis-11/12 flex-shrink-0">
         <CardHeader>
-          <div className="flex p-0 m-0">
-          <CardDescription className="mr-2">{sender}</CardDescription>
-          {props.references && props.references.length > 0 ? (
-            <Button
-              className=" flex border-l border-2 md:hidden"
-              variant={"ghost"}
-              onClick={() => {
-                props.setReference(props.references?.at(0) ?? null);
-              }}
-            >
-              <TooltipProvider>
-                <Tooltip>
-                  <TooltipTrigger>
-                    <div className="flex flex-row">
-
-                    <span className="text-xs m-0 mr-1">Ver fonte </span>
-                    <ArrowBigUpIcon className="mx-auto" size={20} />
-                    </div>
-                    
-                  </TooltipTrigger>
-                  <TooltipContent>
-                    <p>Ver Referências</p>
-                  </TooltipContent>
-                </Tooltip>
-              </TooltipProvider>
-            </Button>
-          ) : (
-            <></>
-          )}
-          </div>
-          
+          <CardDescription>{sender}</CardDescription>
         </CardHeader>
-        
         <CardContent>
           <p className="whitespace-pre-wrap w-full">{props.msg}</p>
         </CardContent>
       </div>
 
       {props.references && props.references.length > 0 ? (
-        <Button
-          className="w-full border-l rounded-l-none h-auto hidden md:block"
-          variant={"ghost"}
-          onClick={() => {
-            props.setReference(props.references?.at(0) ?? null);
-          }}
-        >
-          <TooltipProvider>
-            <Tooltip>
-              <TooltipTrigger>
-                <ArrowRight className="mx-auto" size={20} />
-              </TooltipTrigger>
-              <TooltipContent>
-                <p>Ver Referências</p>
-              </TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
-        </Button>
+        <Popover>
+          <PopoverTrigger className="grow border-l hover:bg-muted">
+            {/* #FIXME use state and add X icon 
+            <ArrowRight className="mx-auto data-[state=open]:hidden" /> */}
+            <ArrowRight className="mx-auto " />
+          </PopoverTrigger>
+          <PopoverContent side="right" sideOffset={20} className=" w-fit ">
+            <h2 className="pr-8 font-semibold ">Documentos utilizados</h2>
+            <ul className="pt-2 flex flex-col space-y-2">
+              {props.references.map((reference, index) => (
+                <Button
+                  key={index}
+                  className=""
+                  variant={"secondary"}
+                  onClick={() => {
+                    props.setReference(reference);
+                  }}
+                >
+                  {`${reference.party} - ${parties.find(
+                    (party) => party.id === reference.party.toLowerCase()
+                  )?.subtitle}`}
+                </Button>
+              ))}
+            </ul>
+          </PopoverContent>
+        </Popover>
       ) : (
         <></>
       )}

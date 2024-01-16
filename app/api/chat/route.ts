@@ -1,18 +1,17 @@
 import axios from "axios";
-import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
 import { MessageResponse, ChatValidator } from "@/lib/validators";
 import { ZodError } from "zod";
 
 import { max_usage } from "@/lib/constants";
-import { createClient } from "@/utils/supabase/server";
 
 import { getBackendURL } from "@/lib/utils";
+import { getSupabaseRouteClient } from "@/lib/supabase_utils";
 
 export const dynamic = "force-dynamic";
 
 export async function POST(req: NextRequest) {
-  const supabase = createClient(cookies());
+  const supabase = getSupabaseRouteClient();
   const {
     data: { session: session },
   } = await supabase.auth.getSession();
@@ -39,13 +38,39 @@ export async function POST(req: NextRequest) {
 
     const { id, party, message, previous_messages } = ChatValidator.parse(body);
 
-    const payload = {
-      access_token: session!.access_token,
-      party: party.toUpperCase(), // backend expects upper case
-      message: message,
-      previous_messages: previous_messages,
-      infer_chat_mode: true,
-    };
+    let res;
+    if (party === "multi") {
+      const payload = {
+        access_token: session!.access_token,
+        // party: party.toUpperCase(), // backend expects upper case
+        message: message,
+        previous_messages: [],
+        infer_chat_mode: true,
+      };
+
+
+
+      const { data } = await axios.post<MessageResponse>(
+        `${getBackendURL()}multi-chat`,
+        payload
+      );
+      res = data;
+    } else {
+      const payload = {
+        access_token: session!.access_token,
+        party: party.toUpperCase(), // backend expects upper case
+        message: message,
+        previous_messages: previous_messages,
+        infer_chat_mode: true,
+      };
+
+      const { data } = await axios.post<MessageResponse>(
+        `${getBackendURL()}chat`,
+        payload
+      );
+
+      res = data;
+    }
 
     // // sleep for 2 seconds
     // await new Promise((resolve) => setTimeout(resolve, 2000));
@@ -66,11 +91,6 @@ export async function POST(req: NextRequest) {
     //   { status: 200 }
     // );
 
-    const { data } = await axios.post<MessageResponse>(
-      `${getBackendURL()}chat`,
-      payload
-    );
-
     await supabase
       .from("user_data")
       .update({ usage: prev_usage + 1 })
@@ -84,8 +104,8 @@ export async function POST(req: NextRequest) {
 
     const reply: MessageResponse = {
       role: "assistant",
-      message: data.message,
-      references: data.references,
+      message: res.message,
+      references: res.references,
     };
 
     await supabase
@@ -95,7 +115,6 @@ export async function POST(req: NextRequest) {
       })
       .eq("id", id)
       .select("conversation_history");
-
 
     return NextResponse.json(reply, { status: 200 });
   } catch (error) {

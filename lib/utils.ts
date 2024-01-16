@@ -1,8 +1,8 @@
-import { type ClassValue, clsx } from "clsx"
-import { twMerge } from "tailwind-merge"
- 
+import { type ClassValue, clsx } from "clsx";
+import { twMerge } from "tailwind-merge";
+
 export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs))
+  return twMerge(clsx(inputs));
 }
 
 export const getBackendURL = () => {
@@ -11,8 +11,7 @@ export const getBackendURL = () => {
   } else {
     return process.env.NEXT_PUBLIC_BACKEND_URL;
   }
-}
-
+};
 
 export const getFrontendURL = () => {
   if (process.env.NODE_ENV === "development") {
@@ -20,4 +19,4 @@ export const getFrontendURL = () => {
   } else {
     return process.env.NEXT_PUBLIC_FRONTEND_URL;
   }
-}
+};
