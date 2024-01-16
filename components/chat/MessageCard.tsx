@@ -7,7 +7,7 @@ import {
   CardDescription,
   CardHeader,
 } from "@/components/ui/card";
-import { ArrowRight } from "lucide-react";
+import { ArrowBigUpIcon, ArrowRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "../ui/button";
 
@@ -33,8 +33,39 @@ const MessageCard: FC<MessageCardProps> = ({ className, ...props }) => {
     <Card className={cn("w-full flex flex-row  mr-4", className, color)}>
       <div className=" basis-11/12 flex-shrink-0">
         <CardHeader>
-          <CardDescription>{sender}</CardDescription>
+          <div className="flex p-0 m-0">
+          <CardDescription className="mr-2">{sender}</CardDescription>
+          {props.references && props.references.length > 0 ? (
+            <Button
+              className=" flex border-l border-2 md:hidden"
+              variant={"ghost"}
+              onClick={() => {
+                props.setReference(props.references?.at(0) ?? null);
+              }}
+            >
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger>
+                    <div className="flex flex-row">
+
+                    <span className="text-xs m-0 mr-1">Ver fonte </span>
+                    <ArrowBigUpIcon className="mx-auto" size={20} />
+                    </div>
+                    
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>Ver Referências</p>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+            </Button>
+          ) : (
+            <></>
+          )}
+          </div>
+          
         </CardHeader>
+        
         <CardContent>
           <p className="whitespace-pre-wrap w-full">{props.msg}</p>
         </CardContent>
@@ -42,7 +73,7 @@ const MessageCard: FC<MessageCardProps> = ({ className, ...props }) => {
 
       {props.references && props.references.length > 0 ? (
         <Button
-          className="w-full border-l rounded-l-none h-auto"
+          className="w-full border-l rounded-l-none h-auto hidden md:block"
           variant={"ghost"}
           onClick={() => {
             props.setReference(props.references?.at(0) ?? null);

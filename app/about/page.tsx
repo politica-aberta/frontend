@@ -27,12 +27,12 @@ export default async function About() {
             <h1 className="pt-24 pb-16 component-title ">Made with love</h1>
             <p>
               Este projeto foi criado por um pequeno grupo de amigos e
-              developers. Nós formámo-nos em tecnologias AI e acreditamos no seu
-              potencial disruptivo, não só economicamente como socialmente.
+              developers. Formados em tecnologias AI, acreditamos no seu
+              potencial disruptivo, não só economica como socialmente.
             </p>
             <p className="pt-8">
-              O nosso objetivo é aproximar a democracia portuguesa destas
-              tecnologias e ajudar o cidadão comum ao voto informado.
+              O nosso objetivo é aproximar a democracia portuguesa das
+              pessoas, recorrendo a estas tecnologias.
             </p>
           </div>
         </div>

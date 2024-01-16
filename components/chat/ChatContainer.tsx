@@ -155,7 +155,8 @@ const ChatContainer: FC<ChatContainerProps> = ({ className, ...props }) => {
           </Button>
         </div>
       </div>
-      {reference && <ReferenceCard reference={reference} />}
+      {reference && <ReferenceCard className="hidden md:block" reference={reference} />}
+      {reference && <ReferenceModal className="md:hidden" reference={reference} />}
     </div>
   );
 };
