@@ -53,6 +53,7 @@ export function ReferencesCard({ className, ...props }: ReferencesCardProps) {
   const { ZoomIn, ZoomOut } = zoomPluginInstance;
 
   return (
+    
     <Collapsible
       open={open}
       onOpenChange={setOpen}
