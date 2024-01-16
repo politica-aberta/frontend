@@ -17,6 +17,7 @@ import ReferenceCard from "@/components/chat/ReferenceCard";
 
 import { Message, Reference } from "@/lib/types";
 import { ChatPayload, MessageValidator } from "@/lib/validators";
+import ReferenceModal from "./ReferenceModal";
 
 interface ChatContainerProps extends React.HTMLAttributes<HTMLDivElement> {
   chatHistory: Message[];
