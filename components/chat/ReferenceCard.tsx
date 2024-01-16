@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { FC, useState } from "react";
 import Link from "next/link";
 
 import { Viewer } from "@react-pdf-viewer/core";
@@ -41,9 +41,11 @@ interface ReferencesCardProps extends React.HTMLAttributes<HTMLDivElement> {
   reference: Reference | null;
 }
 
-export function ReferencesCard({ className, ...props }: ReferencesCardProps) {
+const ReferencesCard: FC<ReferencesCardProps> = ({ className, ...props }) => {
   const [open, setOpen] = useState<boolean>(true);
-  const party = parties.find((party) => party.id === props.reference?.party.toLowerCase())!;
+  const party = parties.find(
+    (party) => party.id === props.reference?.party.toLowerCase()
+  )!;
   const referencePages = props.reference?.pages.sort((a, b) => a - b);
 
   const pageNavigationPluginInstance = pageNavigationPlugin({
@@ -59,8 +61,7 @@ export function ReferencesCard({ className, ...props }: ReferencesCardProps) {
       className={cn(
         "h-screen -mt-16 pt-16",
         "data-[state=open]:w-1/2",
-        className,
-        
+        className
       )}
     >
       <div className="h-full border-l">
@@ -144,6 +145,6 @@ export function ReferencesCard({ className, ...props }: ReferencesCardProps) {
       </div>
     </Collapsible>
   );
-}
+};
 
 export default ReferencesCard;

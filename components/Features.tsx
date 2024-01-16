@@ -11,7 +11,7 @@ export default function Feature({ className, ...props }: FeatureProps) {
       icon: <Search />,
       title: "Pesquisa semântica.",
       description:
-        "Faz perguntas naturalmente que o nosso assistente vai procurar as respostas nos documentos oficiais dos partidos.",
+        "Coloca as tuas dúvidas de forma natural e o assistente procura as respostas nos documentos oficiais dos partidos.",
     },
     {
       icon: <BookOpen />,

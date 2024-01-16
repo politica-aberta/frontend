@@ -1,6 +1,6 @@
 "use client";
 import { cn } from "@/lib/utils";
-import { FC, useEffect, useState } from "react";
+import { FC, SetStateAction, useEffect, useState } from "react";
 import axios, { AxiosError } from "axios";
 import { useSearchParams } from "next/navigation";
 import { useMutation } from "@tanstack/react-query";
@@ -18,6 +18,9 @@ import ReferenceCard from "@/components/chat/ReferenceCard";
 import { Message, Reference } from "@/lib/types";
 import { ChatPayload, MessageValidator } from "@/lib/validators";
 
+import RevampedMessageCard from "./MessageCard";
+import ReferenceModal from "./ReferenceModal";
+
 interface ChatContainerProps extends React.HTMLAttributes<HTMLDivElement> {
   chatHistory: Message[];
   chatId: string;
@@ -29,6 +32,8 @@ const ChatContainer: FC<ChatContainerProps> = ({ className, ...props }) => {
   const { toast } = useToast();
   const [input, setInput] = useState<string>("");
   const [reference, setReference] = useState<Reference | null>(null);
+  const [openMobileReference, setOpenMobileReference] =
+    useState<boolean>(false);
   const [chatHistory, setChatHistory] = useState<Message[]>([]);
 
   useEffect(() => {
@@ -83,13 +88,12 @@ const ChatContainer: FC<ChatContainerProps> = ({ className, ...props }) => {
     },
   });
 
-
   return (
-    <div className={cn("w-screen flex flex-row", className)}>
+    <div className={cn("w-screen flex flex-row ", className)}>
       {/* {<ChatNotFoundDialog open={props.invalidParams} />} */}
-      <div className="flex flex-col justify-between py-8 mx-auto basis-1/2 max-w-3xl">
-        <ScrollArea className="mb-16 h-full pr-8">
-          <ul className="flex flex-col gap-4 ">
+      <div className="flex  flex-col justify-between py-8 md:mx-auto mx-5 w-full md:basis-1/2 md:max-w-3xl">
+        <ScrollArea className="mb-16 h-full lg:pr-8 w-full">
+          <ul className="flex flex-col gap-4 w-full">
             {chatHistory &&
               chatHistory.map((msg, index) => (
                 <MessageCard
@@ -98,12 +102,13 @@ const ChatContainer: FC<ChatContainerProps> = ({ className, ...props }) => {
                   msg={msg.message}
                   references={msg.references}
                   setReference={setReference}
+                  setOpenMobileReference={setOpenMobileReference}
                 />
               ))}
             {sendMessageMutation.isPending && <MessageSkeleton />}
           </ul>
         </ScrollArea>
-        <div className="relative mr-8">
+        <div className="relative lg:mr-8">
           <Textarea
             value={input}
             onChange={(e) => setInput(e.target.value)}
@@ -128,7 +133,7 @@ const ChatContainer: FC<ChatContainerProps> = ({ className, ...props }) => {
                 });
               }
             }}
-            placeholder="Type your message here."
+            placeholder="Escreve aqui a tua mensagem."
             className="absolute bottom-0 p-4 pr-16"
           />
 
@@ -156,7 +161,20 @@ const ChatContainer: FC<ChatContainerProps> = ({ className, ...props }) => {
           </Button>
         </div>
       </div>
-      {reference && <ReferenceCard reference={reference} />}
+      {reference && (
+        <>
+          <ReferenceCard className="hidden md:block" reference={reference} />
+          <div className="lg:hidden">
+            <ReferenceModal
+              reference={reference}
+              open={openMobileReference}
+              setOpen={setOpenMobileReference}
+            />
+          </div>
+        </>
+      )}
+
+      {/* <Modal contentLabel={reference?.party} ariaHideApp={true} isOpen={!!reference} onRequestClose={() => setReference(null)} ><ReferenceModal reference={reference}/></Modal> */}
     </div>
   );
 };
