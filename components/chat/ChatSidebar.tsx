@@ -14,7 +14,7 @@ import { FC } from "react";
 import CreateChatButton from "./CreateChatButton";
 
 interface ChatSidebarProps extends React.HTMLAttributes<HTMLDivElement> {
-  chatHistory: React.ReactNode;
+  conversationHistory: React.ReactNode;
 }
 
 const ChatSidebar: FC<ChatSidebarProps> = ({ className, ...props }) => {
@@ -22,7 +22,10 @@ const ChatSidebar: FC<ChatSidebarProps> = ({ className, ...props }) => {
 
   return (
     <Collapsible
-      className={cn("hidden lg:block h-full border-r px-10 pt-6 py-16", className)}
+      className={cn(
+        "hidden lg:block h-full border-r px-10 pt-6 py-16",
+        className
+      )}
       open={openMenu}
       onOpenChange={setOpenMenu}
     >
@@ -38,7 +41,7 @@ const ChatSidebar: FC<ChatSidebarProps> = ({ className, ...props }) => {
         {openMenu && <CreateChatButton />}
       </div>
       <CollapsibleContent className="pt-8 space-y-4">
-        {props.chatHistory}
+        {props.conversationHistory}
       </CollapsibleContent>
     </Collapsible>
   );

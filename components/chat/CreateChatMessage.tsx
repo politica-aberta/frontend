@@ -24,8 +24,11 @@ import { useToast } from "@/components/ui/use-toast";
 import { useRouter } from "next/navigation";
 import { useMutation } from "@tanstack/react-query";
 import { Button } from "../ui/button";
+import ChatSidebarMobile from "./ChatSidebarMobile";
 
-interface CreateChatMessageProps extends React.HTMLAttributes<HTMLDivElement> {}
+interface CreateChatMessageProps extends React.HTMLAttributes<HTMLDivElement> {
+  conversationHistory: React.ReactNode;
+}
 
 const CreateChatMessage: FC<CreateChatMessageProps> = ({
   className,
@@ -60,8 +63,17 @@ const CreateChatMessage: FC<CreateChatMessageProps> = ({
     },
   });
   return (
-    <div className={cn("", className)}>
-      <Card>
+    <div
+      className={cn(
+        "flex flex-col mt-10 lg:mt-16 mx-6 lg:mx-auto lg:max-w-3xl ",
+        className
+      )}
+    >
+      <ChatSidebarMobile
+        conversationHistory={props.conversationHistory}
+        className="lg:hidden mb-4"
+      />
+      <Card className="">
         <CardHeader>
           <CardDescription>Assistente</CardDescription>
         </CardHeader>
@@ -90,28 +102,31 @@ const CreateChatMessage: FC<CreateChatMessageProps> = ({
           </ToggleGroup>
         </CardContent>
       </Card>
-      <Card className="mt-8">
-        <CardHeader>
-          <CardDescription>Assistente</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <p>
-            Também dispomos de uma opção para comparar partidos. Podes
-            utilizá-la seguindo o botão abaixo.
-          </p>
-          <Button
-            className="mt-6"
-            variant={"outline"}
-            onClick={() => {
-              createChatMutation.mutate({
-                party: "multi",
-              });
-            }}
-          >
-            Comparação
-          </Button>
-        </CardContent>
-      </Card>
+      {/* #FIXME wrapper div because this page has parent h-screen and I wanted padding below on mobile */}
+      <div className="pb-16 mt-16">
+        <Card className="">
+          <CardHeader>
+            <CardDescription>Assistente</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <p>
+              Também disponho de uma opção para comparar partidos. Podes
+              utilizá-la seguindo o botão abaixo.
+            </p>
+            <Button
+              className="mt-6"
+              variant={"outline"}
+              onClick={() => {
+                createChatMutation.mutate({
+                  party: "multi",
+                });
+              }}
+            >
+              Comparação
+            </Button>
+          </CardContent>
+        </Card>
+      </div>
     </div>
   );
 };

@@ -4,9 +4,12 @@ import Link from "next/link";
 
 import { getSupabaseServerClient } from "@/lib/supabase_utils";
 
-interface ChatHistoryProps extends React.HTMLAttributes<HTMLDivElement> {}
+interface ConversationHistoryProps extends React.HTMLAttributes<HTMLDivElement> {}
 
-const ChatHistory: FC<ChatHistoryProps> = async ({ className, ...props }) => {
+const ConversationHistory: FC<ConversationHistoryProps> = async ({
+  className,
+  ...props
+}) => {
   const supabase = getSupabaseServerClient();
 
   let { data, error } = await supabase
@@ -29,9 +32,9 @@ const ChatHistory: FC<ChatHistoryProps> = async ({ className, ...props }) => {
 
   return (
     <div>
-      <p className="text-description pl-2">Historico</p>
+      <p className="text-description pl-2">Histórico</p>
       <ul className="flex flex-col  ">
-        <ScrollArea className=" h-[70vh] mt-4 ">
+        <ScrollArea className="h-[40vh] lg:h-[70vh] mt-4 ">
           <ul className="flex flex-col ">
             {data?.reverse().map((entry) => (
               <Link
@@ -55,4 +58,4 @@ const ChatHistory: FC<ChatHistoryProps> = async ({ className, ...props }) => {
   );
 };
 
-export default ChatHistory;
+export default ConversationHistory;

@@ -1,7 +1,7 @@
 import ChatContainer from "@/components/chat/ChatContainer";
-import ChatHistory from "@/components/chat/ChatHistory";
 import ChatSidebar from "@/components/chat/ChatSidebar";
 import CreateChatMessage from "@/components/chat/CreateChatMessage";
+import ConversationHistory from "@/components/chat/ConversationHistory";
 
 export default async function Chat({
   params,
@@ -15,17 +15,20 @@ export default async function Chat({
 
   return (
     <div className="h-screen pt-16 flex flex-row ">
-      <ChatSidebar chatHistory={<ChatHistory />}></ChatSidebar>
+      <ChatSidebar conversationHistory={<ConversationHistory />}></ChatSidebar>
       {
         // whenever no chat is selected, show the create chat message
         searchParams.id === undefined || searchParams.party === undefined ? (
-          
-          <CreateChatMessage className="max-w-3xl h-fit mx-auto mt-16 items-center" />
+          <CreateChatMessage
+            className=""
+            conversationHistory={<ConversationHistory />}
+          />
         ) : (
           <ChatContainer
             chatId={searchParams.id as string}
             partyId={searchParams.party as string}
             chatHistory={[]}
+            conversationHistory={<ConversationHistory />}
           />
         )
       }
