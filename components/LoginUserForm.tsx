@@ -23,6 +23,7 @@ import { useRouter } from "next/navigation";
 import { useToast } from "@/components/ui/use-toast";
 import { PopoverClose } from "@radix-ui/react-popover";
 import { useMutation } from "@tanstack/react-query";
+import OAuthSignInButton from "./OAuthSignInButton";
 
 export function LoginUserForm() {
   const { toast } = useToast();
@@ -98,8 +99,13 @@ export function LoginUserForm() {
                 "Sign In"
               )}
             </Button>
+          </form>
+        </Form>
+        <div className="text-sm text-muted-foreground text-center mt-4">
+          <OAuthSignInButton provider="Google"/>
+        </div>
 
-            <div className="text-sm text-muted-foreground text-center mt-4">
+        <div className="text-sm text-muted-foreground text-center mt-4">
               Don't have an account?
               <PopoverClose
                 className="pl-1 underline text-foreground"
@@ -108,8 +114,6 @@ export function LoginUserForm() {
                 Sign-up.
               </PopoverClose>
             </div>
-          </form>
-        </Form>
       </PopoverContent>
     </Popover>
   );

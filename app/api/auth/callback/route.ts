@@ -11,22 +11,26 @@ export async function GET(request: Request) {
   // https://supabase.com/docs/guides/auth/auth-helpers/nextjs#managing-sign-in-with-code-exchange
   const requestUrl = new URL(request.url);
   const code = requestUrl.searchParams.get("code");
+  const header = request.headers;
 
   if (code) {
     const supabase = getSupabaseRouteClient();
+
     const {
       data: { user },
     } = await supabase.auth.exchangeCodeForSession(code);
+    
     const userId = user?.id;
     const name = user?.user_metadata?.name;
 
     const { data, error } = await supabase
       .from("user_data")
-      .insert([{ id: userId, name: name, usage: 0 }])
+      .upsert({ id: userId, name: name, usage: 0 }, { ignoreDuplicates: true })
       .select();
 
     // FIXME for some reasone error is an empty object instead of null
     if (error !== null) {
+      console.log(error);
       return NextResponse.json({ error: error?.message }, { status: 500 });
     }
   }
