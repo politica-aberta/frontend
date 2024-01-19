@@ -19,7 +19,7 @@ export async function GET(request: Request) {
     const {
       data: { user },
     } = await supabase.auth.exchangeCodeForSession(code);
-    
+
     const userId = user?.id;
     const name = user?.user_metadata?.name;
 
@@ -31,10 +31,10 @@ export async function GET(request: Request) {
     // FIXME for some reasone error is an empty object instead of null
     if (error !== null) {
       console.log(error);
-      return NextResponse.json({ error: error?.message }, { status: 500 });
+      // return NextResponse.json({ error: error?.message }, { status: 500 });
     }
   }
 
   // URL to redirect to after sign up process completes
-  return NextResponse.redirect(new URL(getFrontendURL()!), { status: 303 });
+  return NextResponse.redirect(getFrontendURL()!, { status: 303 });
 }
