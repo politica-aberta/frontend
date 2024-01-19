@@ -1,6 +1,9 @@
 import { cn } from "@/lib/utils";
 import { Smile } from "lucide-react";
 import Link from "next/link";
+import { Button } from "./ui/button";
+import { useTheme } from "next-themes";
+import { DonationsButton } from "./DonationsButton";
 
 const cols = [
   {
@@ -25,10 +28,11 @@ const cols = [
 
 interface FooterProps extends React.HTMLAttributes<HTMLDivElement> {}
 
+
 export default function Footer({ className, ...props }: FooterProps) {
   return (
     <footer className={cn("max-w-5xl lg:mx-auto mx-6", className)}>
-      <div className="py-8 grid grid-cols-3">
+      <div className="py-8 grid grid-cols-4">
         {cols.map((col, index) => (
           <div key={index}>
             <h2 className="text-md font-bold">{col.title}</h2>
@@ -45,6 +49,10 @@ export default function Footer({ className, ...props }: FooterProps) {
             </div>
           </div>
         ))}
+        <div className="flex flex-col">
+          <h2 className="text-md font-bold mb-3">Gostas do projeto?</h2>
+          <DonationsButton/>
+        </div>
       </div>
       <div className="bosder-t pt-16 pb-8">
         <div className="inline-flex gap-4">
