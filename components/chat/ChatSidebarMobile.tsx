@@ -125,7 +125,9 @@ const ChatSidebarMobile: FC<ChatSidebarMobileProps> = ({
                 <SelectTrigger className="w-full">
                   <SelectValue placeholder="Escolhe o teu partido" />
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent 
+                  ref={(ref) => ref?.addEventListener('touchend', (e) => e.preventDefault())}
+                  >
                   {parties.map((party) => (
                     <SelectItem key={party.id} value={party.id}>
                       {party.title}
@@ -145,6 +147,20 @@ const ChatSidebarMobile: FC<ChatSidebarMobileProps> = ({
               >
                 Comparação
               </Toggle>
+              <Button
+                disabled={value === ""}
+                className="w-full mt-8 mb-32"
+                type="submit"
+                onClick={() => {
+                  createChatMutation.mutate({ party: value });
+                }}
+              >
+                {createChatMutation.isPending ? (
+                  <Loader2 className="animate-spin" />
+                ) : (
+                  "Continuar"
+                )}
+              </Button>
             </div>
           </div>
         </div>
@@ -162,21 +178,6 @@ const ChatSidebarMobile: FC<ChatSidebarMobileProps> = ({
               {props.conversationHistory}
             </CollapsibleContent>
           </Collapsible>
-
-          <Button
-            disabled={value === ""}
-            className="w-full mt-8 mb-32"
-            type="submit"
-            onClick={() => {
-              createChatMutation.mutate({ party: value });
-            }}
-          >
-            {createChatMutation.isPending ? (
-              <Loader2 className="animate-spin" />
-            ) : (
-              "Continuar"
-            )}
-          </Button>
         </div>
       </SheetContent>
     </Sheet>
