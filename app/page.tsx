@@ -3,7 +3,7 @@ import Features from "@/components/Features";
 import Footer from "@/components/Footer";
 import { buttonVariants } from "@/components/ui/button";
 import { getSupabaseServerClient } from "@/lib/supabase_utils";
-import { ArrowRight } from "lucide-react";
+import { ArrowDown } from "lucide-react";
 import Link from "next/link";
 
 export default async function Index() {
@@ -47,7 +47,7 @@ export default async function Index() {
               href="#features"
             >
               Mais Informação
-              <ArrowRight className="pl-2 " />
+              <ArrowDown className="pl-2 " />
             </Link>
           </div>
         </div>

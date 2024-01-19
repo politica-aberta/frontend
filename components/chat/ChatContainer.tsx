@@ -35,14 +35,13 @@ const ChatContainer: FC<ChatContainerProps> = ({ className, ...props }) => {
   const [openMobileReference, setOpenMobileReference] =
     useState<boolean>(false);
   const [chatHistory, setChatHistory] = useState<Message[]>([]);
-
   useEffect(() => {
     setChatHistory(
       !props.chatHistory || props.chatHistory.length === 0
         ? [
             {
               role: "assistant",
-              message: "Olá! Como posso ser útil?",
+              message: props.partyId == "multi" ? "Olá! Estou aqui para te responder a dúvidas e questões sobre os programas dos partidos políticos portugueses.": `Olá! O que queres saber acerca das propostas do ${props.partyId.toUpperCase()}?`,
               references: null,
             },
           ]
@@ -53,7 +52,7 @@ const ChatContainer: FC<ChatContainerProps> = ({ className, ...props }) => {
 
   const sendMessageMutation = useMutation({
     mutationFn: (payload: ChatPayload) => {
-      console.log(payload);
+      const inp = input
       setChatHistory(
         chatHistory.concat({
           role: "user",
@@ -88,10 +87,31 @@ const ChatContainer: FC<ChatContainerProps> = ({ className, ...props }) => {
     },
   });
 
+
+  const submitMessage = () => {
+    if (!sendMessageMutation.isPending && input.length > 0) {    
+      if (!props.partyId) {
+        toast({
+          title: "Houve um problema.",
+          description: "Não conseguimos enviar a mensagem.",
+          variant: "destructive",
+        });
+        return;
+      }
+      sendMessageMutation.mutate({
+        id: props.chatId,
+        party: props.partyId.toLowerCase(),
+        message: input,
+        previous_messages: chatHistory,
+      });
+    }
+
+  }
+
   return (
     <div className={cn("w-screen flex flex-row ", className)}>
-      <div className="flex flex-col  justify-between py-8 md:mx-auto mx-5 w-full md:basis-1/2 md:max-w-3xl">
-        <ScrollArea className="mb-16 h-full lg:pr-8 w-full">
+      <div className="flex flex-col justify-between py-8 md:mx-auto mx-5 w-full md:basis-1/2 md:max-w-3xl">
+        <ScrollArea className="lg:pr-8 w-full mb-6 ">
           <ChatSidebarMobile
             conversationHistory={props.conversationHistory}
             className="lg:hidden mb-4"
@@ -108,60 +128,30 @@ const ChatContainer: FC<ChatContainerProps> = ({ className, ...props }) => {
                   setOpenMobileReference={setOpenMobileReference}
                 />
               ))}
-            {sendMessageMutation.isPending && <MessageSkeleton />}
+            <MessageSkeleton alertMessage={props.partyId == "multi" ? "As respostas no modo multi-partido podem demorar até 1 minuto a ser geradas. Ainda estou a pensar..." : null} />
           </ul>
         </ScrollArea>
-        <div className="relative lg:mr-8">
+        <div className="relative lg:mr-8 ">
           <Textarea
-            value={input}
+            value={sendMessageMutation.isPending? "": input}
             onChange={(e) => setInput(e.target.value)}
+            disabled={sendMessageMutation.isPending}
             onKeyDown={(e) => {
               if (e.key === "Enter" && !e.shiftKey) {
                 e.preventDefault();
-
-                if (!props.partyId) {
-                  toast({
-                    title: "Houve um problema.",
-                    description: "Não conseguimos enviar a mensagem.",
-                    variant: "destructive",
-                  });
-                  return;
-                }
-
-                sendMessageMutation.mutate({
-                  id: props.chatId,
-                  party: props.partyId.toLowerCase(),
-                  message: input,
-                  previous_messages: chatHistory,
-                });
+                submitMessage()
               }
             }}
             placeholder="Escreve aqui a tua mensagem."
-            className="absolute bottom-0 p-4 pr-16"
+            className=" p-4 pr-16"
           />
 
-          <Button
+          <ChevronRightCircle
+            className={`absolute bottom-8 right-8 bg-background text-primary-foreground hover:bg-background ${sendMessageMutation.isPending || input.length <= 0 ? "" : "hover:text-primary cursor-pointer"}`}
             onClick={() => {
-              if (!props.partyId) {
-                console.log();
-                toast({
-                  title: "Houve um problema.",
-                  description: "Não conseguimos enviar a mensagem.",
-                  variant: "destructive",
-                });
-                return;
-              }
-
-              sendMessageMutation.mutate({
-                id: props.chatId,
-                party: props.partyId.toLowerCase(),
-                message: input,
-                previous_messages: chatHistory,
-              });
+              submitMessage()
             }}
-          >
-            <ChevronRightCircle className="text-primary-foreground hover:text-primary absolute bottom-8 right-8" />
-          </Button>
+          />
         </div>
       </div>
       {reference && (

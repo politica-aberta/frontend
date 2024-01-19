@@ -75,11 +75,10 @@ const CreateChatMessage: FC<CreateChatMessageProps> = ({
       />
       <Card className="">
         <CardHeader>
-          <CardDescription>Assistente</CardDescription>
+          <CardDescription>Falar com um partido</CardDescription>
         </CardHeader>
         <CardContent>
-          Olá! Estou aqui para te ajudar a escolher um partido político que
-          represente os teus ideais. Descobre mais com os botões abaixo.
+          Olá! Escolhe um partido e começa a explorar as suas propostas.
           <ToggleGroup
             className="pt-6 flex flex-wrap overflow-auto gap-4 justify-normal"
             type="single"
@@ -106,12 +105,11 @@ const CreateChatMessage: FC<CreateChatMessageProps> = ({
       <div className="pb-16 mt-16">
         <Card className="">
           <CardHeader>
-            <CardDescription>Assistente</CardDescription>
+            <CardDescription>Multi-partido</CardDescription>
           </CardHeader>
           <CardContent>
             <p>
-              Também disponho de uma opção para comparar partidos. Podes
-              utilizá-la seguindo o botão abaixo.
+              Podes também escolher falar com todos os partidos em simultâneo, de forma a perceberes qual te representa.
             </p>
             <Button
               className="mt-6"

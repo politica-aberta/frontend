@@ -15,7 +15,7 @@ export default function Feature({ className, ...props }: FeatureProps) {
     },
     {
       icon: <BookOpen />,
-      title: "Explora os documentos.",
+      title: "Exploração das propostas.",
       description:
         "Ao lado da tua conversa tens acesso ao documento original, para que possas consultá-lo sempre que quiseres.",
     },
@@ -31,7 +31,7 @@ export default function Feature({ className, ...props }: FeatureProps) {
     <div id="features" className="bg-secondary/50">
       <div className="max-w-5xl mx-auto px-6 py-32">
         <div className="lg:pl-12 max-w-2xl">
-          <h1 className="text-title">A funcionalidade da plataforma</h1>
+          <h1 className="text-title">Para que serve o Política Aberta?</h1>
           <h2 className="text-muted-foreground text-lg pt-4">
             O projeto Política Aberta permite-te explorar a informação presente
             nos documentos oficiais dos partidos portugueses. O nosso objetivo é
