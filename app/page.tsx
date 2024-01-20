@@ -6,7 +6,13 @@ import { getSupabaseServerClient } from "@/lib/supabase_utils";
 import { ArrowDown } from "lucide-react";
 import Link from "next/link";
 
-export default async function Index() {
+export default async function Index({
+  params,
+  searchParams,
+}: {
+  params: { slug: string };
+  searchParams: { [key: string]: string | string[] | undefined };
+}) {
   const supabase = getSupabaseServerClient();
 
   const {

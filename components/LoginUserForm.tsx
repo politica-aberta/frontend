@@ -29,7 +29,6 @@ export function LoginUserForm() {
   const { toast } = useToast();
   const router = useRouter();
 
-
   const loginMutation = useMutation({
     mutationFn: (payload: LoginUserPayload) =>
       axios.post("/api/auth/sign-in", payload),
@@ -101,19 +100,20 @@ export function LoginUserForm() {
             </Button>
           </form>
         </Form>
+
         <div className="text-sm text-muted-foreground text-center mt-4">
-          <OAuthSignInButton provider="Google"/>
+          <OAuthSignInButton provider="Google" />
         </div>
 
         <div className="text-sm text-muted-foreground text-center mt-4">
-              Don't have an account?
-              <PopoverClose
-                className="pl-1 underline text-foreground"
-                onClick={() => router.push("/auth/sign-up")}
-              >
-                Sign-up.
-              </PopoverClose>
-            </div>
+          Don't have an account?
+          <PopoverClose
+            className="pl-1 underline text-foreground"
+            onClick={() => router.push("/auth/sign-up")}
+          >
+            Sign-up.
+          </PopoverClose>
+        </div>
       </PopoverContent>
     </Popover>
   );

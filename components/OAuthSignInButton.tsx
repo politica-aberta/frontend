@@ -1,42 +1,59 @@
-"use client"
+"use client";
 
-import axios from 'axios';
-import { useRouter } from 'next/navigation';
-import { Button } from './ui/button';
-import { useMutation } from '@tanstack/react-query';
+import { useRouter } from "next/navigation";
+import Link from "next/link";
+import { useEffect, useState, FC } from "react";
+import { createClient } from "@/utils/supabase/client";
+import { cn, getFrontendURL } from "@/lib/utils";
+import { Provider } from "@supabase/supabase-js";
 import { useToast } from "@/components/ui/use-toast";
-import { Loader2 } from "lucide-react";
+import { Button, buttonVariants } from "./ui/button";
 
-const OAuthSignInButton = (props: any) => {
+interface OAuthSignInButtonProps extends React.HTMLAttributes<HTMLDivElement> {
+  provider: string;
+}
+
+const OAuthSignInButton: FC<OAuthSignInButtonProps> = ({
+  className,
+  ...props
+}) => {
   const { toast } = useToast();
-  const provider = props.provider;
+  const [url, setUrl] = useState<string>("");
 
-  const router = useRouter();
+  useEffect(() => {
+    const getOAuthUrl = async () => {
+      const supabase = createClient();
 
-  const loginMutation = useMutation({
-    mutationFn: () =>
-      axios.post("/api/auth/get-sign-in-provider", {prov: provider.toLowerCase()}),
-    onSuccess: (data) => {
-      router.push(data.data.body); // FIXME likely a better way to do this
-    },
-    onError(error) {
-      console.log(error);
-      toast({
-        title: "Houve um problema.",
-        description: "Não conseguimos redirecionar para a página requisitada.",
-        variant: "destructive",
+      const { data, error } = await supabase.auth.signInWithOAuth({
+        provider: props.provider.toLowerCase() as Provider,
+        options: {
+          skipBrowserRedirect: true,
+          queryParams: {
+            access_type: "offline",
+            prompt: "consent",
+          },
+          redirectTo: `${getFrontendURL()}api/auth/callback`,
+        },
       });
-    },
-  });
+
+      if (error) {
+        toast({
+          title: "Houve um problema.",
+          description: "Não conseguimos usar o login da Google.",
+          variant: "destructive",
+        });
+      } else if (data) {
+        setUrl(data.url);
+      }
+    };
+
+    getOAuthUrl();
+  }, [props.provider, toast]);
 
   return (
-    <Button className="w-full" onClick={() => loginMutation.mutate(provider)}>
-      {loginMutation.isPending ? (
-        <Loader2 className="animate-spin" />
-      ) : (
-        `Sign in with ${provider}`
-      )}
-    </Button>
+    <Link href={url} className={cn(buttonVariants(), "w-full")}>
+      {`Sign in with ${props.provider}`}
+    </Link>
   );
 };
 
