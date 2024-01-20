@@ -11,7 +11,7 @@ import {
   SheetTitle,
 } from "@/components/ui/sheet";
 
-import { Check, ChevronsUpDown, Loader2, Plus } from "lucide-react";
+import { Loader2, Plus } from "lucide-react";
 import { Button, buttonVariants } from "../ui/button";
 
 import React from "react";
@@ -26,7 +26,6 @@ import { useToast } from "@/components/ui/use-toast";
 import { useRouter } from "next/navigation";
 import { useMutation } from "@tanstack/react-query";
 import { Label } from "@radix-ui/react-label";
-import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { parties } from "@/lib/constants";
 import {
   Select,
@@ -36,17 +35,9 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from "@/components/ui/collapsible";
-
 import { Toggle } from "../ui/toggle";
 
-interface ChatSidebarMobileProps extends React.HTMLAttributes<HTMLDivElement> {
-  conversationHistory: React.ReactNode;
-}
+interface ChatSidebarMobileProps extends React.HTMLAttributes<HTMLDivElement> {}
 
 const ChatSidebarMobile: FC<ChatSidebarMobileProps> = ({
   className,
@@ -97,87 +88,65 @@ const ChatSidebarMobile: FC<ChatSidebarMobileProps> = ({
         <span>Novo Chat</span>
       </SheetTrigger>
 
-      <SheetContent
-        side="left"
-        className="h-screen flex flex-col justify-between"
-      >
-        <div>
-          <SheetHeader className="pt-8">
-            <SheetTitle>
-              Criar Conversa
-              <SheetDescription className="">
-                Aproxima-te do teu partido
-              </SheetDescription>
-            </SheetTitle>
-          </SheetHeader>
-
-          <div className=" w-full items-center gap-4 pt-4  ">
-            <div className="flex flex-col space-y-3">
-              <Label htmlFor="party">Partido</Label>
-
-              <Select
-                value={value}
-                onValueChange={(value) => {
-                  setValue(value);
-                  setPressed(false);
-                }}
-              >
-                <SelectTrigger className="w-full">
-                  <SelectValue placeholder="Escolhe o teu partido" />
-                </SelectTrigger>
-                <SelectContent 
-                  ref={(ref) => ref?.addEventListener('touchend', (e) => e.preventDefault())}
-                  >
-                  {parties.map((party) => (
-                    <SelectItem key={party.id} value={party.id}>
-                      {party.title}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-
-              <Toggle
-                pressed={pressed}
-                onPressedChange={setPressed}
-                className="w-full"
-                variant="outline"
-                onClick={() => {
-                  setValue("multi");
-                }}
-              >
-                Comparação
-              </Toggle>
-              <Button
-                disabled={value === ""}
-                className="w-full mt-8 mb-32"
-                type="submit"
-                onClick={() => {
-                  createChatMutation.mutate({ party: value });
-                }}
-              >
-                {createChatMutation.isPending ? (
-                  <Loader2 className="animate-spin" />
-                ) : (
-                  "Continuar"
-                )}
-              </Button>
-            </div>
-          </div>
-        </div>
-
-        <div />
-
-        <div>
-          <Collapsible>
-            <CollapsibleTrigger
-              className={buttonVariants({ variant: "outline" })}
+      <SheetContent side="left" className="h-screen flex flex-col  pt-12 ">
+        <SheetHeader className="pt-24 text-left">
+          <SheetTitle>Criar Conversa</SheetTitle>
+          <SheetDescription className="">
+            Aproxima-te do teu partido
+          </SheetDescription>
+        </SheetHeader>
+        <div className=" w-full h-full gap-4 pt-8 flex flex-col justify-between ">
+          <div className="space-y-6 ">
+            <Label htmlFor="party">Partido</Label>
+            <Select
+              value={value}
+              onValueChange={(value) => {
+                setValue(value);
+                setPressed(false);
+              }}
             >
-              Conversas Passadas
-            </CollapsibleTrigger>
-            <CollapsibleContent className="pt-2">
-              {props.conversationHistory}
-            </CollapsibleContent>
-          </Collapsible>
+              <SelectTrigger className="w-full">
+                <SelectValue placeholder="Escolhe o teu partido" />
+              </SelectTrigger>
+              <SelectContent
+                ref={(ref) =>
+                  ref?.addEventListener("touchend", (e) => e.preventDefault())
+                }
+              >
+                {parties.map((party) => (
+                  <SelectItem key={party.id} value={party.id}>
+                    {party.title}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            <Toggle
+              pressed={pressed}
+              onPressedChange={setPressed}
+              className="w-full"
+              variant="outline"
+              onClick={() => {
+                setValue("multi");
+              }}
+            >
+              Comparação
+            </Toggle>
+          </div>
+
+          <Button
+            disabled={value === ""}
+            className="w-full mt-8 mb-32"
+            type="submit"
+            onClick={() => {
+              createChatMutation.mutate({ party: value });
+            }}
+          >
+            {createChatMutation.isPending ? (
+              <Loader2 className="animate-spin" />
+            ) : (
+              "Continuar"
+            )}
+          </Button>
         </div>
       </SheetContent>
     </Sheet>
