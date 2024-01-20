@@ -33,7 +33,7 @@ export default async function Index({
           }}
         ></div>
       </div>
-      <div className="h-screen -mt-16 lg:mx-auto px-6 max-w-3xl">
+      <div className="h-screen -mt-16 mx-auto px-6 max-w-3xl">
         <div className="h-full text-center grid content-center">
           <h1 className="text-6xl font-bold tracking-tight text-secondary-foreground ">
             Política Aberta

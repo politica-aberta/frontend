@@ -25,6 +25,7 @@ import { useRouter } from "next/navigation";
 import { useMutation } from "@tanstack/react-query";
 import { Button } from "../ui/button";
 import ChatSidebarMobile from "./ChatSidebarMobile";
+import ConversationHistoryMobile from "./ConversationHistoryMobile";
 
 interface CreateChatMessageProps extends React.HTMLAttributes<HTMLDivElement> {
   conversationHistory: React.ReactNode;
@@ -69,10 +70,13 @@ const CreateChatMessage: FC<CreateChatMessageProps> = ({
         className
       )}
     >
-      <ChatSidebarMobile
-        conversationHistory={props.conversationHistory}
-        className="lg:hidden mb-4"
-      />
+      <div className="flex flex-row gap-4 mb-4">
+        <ChatSidebarMobile className="lg:hidden " />
+        <ConversationHistoryMobile
+          className="lg:hidden"
+          conversationHistory={props.conversationHistory}
+        />
+      </div>
       <Card className="">
         <CardHeader>
           <CardDescription>Falar com um partido</CardDescription>
@@ -109,7 +113,8 @@ const CreateChatMessage: FC<CreateChatMessageProps> = ({
           </CardHeader>
           <CardContent>
             <p>
-              Podes também escolher falar com todos os partidos em simultâneo, de forma a perceberes qual te representa.
+              Podes também escolher falar com todos os partidos em simultâneo,
+              de forma a perceberes qual te representa.
             </p>
             <Button
               className="mt-6"

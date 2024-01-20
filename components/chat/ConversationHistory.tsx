@@ -32,9 +32,9 @@ const ConversationHistory: FC<ConversationHistoryProps> = async ({
 
   return (
     <div>
-      <p className="text-description pl-2">Histórico</p>
+      <p className="hidden lg:block text-description pl-2">Histórico</p>
       <ul className="flex flex-col  ">
-        <ScrollArea className="h-[40vh] lg:h-[70vh] mt-4 ">
+        <ScrollArea className="h-[60vh] mt-4 ">
           <ul className="flex flex-col ">
             {data?.reverse().map((entry) => (
               <Link
