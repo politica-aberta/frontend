@@ -51,8 +51,8 @@ const OAuthSignInButton: FC<OAuthSignInButtonProps> = ({
   }, [props.provider, toast]);
 
   return (
-    <Link href={url} className={cn(buttonVariants(), "w-full")}>
-      {`Sign in with ${props.provider}`}
+    <Link prefetch={false} href={url} className={cn(buttonVariants(), "w-full")}>
+      {`Sign In with ${props.provider}`}
     </Link>
   );
 };

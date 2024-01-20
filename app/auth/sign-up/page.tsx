@@ -4,6 +4,7 @@ import Link from "next/link";
 import CreateUserForm from "@/components/CreateUserForm";
 import Image from "next/image";
 import Waves from "@/images/pexels-andrew-neel-7174579.jpg";
+import OAuthSignInButton from "@/components/OAuthSignInButton";
 
 export const metadata: Metadata = {
   title: "Authentication",
@@ -44,6 +45,8 @@ export default function AuthenticationPage() {
             </p>
           </div>
           <CreateUserForm />
+
+          <OAuthSignInButton provider="Google" />
           <p className="px-8 text-center text-sm text-muted-foreground">
             Ao continuares, aceitas o nossos{" "}
             <Link
