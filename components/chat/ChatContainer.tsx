@@ -128,7 +128,7 @@ const ChatContainer: FC<ChatContainerProps> = ({ className, ...props }) => {
                   setOpenMobileReference={setOpenMobileReference}
                 />
               ))}
-            <MessageSkeleton alertMessage={props.partyId == "multi" ? "As respostas no modo multi-partido podem demorar até 1 minuto a ser geradas. Ainda estou a pensar..." : null} />
+          {sendMessageMutation.isPending && <MessageSkeleton alertMessage={props.partyId == "multi" ? "As respostas no modo multi-partido podem demorar até 1 minuto a ser geradas. Ainda estou a pensar..." : null} />}
           </ul>
         </ScrollArea>
         <div className="relative lg:mr-8 ">

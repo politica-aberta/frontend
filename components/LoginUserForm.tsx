@@ -23,11 +23,11 @@ import { useRouter } from "next/navigation";
 import { useToast } from "@/components/ui/use-toast";
 import { PopoverClose } from "@radix-ui/react-popover";
 import { useMutation } from "@tanstack/react-query";
+import OAuthSignInButton from "./OAuthSignInButton";
 
 export function LoginUserForm() {
   const { toast } = useToast();
   const router = useRouter();
-
 
   const loginMutation = useMutation({
     mutationFn: (payload: LoginUserPayload) =>
@@ -98,18 +98,22 @@ export function LoginUserForm() {
                 "Sign In"
               )}
             </Button>
-
-            <div className="text-sm text-muted-foreground text-center mt-4">
-              Don't have an account?
-              <PopoverClose
-                className="pl-1 underline text-foreground"
-                onClick={() => router.push("/auth/sign-up")}
-              >
-                Sign-up.
-              </PopoverClose>
-            </div>
           </form>
         </Form>
+
+        <div className="text-sm text-muted-foreground text-center mt-4">
+          <OAuthSignInButton provider="Google" />
+        </div>
+
+        <div className="text-sm text-muted-foreground text-center mt-4">
+          Don't have an account?
+          <PopoverClose
+            className="pl-1 underline text-foreground"
+            onClick={() => router.push("/auth/sign-up")}
+          >
+            Sign-up.
+          </PopoverClose>
+        </div>
       </PopoverContent>
     </Popover>
   );

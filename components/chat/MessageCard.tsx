@@ -42,6 +42,7 @@ const MessageCard: FC<MessageCardProps> = ({ className, ...props }) => {
             {sender}
           </CardDescription>
         </CardHeader>
+        
         <CardContent>
           <p className="whitespace-pre-wrap w-full">{props.msg}</p>
         </CardContent>
