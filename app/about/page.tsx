@@ -2,7 +2,7 @@ import Footer from "@/components/Footer";
 import { Smile } from "lucide-react";
 import Link from "next/link";
 
-const contributors: string[] = ["xtwigs", "jmartinhoj", "diogosoares22"];
+const contributors: string[] = ["xtwigs", "jmartinhoj", "diogosoares22", "ManelCoutinho", "go-liv" ];
 
 export default async function About() {
   return (
