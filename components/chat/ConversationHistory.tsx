@@ -14,7 +14,8 @@ const ConversationHistory: FC<ConversationHistoryProps> = async ({
 
   let { data, error } = await supabase
     .from("conversation_data")
-    .select("id,entity,created_at");
+    .select("id,entity,created_at")
+    .order("created_at", { ascending: false });
 
   // FIXME come up with names for the entries, maybe use the entity name + a number,
   // but this should be done in supabase
@@ -36,7 +37,7 @@ const ConversationHistory: FC<ConversationHistoryProps> = async ({
       <ul className="flex flex-col  ">
         <ScrollArea className="h-[60vh] mt-4 ">
           <ul className="flex flex-col ">
-            {data?.reverse().map((entry) => (
+            {data?.map((entry) => (
               <Link
                 className="mr-4 items-stretch hover:bg-muted p-2 rounded-sm"
                 prefetch={false}

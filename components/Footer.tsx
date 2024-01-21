@@ -10,8 +10,8 @@ const cols = [
     title: "Navegar",
     links: [
       { title: "Conversar", href: "/chat" },
-      { title: "Funcionalidades", href: "#features" },
-      { title: "Perguntas Frequentes", href: "#faq" },
+      { title: "Funcionalidades", href: "/#features" },
+      { title: "Perguntas Frequentes", href: "/#faq" },
     ],
   },
   {

@@ -45,7 +45,7 @@ const MobileNavbar: FC<MobileNavbarProps> = ({ className, ...props }) => {
             </Link>
           </div>
           <div className="flex pt-8 gap-8 px-4 border-t">
-            {props.session?.user ? <SignOutButton /> : <LoginUserForm />}
+            {props.session?.user ? <SignOutButton /> : <LoginUserForm onClose={() => setOpen(false)} />}
 
             <ThemeToggle className="" />
           </div>

@@ -43,6 +43,7 @@ const ChatSidebarMobile: FC<ChatSidebarMobileProps> = ({
   className,
   ...props
 }) => {
+  const [isSidebarOpen, setIsSidebarOpen] = React.useState<boolean>(false);
   const [pressed, setPressed] = React.useState<boolean>(false);
   const [value, setValue] = React.useState<string>("");
   const router = useRouter();
@@ -56,6 +57,7 @@ const ChatSidebarMobile: FC<ChatSidebarMobileProps> = ({
         data.data
       );
       router.replace(`/chat?id=${id}&party=${party}`);
+      setIsSidebarOpen(false);
     },
     onError(error: AxiosError) {
       if (error.response?.status === 401) {
@@ -75,7 +77,7 @@ const ChatSidebarMobile: FC<ChatSidebarMobileProps> = ({
   });
 
   return (
-    <Sheet>
+    <Sheet open={isSidebarOpen} onOpenChange={setIsSidebarOpen}>
       {/* #FIXME ideally this would be <CreateChatButton/> */}
       <SheetTrigger
         className={cn(
@@ -95,7 +97,7 @@ const ChatSidebarMobile: FC<ChatSidebarMobileProps> = ({
             Aproxima-te do teu partido
           </SheetDescription>
         </SheetHeader>
-        <div className=" w-full h-full gap-4 pt-8 flex flex-col justify-between ">
+        <div className=" w-full h-full pt-8 flex flex-col">
           <div className="space-y-6 ">
             <Label htmlFor="party">Partido</Label>
             <Select
@@ -135,7 +137,7 @@ const ChatSidebarMobile: FC<ChatSidebarMobileProps> = ({
 
           <Button
             disabled={value === ""}
-            className="w-full mt-8 mb-32"
+            className="w-full mt-6 mb-32"
             type="submit"
             onClick={() => {
               createChatMutation.mutate({ party: value });

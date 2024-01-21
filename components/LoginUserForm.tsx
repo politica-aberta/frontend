@@ -25,7 +25,11 @@ import { PopoverClose } from "@radix-ui/react-popover";
 import { useMutation } from "@tanstack/react-query";
 import OAuthSignInButton from "./OAuthSignInButton";
 
-export function LoginUserForm() {
+interface LoginUserFormProps {
+  onClose?: () => void;
+}
+
+export function LoginUserForm({onClose}: LoginUserFormProps) {
   const { toast } = useToast();
   const router = useRouter();
 
@@ -109,7 +113,10 @@ export function LoginUserForm() {
           Don't have an account?
           <PopoverClose
             className="pl-1 underline text-foreground"
-            onClick={() => router.push("/auth/sign-up")}
+            onClick={() => {
+              router.push("/auth/sign-up")
+              onClose?.();
+            }}
           >
             Sign-up.
           </PopoverClose>
