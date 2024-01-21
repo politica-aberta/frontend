@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { getFrontendURL } from "@/lib/utils";
-
+import { redirect } from "next/navigation";
 import { getSupabaseRouteClient } from "@/lib/supabase_utils";
 
 export const dynamic = "force-dynamic";
@@ -28,13 +28,11 @@ export async function GET(request: Request) {
       .upsert({ id: userId, name: name, usage: 0 }, { ignoreDuplicates: true })
       .select();
 
-    // FIXME for some reasone error is an empty object instead of null
+    // if error redirect to main page
     if (error !== null) {
       console.log(error);
-      return NextResponse.json({ error: error?.message }, { status: 500 });
     }
   }
 
-  // URL to redirect to after sign up process completes
-  return NextResponse.redirect(new URL(getFrontendURL()!), { status: 303 });
+  redirect(getFrontendURL()!);
 }
