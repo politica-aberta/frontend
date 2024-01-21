@@ -18,6 +18,22 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
+  const { data, error } = await supabase
+    .from("user_data")
+    .upsert(
+      {
+        id: session.session.user.id,
+        name: session.session.user.user_metadata.name,
+        usage: 0,
+      },
+      { ignoreDuplicates: true }
+    )
+    .select();
+
+  if (error !== null) {
+    console.log(error);
+  }
+
   const body = await request.json();
   const { party } = CreateConversationValidator.parse(body);
   const newReq: FullCreateConversationPayload = {
