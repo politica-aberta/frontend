@@ -175,7 +175,7 @@ const ChatContainer: FC<ChatContainerProps> = ({ className, ...props }) => {
       </div>
       {reference && (
         <>
-          <ReferenceCard className="hidden md:block" reference={reference} />
+          <ReferenceCard className="hidden lg:block" reference={reference} />
           <div className="lg:hidden">
             <ReferenceModal
               reference={reference}

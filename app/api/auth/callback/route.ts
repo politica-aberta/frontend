@@ -11,22 +11,19 @@ export async function GET(request: Request) {
 
   if (code) {
     const supabase = createClient(cookies());
+    await supabase.auth.exchangeCodeForSession(code);
 
-    const {
-      data: { user },
-    } = await supabase.auth.exchangeCodeForSession(code);
+    // const { data, error } = await supabase
+    //   .from("user_data")
+    //   .upsert(
+    //     { id: user?.id, name: user?.user_metadata.name, usage: 0 },
+    //     { ignoreDuplicates: true }
+    //   )
+    //   .select();
 
-    const { data, error } = await supabase
-      .from("user_data")
-      .upsert(
-        { id: user?.id, name: user?.user_metadata.name, usage: 0 },
-        { ignoreDuplicates: true }
-      )
-      .select();
-
-    if (error !== null) {
-      console.log(error);
-    }
+    // if (error !== null) {
+    //   console.log(error);
+    // }
   }
 
   redirect(getFrontendURL()!);
