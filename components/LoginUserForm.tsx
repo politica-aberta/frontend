@@ -110,11 +110,11 @@ export function LoginUserForm({onClose}: LoginUserFormProps) {
         </div>
 
         <div className="text-sm text-muted-foreground text-center mt-4">
-          Don't have an account?
+          Não tens conta?
           <PopoverClose
             className="pl-1 underline text-foreground"
             onClick={() => {
-              router.push("/auth/sign-up")
+              router.push("/auth/sign-up");
               onClose?.();
             }}
           >

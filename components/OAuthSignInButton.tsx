@@ -8,6 +8,7 @@ import { cn, getFrontendURL } from "@/lib/utils";
 import { Provider } from "@supabase/supabase-js";
 import { useToast } from "@/components/ui/use-toast";
 import { Button, buttonVariants } from "./ui/button";
+import GoogleIcon from "./svg";
 
 interface OAuthSignInButtonProps extends React.HTMLAttributes<HTMLDivElement> {
   provider: string;
@@ -51,8 +52,13 @@ const OAuthSignInButton: FC<OAuthSignInButtonProps> = ({
   }, [props.provider, toast]);
 
   return (
-    <Link prefetch={false} href={url} className={cn(buttonVariants(), "w-full")}>
-      {`Sign In with ${props.provider}`}
+    <Link
+      prefetch={false}
+      href={url}
+      className={cn(buttonVariants(), "w-full flex justify-center gap-4")}
+    >
+      <GoogleIcon className="w-5 h-5" />
+      <span> {`Continuar com a ${props.provider}`}</span>
     </Link>
   );
 };
