@@ -101,7 +101,7 @@
 <!-- GETTING STARTED -->
 ## Getting Started
 
-This is the frontend of Política Aberta, an open source project to help the Portuguese electors to choose their vote. IT acts like a chatbot, where users can ask things to political parties and the answer is based on their political program. 
+This is the frontend of Política Aberta, an open source project to help the Portuguese electors to choose their vote. It acts like a chatbot, where users can ask things to political parties and the answer is based on their political program. 
 
 Feel free to clone this repo, run it locally and contribute!
 
