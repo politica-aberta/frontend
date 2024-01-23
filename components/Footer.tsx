@@ -49,7 +49,7 @@ export default function Footer({ className, ...props }: FooterProps) {
         <div className="flex flex-col pt-12">
           <h2 className="text-md font-bold mb-3">Gostas do projeto?</h2>
           <Link
-            href="https://donate.stripe.com/test_28o6rJ3LUg6H3JKdQQ"
+            href="https://donate.stripe.com/3csbLi47Rb5S8AU144"
             target="_blank"
             className={cn(buttonVariants(), "w-fit")}
           >
