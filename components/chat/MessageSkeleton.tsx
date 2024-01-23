@@ -26,7 +26,7 @@ const MessageSkeleton: FC<MessageSkeletonProps> = ({ className, ...props }) => {
 
         <Skeleton className="h-4" />
         <Skeleton className="h-4" />
-        {props.alertMessage && isAlertVisible && <div className="bg-yellow-50 border-2 border-yellow-400 p-2 text-xs mt-5">
+        {props.alertMessage && isAlertVisible && <div className="bg-yellow-50 border-2 border-yellow-400 p-2 text-black text-xs mt-5">
           <p className="flex">
             <span className="my-auto"><LoaderIcon className="flex mr-2"/></span><span className="my-auto">{props.alertMessage}</span>
           </p>
