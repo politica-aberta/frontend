@@ -177,7 +177,12 @@ docker compose up --build
 <!-- ROADMAP -->
 ## Roadmap
 
-- [ ] Feature 1
+- [ ] Add prompt examples
+- [ ] Enhance signup email
+- [ ] Apple sign up
+- [ ] install bun in docker for faster deployments
+- [ ] stream backend responses
+- [ ] 
 
 See the [open issues](https://github.com/politica-aberta/frontend/issues) for a full list of proposed features (and known issues).
 
