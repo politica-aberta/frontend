@@ -4,9 +4,10 @@ import { ThemeProvider } from "@/components/Provider";
 import Header from "@/components/Header";
 import { Toaster } from "@/components/ui/toaster";
 
-const defaultUrl = process.env.VERCEL_URL
-  ? `https://${process.env.VERCEL_URL}`
-  : "http://localhost:3000";
+
+const defaultUrl = process.env.NODE_ENV === "development"
+  ? "http://localhost:3000"
+  : "https://politica-aberta.pt"
 
 export const metadata = {
   metadataBase: defaultUrl,
@@ -21,6 +22,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="pt" className={GeistSans.className}>
+      <head>
+        <script defer data-domain="politica-aberta.pt" src="https://analytics.politica-aberta.pt/js/script.js"></script>        
+      </head>
       <body className="">
         <ThemeProvider
           attribute="class"
