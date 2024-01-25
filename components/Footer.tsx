@@ -1,9 +1,7 @@
 import { cn } from "@/lib/utils";
 import { Smile } from "lucide-react";
 import Link from "next/link";
-import { Button, buttonVariants } from "./ui/button";
-import { useTheme } from "next-themes";
-import { DonationsButton } from "./DonationsButton";
+import { buttonVariants } from "./ui/button";
 
 const cols = [
   {
@@ -53,7 +51,7 @@ export default function Footer({ className, ...props }: FooterProps) {
             target="_blank"
             className={cn(buttonVariants(), "w-fit")}
           >
-            Faz uma doação ❤️
+            Contribui <span className="ml-2">❤️</span>
           </Link>
         </div>
       </div>

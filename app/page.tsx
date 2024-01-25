@@ -5,6 +5,7 @@ import { buttonVariants } from "@/components/ui/button";
 import { getSupabaseServerClient } from "@/lib/supabase_utils";
 import { ArrowDown } from "lucide-react";
 import Link from "next/link";
+import PartyShowcase from "@/components/PartyShowcase";
 
 export default async function Index({
   params,
@@ -71,7 +72,8 @@ export default async function Index({
         ></div>
       </div>
       <Features />
-      <FAQ className="pt-16" />
+      <PartyShowcase />
+      <FAQ className="pt-32" />
       <Footer className="pt-32" />
     </div>
   );

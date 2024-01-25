@@ -2,7 +2,13 @@ import Footer from "@/components/Footer";
 import { Smile } from "lucide-react";
 import Link from "next/link";
 
-const contributors: string[] = ["xtwigs", "jmartinhoj", "diogosoares22", "ManelCoutinho", "go-liv" ];
+const contributors: string[] = [
+  "xtwigs",
+  "jmartinhoj",
+  "diogosoares22",
+  "ManelCoutinho",
+  "go-liv",
+];
 
 export default async function About() {
   return (
@@ -24,15 +30,17 @@ export default async function About() {
           <Smile className="place-self-center lg:mt-24" size={192} />
 
           <div className="mx-6 text-lg">
-            <h1 className="pt-24 pb-16 component-title ">Made with love</h1>
+            <h1 className="py-16 component-title ">Made with love</h1>
             <p>
               Este projeto foi criado por um pequeno grupo de amigos e
-              developers. Formados em tecnologias AI, acreditamos no seu
-              potencial disruptivo, não só economica como socialmente.
+              developers. Surgiu da vontade de mudar o acesso ineficiente,
+              parcial e opaco da comunicação política, para uma solução
+              eficiente, parcial, clara e transparente.
             </p>
             <p className="pt-8">
-              O nosso objetivo é aproximar a democracia portuguesa das
-              pessoas, recorrendo a estas tecnologias.
+              O nosso objetivo é recorrer das novas tecnologias na área de
+              Inteligência Artificial para aproximar a democracia portuguesa das
+              pessoas.
             </p>
           </div>
         </div>
@@ -40,7 +48,7 @@ export default async function About() {
 
       <div className="max-w-5xl lg:mx-auto mx-6">
         <div className="">
-          <h2>Profundos agradecimentos a quem nos ajudou com o projeto.</h2>
+          <h2>Agradecemos profundamente a quem nos ajudou com o projeto.</h2>
           <ul className="pt-2">
             {contributors.map((col, index) => (
               <div key={index}>

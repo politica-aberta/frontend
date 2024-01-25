@@ -3,16 +3,17 @@ import "./globals.css";
 import { ThemeProvider } from "@/components/Provider";
 import Header from "@/components/Header";
 import { Toaster } from "@/components/ui/toaster";
-
-
-const defaultUrl = process.env.NODE_ENV === "development"
-  ? "http://localhost:3000"
-  : "https://politica-aberta.pt"
+import { getFrontendURL } from "@/lib/utils";
 
 export const metadata = {
-  metadataBase: defaultUrl,
+  metadataBase: getFrontendURL(),
   title: "Política Aberta",
   description: "Aproxima-te da democracia.",
+  openGraph: {
+    title: "Política Aberta",
+    description: "Aproxima-te da democracia.",
+    url: "https://politica-aberta.pt",
+  },
 };
 
 export default function RootLayout({
@@ -23,7 +24,11 @@ export default function RootLayout({
   return (
     <html lang="pt" className={GeistSans.className}>
       <head>
-        <script defer data-domain="politica-aberta.pt" src="https://analytics.politica-aberta.pt/js/script.js"></script>        
+        <script
+          defer
+          data-domain="politica-aberta.pt"
+          src="https://analytics.politica-aberta.pt/js/script.js"
+        ></script>
       </head>
       <body className="">
         <ThemeProvider
