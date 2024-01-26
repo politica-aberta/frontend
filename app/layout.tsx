@@ -27,7 +27,7 @@ export default function RootLayout({
         <script
           defer
           data-domain="politica-aberta.pt"
-          src="https://analytics.politica-aberta.pt/js/script.js"
+          src="https://cebolas.politica-aberta.pt/js/script.js"
         ></script>
       </head>
       <body className="">
