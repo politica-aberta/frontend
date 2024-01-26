@@ -12,7 +12,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
             url: 'https://politica-aberta.pt/about',
             lastModified: new Date(),
             changeFrequency: 'daily',
-            priority: 0.5,
+            priority: 0.8,
         },
         {
             url: 'https://politica-aberta.pt/chat',
