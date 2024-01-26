@@ -238,6 +238,7 @@ Project Link: [https://github.com/politica-aberta/frontend](https://github.com/p
 
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
+
 [contributors-shield]: https://img.shields.io/github/contributors/politica-aberta/frontend.svg?style=for-the-badge
 [contributors-url]: https://github.com/politica-aberta/frontend/graphs/contributors
 [forks-shield]: https://img.shields.io/github/forks/politica-aberta/frontend.svg?style=for-the-badge
