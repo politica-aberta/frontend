@@ -8,12 +8,18 @@ import { getFrontendURL } from "@/lib/utils";
 export const metadata = {
   metadataBase: getFrontendURL(),
   title: "Política Aberta",
-  description: "Aproxima-te da democracia.",
+  description:
+    "Onde te aproximas dos valores democráticos do nosso país. Chat bot que te responde sobre as ideias dos partidos políticos portugueses.",
   openGraph: {
     title: "Política Aberta",
-    description: "Aproxima-te da democracia.",
+    description:
+      "Onde te aproximas dos valores democráticos do nosso país. Chat bot que te responde sobre as ideias dos partidos políticos portugueses.",
     url: "https://politica-aberta.pt",
+    // set time now
+    published_time: new Date().toISOString(),
+    author: "Projeto Política Aberta",
   },
+  
 };
 
 export default function RootLayout({
