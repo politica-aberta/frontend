@@ -13,7 +13,7 @@ const ChatExamples: FC<ChatExamplesProps> = ({ className, ...props }) => {
   const examples = [
     {
       prob: 0.3,
-      question: `O ${props.party} tem alguma proposta para reforma tributária?`,
+      question: `O ${props.party} tem alguma proposta para implementar uma reforma tributária?`,
     },
     {
       prob: 0.6,
@@ -35,7 +35,7 @@ const ChatExamples: FC<ChatExamplesProps> = ({ className, ...props }) => {
     },
     {
       prob: 0.55,
-      question: `Qual é a visão dos PS e da IL sobre a geração de empregos e crescimento econômico?`,
+      question: `Qual é a visão dos PS e da IL sobre a geração de empregos e crescimento económico?`,
     },
     {
       prob: 0.6,
