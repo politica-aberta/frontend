@@ -35,7 +35,7 @@ export default async function About() {
               Este projeto foi criado por um pequeno grupo de amigos e
               developers. Surgiu da vontade de mudar o acesso ineficiente,
               parcial e opaco da comunicação política, para uma solução
-              eficiente, parcial, clara e transparente.
+              eficiente, imparcial, clara e transparente.
             </p>
             <p className="pt-8">
               O nosso objetivo é recorrer das novas tecnologias na área de
