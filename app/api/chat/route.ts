@@ -44,7 +44,7 @@ export async function POST(req: NextRequest) {
         access_token: session!.access_token,
         // party: party.toUpperCase(), // backend expects upper case
         message: message,
-        previous_messages: [],
+        previous_messages: previous_messages,
         infer_chat_mode: true,
       };
 
