@@ -1,12 +1,12 @@
 "use client";
 import { cn } from "@/lib/utils";
-import { FC, SetStateAction, useEffect, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import axios, { AxiosError } from "axios";
 import { useSearchParams } from "next/navigation";
 import { useMutation } from "@tanstack/react-query";
 
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Button } from "@/components/ui/button";
+
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/components/ui/use-toast";
 import { ChevronRightCircle } from "lucide-react";
@@ -20,6 +20,7 @@ import { ChatPayload, MessageValidator } from "@/lib/validators";
 import ReferenceModal from "./ReferenceModal";
 import ChatSidebarMobile from "./ChatSidebarMobile";
 import ConversationHistoryMobile from "./ConversationHistoryMobile";
+import ChatExamples from "./ChatExamples";
 
 interface ChatContainerProps extends React.HTMLAttributes<HTMLDivElement> {
   chatHistory: Message[];
@@ -115,9 +116,7 @@ const ChatContainer: FC<ChatContainerProps> = ({ className, ...props }) => {
       <div className="flex flex-col justify-between py-8 md:mx-auto mx-5 w-full md:basis-1/2 md:max-w-3xl">
         <ScrollArea className="lg:pr-8 w-full mb-6 ">
           <div className="flex flex-row gap-4 mb-4">
-            <ChatSidebarMobile
-              className="lg:hidden"
-            />
+            <ChatSidebarMobile className="lg:hidden" />
             <ConversationHistoryMobile
               className="lg:hidden"
               conversationHistory={props.conversationHistory}
@@ -139,38 +138,48 @@ const ChatContainer: FC<ChatContainerProps> = ({ className, ...props }) => {
               <MessageSkeleton
                 alertMessage={
                   props.partyId == "multi"
-                    ? "As respostas no modo multi-partido podem demorar até 1 minuto a ser geradas. Ainda estou a pensar..."
+                    ? "As respostas no modo multi-partido podem demorar até 1 minuto a ser geradas."
                     : null
                 }
               />
             )}
           </ul>
         </ScrollArea>
-        <div className="relative lg:mr-8 ">
-          <Textarea
-            value={sendMessageMutation.isPending ? "" : input}
-            onChange={(e) => setInput(e.target.value)}
-            disabled={sendMessageMutation.isPending}
-            onKeyDown={(e) => {
-              if (e.key === "Enter" && !e.shiftKey) {
-                e.preventDefault();
-                submitMessage();
-              }
-            }}
-            placeholder="Escreve aqui a tua mensagem."
-            className=" p-4 pr-16"
-          />
+        <div>
+          {chatHistory.length <= 1 && (
+            <ChatExamples
+              className="pb-4 lg:mr-8"
+              party={props.partyId.toUpperCase()}
+              setInput={setInput}
+            />
+          )}
 
-          <ChevronRightCircle
-            className={`absolute bottom-8 right-8 bg-background text-primary-foreground hover:bg-background ${
-              sendMessageMutation.isPending || input.length <= 0
-                ? ""
-                : "hover:text-primary cursor-pointer"
-            }`}
-            onClick={() => {
-              submitMessage();
-            }}
-          />
+          <div className="relative lg:mr-8 ">
+            <Textarea
+              value={sendMessageMutation.isPending ? "" : input}
+              onChange={(e) => setInput(e.target.value)}
+              disabled={sendMessageMutation.isPending}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" && !e.shiftKey) {
+                  e.preventDefault();
+                  submitMessage();
+                }
+              }}
+              placeholder="Escreve aqui a tua mensagem."
+              className=" p-4 pr-16"
+            />
+
+            <ChevronRightCircle
+              className={`absolute bottom-8 right-8 bg-background text-secondary hover:bg-background ${
+                sendMessageMutation.isPending || input.length <= 0
+                  ? ""
+                  : "hover:text-primary cursor-pointer"
+              }`}
+              onClick={() => {
+                submitMessage();
+              }}
+            />
+          </div>
         </div>
       </div>
       {reference && (

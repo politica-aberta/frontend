@@ -1,36 +1,36 @@
-import { FC, useEffect, useState} from "react";
+import { FC, useEffect, useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader } from "../ui/card";
 import { Skeleton } from "../ui/skeleton";
-import { LoaderIcon } from "lucide-react";
-
+import { Loader2 } from "lucide-react";
 
 interface MessageSkeletonProps extends React.HTMLAttributes<HTMLDivElement> {
-  alertMessage?: string | null | undefined
+  alertMessage?: string | null | undefined;
 }
 
 const MessageSkeleton: FC<MessageSkeletonProps> = ({ className, ...props }) => {
-  const [isAlertVisible, setIsAlertVisible] = useState<boolean>(false)
+  const [isAlertVisible, setIsAlertVisible] = useState<boolean>(false);
   useEffect(() => {
-    if(props.alertMessage) {
+    if (props.alertMessage) {
       setTimeout(() => {
-          setIsAlertVisible(true);
-      }, 2000);
+        setIsAlertVisible(true);
+      }, 4000);
     }
-  })
+  });
   return (
     <Card className="w-full">
       <CardHeader>
         <CardDescription>Assistente</CardDescription>
       </CardHeader>
       <CardContent className="space-y-1.5">
+        <Skeleton className="h-4" />
+        <Skeleton className="h-4" />
 
-        <Skeleton className="h-4" />
-        <Skeleton className="h-4" />
-        {props.alertMessage && isAlertVisible && <div className="bg-yellow-50 border-2 border-yellow-400 p-2 text-black text-xs mt-5">
-          <p className="flex">
-            <span className="my-auto"><LoaderIcon className="flex mr-2"/></span><span className="my-auto">{props.alertMessage}</span>
-          </p>
-        </div>}
+        {props.alertMessage && isAlertVisible && (
+          <Skeleton className="p-3 flex bg-background pt-6">
+            <Loader2 className="animate-spin mr-3" />
+            {props.alertMessage}
+          </Skeleton>
+        )}
       </CardContent>
     </Card>
   );
