@@ -58,7 +58,7 @@ const ChatExamples: FC<ChatExamplesProps> = ({ className, ...props }) => {
           <Button
             key={index} // Don't forget to add a key when mapping in React
             className={`h-20 p-4 text-left whitespace-normal items-start justify-start ${
-              index >= 2 ? "hidden lg:block" : ""
+              index >= 2 ? "hidden lg:block" : "block"
             }`}
             onClick={() => props.setInput(ex.question)}
             variant={"outline"}
