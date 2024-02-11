@@ -106,7 +106,10 @@ const ChatContainer: FC<ChatContainerProps> = ({ className, ...props }) => {
         id: props.chatId,
         party: props.partyId.toLowerCase(),
         message: input,
-        previous_messages: chatHistory,
+        previous_messages: chatHistory.map(({ references, ...rest }) => ({
+          ...rest,
+          references: null, // Drop references before sending messages
+        })),
       });
     }
   };

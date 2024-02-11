@@ -52,7 +52,8 @@ const ReferenceModal: FC<ReferenceModalProps> = ({ className, ...props }) => {
   const party = parties.find(
     (party) => party.id === props.reference?.party.toLowerCase()
   )!;
-  const referencePages = props.reference?.pages.sort((a, b) => a - b);
+  // const referencePages = props.reference?.pages;//.sort((a, b) => a - b);
+  const pageNumbers = props.reference? Object.keys(props.reference?.pages).map(Number) : [];
 
   const pageNavigationPluginInstance = pageNavigationPlugin({
     enableShortcuts: false,
@@ -88,17 +89,17 @@ const ReferenceModal: FC<ReferenceModalProps> = ({ className, ...props }) => {
                 <DropdownMenuContent align="end" alignOffset={-10}>
                   <DropdownMenuLabel>Páginas</DropdownMenuLabel>
                   <ul className="flex flex-col space-y-2 pb-2">
-                    {referencePages?.map((page) => (
+                    {pageNumbers?.map((pageNum) => (
                       <Button
                         className="mx-2"
-                        key={page}
+                        key={pageNum}
                         variant={"secondary"}
                         size={"sm"}
                         onClick={() => {
-                          pageNavigationPluginInstance.jumpToPage(page - 1);
+                          pageNavigationPluginInstance.jumpToPage(pageNum - 1);
                         }}
                       >
-                        {page}
+                        {pageNum}
                       </Button>
                     ))}
                   </ul>
@@ -153,7 +154,7 @@ const ReferenceModal: FC<ReferenceModalProps> = ({ className, ...props }) => {
             </SheetHeader>
 
             <Viewer
-              initialPage={referencePages ? referencePages[0] - 1 : 0}
+              initialPage={pageNumbers ? pageNumbers[0] - 1 : 0}
               theme={"auto"}
               fileUrl={props.reference!.document}
               plugins={[pageNavigationPluginInstance, zoomPluginInstance]}
