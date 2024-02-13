@@ -4,25 +4,25 @@ import { FAQQuestion } from "@/lib/types";
 export const parties: Party[] = [
   {
     id: "be",
-    path: "https://dzwdgfmvuevjqjutrpye.supabase.co/storage/v1/object/public/documents/be-legislativas22.pdf",
+    path: "https://dzwdgfmvuevjqjutrpye.supabase.co/storage/v1/object/public/documents/be-legislativas24.pdf",
     title: "Bloco de Esquerda",
     subtitle: "Programa eleitoral (2024)",
   },
   {
     id: "chega",
-    path: "https://dzwdgfmvuevjqjutrpye.supabase.co/storage/v1/object/public/documents/chega-legislativas22.pdf",
+    path: "https://dzwdgfmvuevjqjutrpye.supabase.co/storage/v1/object/public/documents/chega-legislativas24.pdf",
     title: "Partido Chega",
     subtitle: "Programa eleitoral (2024)",
   },
   {
     id: "il",
-    path: "https://dzwdgfmvuevjqjutrpye.supabase.co/storage/v1/object/public/documents/il-legislativas22.pdf",
+    path: "https://dzwdgfmvuevjqjutrpye.supabase.co/storage/v1/object/public/documents/il-legislativas24.pdf",
     title: "Iniciativa Liberal",
     subtitle: "Programa eleitoral (2024)",
   },
   {
     id: "l",
-    path: "https://dzwdgfmvuevjqjutrpye.supabase.co/storage/v1/object/public/documents/livre-legislativas22.pdf",
+    path: "https://dzwdgfmvuevjqjutrpye.supabase.co/storage/v1/object/public/documents/livre-legislativas24.pdf",
     title: "Partido Livre",
     subtitle: "Programa eleitoral (2024)",
   },
@@ -34,7 +34,7 @@ export const parties: Party[] = [
   },
   {
     id: "pcp",
-    path: "https://dzwdgfmvuevjqjutrpye.supabase.co/storage/v1/object/public/documents/pcp-legislativas22.pdf",
+    path: "https://dzwdgfmvuevjqjutrpye.supabase.co/storage/v1/object/public/documents/pcp-legislativas24.pdf",
     title: "Partido Comunista Português",
     subtitle: "Programa eleitoral (2024)",
   },
@@ -46,7 +46,7 @@ export const parties: Party[] = [
   },
   {
     id: "psd",
-    path: "https://dzwdgfmvuevjqjutrpye.supabase.co/storage/v1/object/public/documents/psd-legislativas22.pdf",
+    path: "https://dzwdgfmvuevjqjutrpye.supabase.co/storage/v1/object/public/documents/psd-legislativas24.pdf",
     title: "Partido Social Democrata",
     subtitle: "Programa eleitoral (2024)",
   },
