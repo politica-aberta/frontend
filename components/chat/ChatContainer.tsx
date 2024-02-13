@@ -18,10 +18,10 @@ import ReferenceCard from "@/components/chat/ReferenceCard";
 import { Message, Reference } from "@/lib/types";
 import { ChatPayload, MessageValidator } from "@/lib/validators";
 import ReferenceModal from "./ReferenceModal";
-import ChatSidebarMobile from "./ChatSidebarMobile";
 import ConversationHistoryMobile from "./ConversationHistoryMobile";
 import ChatExamples from "./ChatExamples";
 import { useRouter } from "next/navigation";
+import CreateChatButton from "./CreateChatButton";
 
 interface ChatContainerProps extends React.HTMLAttributes<HTMLDivElement> {
   chatHistory: Message[];
@@ -112,7 +112,7 @@ const ChatContainer: FC<ChatContainerProps> = ({ className, ...props }) => {
       <div className="flex flex-col justify-between py-8 md:mx-auto mx-5 w-full md:basis-1/2 md:max-w-3xl">
         <ScrollArea className="lg:pr-8 w-full mb-6 ">
           <div className="flex flex-row gap-4 mb-4">
-            <ChatSidebarMobile className="lg:hidden" />
+            <CreateChatButton className="lg:hidden" />
             <ConversationHistoryMobile
               className="lg:hidden"
               conversationHistory={props.conversationHistory}

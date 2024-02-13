@@ -66,7 +66,7 @@ const CreateChatButton: FC<CreateChatButtonProps> = ({
 
   return (
     <Button
-    className="w-32"
+      className={cn("w-32", className)}
       onClick={() => {
         createChatMutation.mutate({ party: "multi" });
       }}
