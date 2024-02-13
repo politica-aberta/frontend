@@ -1,13 +1,5 @@
 "use client";
 
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "./ui/card";
-
 import { parties } from "@/lib/constants";
 
 import {
@@ -18,6 +10,17 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel";
 import Autoplay from "embla-carousel-autoplay";
+import PartyCard from "./PartyCard";
+
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "./ui/card";
+
+import Image from "next/image";
 
 interface PartyShowcaseProps extends React.HTMLAttributes<HTMLDivElement> {}
 
@@ -25,7 +28,7 @@ const PartyShowcase = ({ className, ...props }: PartyShowcaseProps) => {
   return (
     <div>
       <div className="lg:mx-auto w-full max-w-5xl px-6 py-16 lg:py-32">
-        <h2 className="mx-auto mb-8  text-center component-title md:mb-12  lg:mb-16">
+        <h2 className="mx-auto mb-8 text-center component-title md:mb-12 lg:mb-16">
           Partidos
         </h2>
 
@@ -48,16 +51,23 @@ const PartyShowcase = ({ className, ...props }: PartyShowcaseProps) => {
             ]}
             className=""
           >
-            <CarouselContent className="mx-6 lg:max-w-5xl  max-w-xs">
+            <CarouselContent className="mx-6 lg:max-w-5xl max-w-xs">
               {parties.map((party, index) => (
-                <CarouselItem key={index} className=" basis-full  lg:basis-1/3">
-                  <Card className="flex flex-col justify-between text-card bg-card-foreground h-48">
+                <CarouselItem key={index} className="basis-full lg:basis-1/3">
+                  <Card className="flex flex-col justify-between text-card bg-card-foreground h-48 text-left">
                     <CardHeader>
                       <CardTitle>{party.title}</CardTitle>
-                      <CardDescription>Documentos disponíveis</CardDescription>
                     </CardHeader>
-                    <CardContent>{party.subtitle}</CardContent>
-                  </Card>
+                    <CardContent>
+                      <div className="w-full bg-muted rounded-md h-16 grid place-content-center  ">
+                        <Image
+                          className={party.size}
+                          src={party.logo}
+                          alt={`${party.id}-logo`}
+                        />
+                      </div>
+                    </CardContent>
+                  </Card>{" "}
                 </CarouselItem>
               ))}
             </CarouselContent>

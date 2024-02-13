@@ -1,54 +1,79 @@
 import { Party } from "@/lib/types";
 import { FAQQuestion } from "@/lib/types";
 
+import BE from "@/images/parties/be-removebg-preview.png";
+import Chega from "@/images/parties/chega.png";
+import IL from "@/images/parties/il.png";
+import Livre from "@/images/parties/livre.png";
+import PAN from "@/images/parties/pan.png";
+import PCP from "@/images/parties/cdu-removebg-preview.png";
+import PS from "@/images/parties/ps.png";
+import PSD from "@/images/parties/ad.png";
+
 export const parties: Party[] = [
   {
     id: "be",
     path: "https://dzwdgfmvuevjqjutrpye.supabase.co/storage/v1/object/public/documents/be-legislativas24.pdf",
     title: "Bloco de Esquerda",
     subtitle: "Programa eleitoral (2024)",
+    logo: BE,
+    size: "h-12 w-16",
   },
   {
     id: "chega",
     path: "https://dzwdgfmvuevjqjutrpye.supabase.co/storage/v1/object/public/documents/chega-legislativas24.pdf",
     title: "Partido Chega",
     subtitle: "Programa eleitoral (2024)",
+    logo: Chega,
+    size: "h-12 w-16",
   },
   {
     id: "il",
     path: "https://dzwdgfmvuevjqjutrpye.supabase.co/storage/v1/object/public/documents/il-legislativas24.pdf",
     title: "Iniciativa Liberal",
     subtitle: "Programa eleitoral (2024)",
+    logo: IL,
+    size: "h-12 w-16",
   },
   {
     id: "l",
     path: "https://dzwdgfmvuevjqjutrpye.supabase.co/storage/v1/object/public/documents/livre-legislativas24.pdf",
     title: "Partido Livre",
     subtitle: "Programa eleitoral (2024)",
+    logo: Livre,
+    size: "h-12 w-16",
   },
   {
     id: "pan",
     path: "https://dzwdgfmvuevjqjutrpye.supabase.co/storage/v1/object/public/documents/pan-legislativas22.pdf",
     title: "Partido Animais e Natureza",
     subtitle: "Programa eleitoral (2022)",
+    logo: PAN,
+    size: "h-12 w-16",
   },
   {
     id: "pcp",
     path: "https://dzwdgfmvuevjqjutrpye.supabase.co/storage/v1/object/public/documents/pcp-legislativas24.pdf",
-    title: "Partido Comunista Português",
+    title: "Coligação Democrática Unitária",
     subtitle: "Programa eleitoral (2024)",
+    logo: PCP,
+    size: "h-12 w-16",
   },
   {
     id: "ps",
     path: "https://dzwdgfmvuevjqjutrpye.supabase.co/storage/v1/object/public/documents/ps-legislativas22.pdf",
     title: "Partido Socialista",
     subtitle: "Programa eleitoral (2022)",
+    logo: PS,
+    size: "h-12 w-16",
   },
   {
     id: "psd",
     path: "https://dzwdgfmvuevjqjutrpye.supabase.co/storage/v1/object/public/documents/psd-legislativas24.pdf",
-    title: "Partido Social Democrata",
+    title: "Aliança Democrática",
     subtitle: "Programa eleitoral (2024)",
+    logo: PSD,
+    size: "h-10 w-10",
   },
 ];
 

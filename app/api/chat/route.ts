@@ -48,8 +48,6 @@ export async function POST(req: NextRequest) {
         infer_chat_mode: true,
       };
 
-
-
       const { data } = await axios.post<MessageResponse>(
         `${getBackendURL()}multi-chat`,
         payload
