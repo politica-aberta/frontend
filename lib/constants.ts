@@ -17,7 +17,8 @@ export const parties: Party[] = [
     title: "Bloco de Esquerda",
     subtitle: "Programa eleitoral (2024)",
     logo: BE,
-    size: "h-12 w-16",
+    height: 60,
+    width: 80,
   },
   {
     id: "chega",
@@ -25,7 +26,8 @@ export const parties: Party[] = [
     title: "Partido Chega",
     subtitle: "Programa eleitoral (2024)",
     logo: Chega,
-    size: "h-12 w-16",
+    height: 60,
+    width: 80,
   },
   {
     id: "il",
@@ -33,7 +35,8 @@ export const parties: Party[] = [
     title: "Iniciativa Liberal",
     subtitle: "Programa eleitoral (2024)",
     logo: IL,
-    size: "h-12 w-16",
+    height: 60,
+    width: 80,
   },
   {
     id: "l",
@@ -41,7 +44,8 @@ export const parties: Party[] = [
     title: "Partido Livre",
     subtitle: "Programa eleitoral (2024)",
     logo: Livre,
-    size: "h-12 w-16",
+    height: 60,
+    width: 80,
   },
   {
     id: "pan",
@@ -49,7 +53,8 @@ export const parties: Party[] = [
     title: "Partido Animais e Natureza",
     subtitle: "Programa eleitoral (2022)",
     logo: PAN,
-    size: "h-12 w-16",
+    height: 60,
+    width: 80,
   },
   {
     id: "pcp",
@@ -57,7 +62,8 @@ export const parties: Party[] = [
     title: "Coligação Democrática Unitária",
     subtitle: "Programa eleitoral (2024)",
     logo: PCP,
-    size: "h-12 w-16",
+    height: 100,
+    width: 120,
   },
   {
     id: "ps",
@@ -65,7 +71,8 @@ export const parties: Party[] = [
     title: "Partido Socialista",
     subtitle: "Programa eleitoral (2022)",
     logo: PS,
-    size: "h-12 w-16",
+    height: 60,
+    width: 80,
   },
   {
     id: "psd",
@@ -73,7 +80,8 @@ export const parties: Party[] = [
     title: "Aliança Democrática",
     subtitle: "Programa eleitoral (2024)",
     logo: PSD,
-    size: "h-10 w-10",
+    height: 70,
+    width: 100,
   },
 ];
 

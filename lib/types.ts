@@ -12,6 +12,8 @@ export type Party = {
   subtitle: string;
   logo: StaticImageData;
   size?: string;
+  height?: number;
+  width?: number;
 };
 
 export type Message = {

@@ -62,6 +62,8 @@ const PartyShowcase = ({ className, ...props }: PartyShowcaseProps) => {
                       <div className="w-full bg-muted rounded-md h-16 grid place-content-center  ">
                         <Image
                           className={party.size}
+                          height={party.height}
+                          width={party.width}
                           src={party.logo}
                           alt={`${party.id}-logo`}
                         />
