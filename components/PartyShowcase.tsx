@@ -58,16 +58,8 @@ const PartyShowcase = ({ className, ...props }: PartyShowcaseProps) => {
                     <CardHeader>
                       <CardTitle>{party.title}</CardTitle>
                     </CardHeader>
-                    <CardContent>
-                      <div className="w-full bg-muted rounded-md h-16 grid place-content-center  ">
-                        <Image
-                          className={party.size}
-                          height={party.height}
-                          width={party.width}
-                          src={party.logo}
-                          alt={`${party.id}-logo`}
-                        />
-                      </div>
+                    <CardContent className="w-full">
+                      <PartyCard party={party} />
                     </CardContent>
                   </Card>{" "}
                 </CarouselItem>
