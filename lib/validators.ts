@@ -38,7 +38,6 @@ export const MessageValidator = z.object({
 
 export const ChatValidator = z.object({
   id: z.string().uuid(),
-  party: z.enum(["multi", ...partyValues] as [string, ...string[]]),
   message: z.string(),
   previous_messages: z.array(MessageValidator),
 });

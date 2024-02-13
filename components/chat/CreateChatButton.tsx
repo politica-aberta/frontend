@@ -35,10 +35,6 @@ const CreateChatButton: FC<CreateChatButtonProps> = ({
   className,
   ...props
 }) => {
-  const [open, setOpen] = React.useState<boolean>(false);
-  const [openSearch, setOpenSearch] = React.useState<boolean>(false);
-  const [pressed, setPressed] = React.useState<boolean>(false);
-  const [value, setValue] = React.useState<string>("");
   const router = useRouter();
   const { toast } = useToast();
 
@@ -49,8 +45,7 @@ const CreateChatButton: FC<CreateChatButtonProps> = ({
       const { id, party } = CreateConversationResponseValidator.parse(
         data.data
       );
-      router.replace(`/chat?id=${id}&party=${party}`);
-      setOpen(false);
+      router.replace(`/chat?id=${id}`);
     },
     onError(error: AxiosError) {
       if (error.response?.status === 401) {
@@ -70,101 +65,22 @@ const CreateChatButton: FC<CreateChatButtonProps> = ({
   });
 
   return (
-    <Popover open={open} onOpenChange={setOpen}>
-      <PopoverTrigger className={buttonVariants({ variant: "default" })}>
-        <Plus className="p-1 -ml-2" />
-        <span>Novo Chat</span>
-      </PopoverTrigger>
-      <PopoverContent
-        className="p-6 space-y-4"
-        side="right"
-        sideOffset={10}
-        align="start"
-        avoidCollisions={false}
-      >
-        <div className="component-header p-0">
-          <h1 className="text-title">Criar Conversa</h1>
-          <h2 className="text-description">Aproxima-te do teu partido</h2>
-        </div>
-        <div className="grid w-full items-center gap-4 pt-4  ">
-          <div className="flex flex-col space-y-1.5">
-            <Label htmlFor="party">Partido</Label>
-            <div className="">
-              <Popover open={openSearch} onOpenChange={setOpenSearch}>
-                <PopoverTrigger asChild>
-                  <Button
-                    variant="outline"
-                    role="combobox"
-                    aria-expanded={openSearch}
-                    className="w-full justify-between"
-                  >
-                    {value
-                      ? parties.find((party) => party.id === value)?.title
-                      : "Escolhe o teu partido..."}
-                    <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-                  </Button>
-                </PopoverTrigger>
-                <PopoverContent className="w-full p-0">
-                  <Command>
-                    <CommandInput placeholder="Escolhe o teu partido..." />
-                    <CommandEmpty>No party found.</CommandEmpty>
-                    <CommandGroup>
-                      {parties.map((party, index) => (
-                        <CommandItem
-                          key={index}
-                          value={party.id}
-                          onSelect={(currentValue) => {
-                            setValue(
-                              currentValue === value ? "" : currentValue
-                            );
-                            setOpenSearch(false);
-                            setPressed(false);
-                          }}
-                        >
-                          <Check
-                            className={cn(
-                              "mr-2 h-4 w-4",
-                              value === party.id ? "opacity-100" : "opacity-0"
-                            )}
-                          />
-                          {party.title}
-                        </CommandItem>
-                      ))}
-                    </CommandGroup>
-                  </Command>
-                </PopoverContent>
-              </Popover>
-            </div>
-          </div>
-        </div>
-        <Toggle
-          pressed={pressed}
-          className="w-full"
-          variant="outline"
-          onClick={() => {
-            setPressed(!pressed);
-            setValue("multi");
-          }}
-        >
-          Comparação
-        </Toggle>
-
-        <Button
-          disabled={value === ""}
-          className="w-full"
-          type="submit"
-          onClick={() => {
-            createChatMutation.mutate({ party: value });
-          }}
-        >
-          {createChatMutation.isPending ? (
-            <Loader2 className="animate-spin" />
-          ) : (
-            "Continuar"
-          )}
-        </Button>
-      </PopoverContent>
-    </Popover>
+    <Button
+    className="w-32"
+      onClick={() => {
+        createChatMutation.mutate({ party: "multi" });
+      }}
+    >
+      {createChatMutation.isPending ? (
+        <Loader2 className="animate-spin mr-3 w-full" />
+      ) : (
+        <>
+          {" "}
+          <Plus className="p-1 -ml-2" />
+          <span>Novo Chat</span>
+        </>
+      )}
+    </Button>
   );
 };
 

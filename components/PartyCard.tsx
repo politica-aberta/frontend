@@ -50,7 +50,7 @@ const PartyCard: FC<PartyCardProps> = ({ className, party, ...props }) => {
           {/* #FIXME map over docs whenever >1*/}
           <ul className="pl-4 pt-2 list-disc">
             <li className=" ">
-              <Link href={party.path} target="_blank">
+              <Link className=" underline " href={party.path} target="_blank">
                 {party.subtitle}
               </Link>
             </li>

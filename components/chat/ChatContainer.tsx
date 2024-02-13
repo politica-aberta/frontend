@@ -21,11 +21,11 @@ import ReferenceModal from "./ReferenceModal";
 import ChatSidebarMobile from "./ChatSidebarMobile";
 import ConversationHistoryMobile from "./ConversationHistoryMobile";
 import ChatExamples from "./ChatExamples";
+import { useRouter } from "next/navigation";
 
 interface ChatContainerProps extends React.HTMLAttributes<HTMLDivElement> {
   chatHistory: Message[];
   chatId: string;
-  partyId: string;
   conversationHistory: React.ReactNode;
 }
 
@@ -37,6 +37,11 @@ const ChatContainer: FC<ChatContainerProps> = ({ className, ...props }) => {
   const [openMobileReference, setOpenMobileReference] =
     useState<boolean>(false);
   const [chatHistory, setChatHistory] = useState<Message[]>([]);
+
+
+  const router = useRouter()
+
+
   useEffect(() => {
     setChatHistory(
       !props.chatHistory || props.chatHistory.length === 0
@@ -44,9 +49,7 @@ const ChatContainer: FC<ChatContainerProps> = ({ className, ...props }) => {
             {
               role: "assistant",
               message:
-                props.partyId == "multi"
-                  ? "Olá! Estou aqui para te responder a dúvidas e questões sobre os programas dos partidos políticos portugueses."
-                  : `Olá! O que queres saber acerca das propostas do ${props.partyId.toUpperCase()}?`,
+                "Olá! Estou aqui para te responder a dúvidas e questões sobre os programas dos partidos políticos portugueses.",
               references: null,
             },
           ]
@@ -68,7 +71,9 @@ const ChatContainer: FC<ChatContainerProps> = ({ className, ...props }) => {
       return axios.post("/api/chat", payload);
     },
     onSuccess: (data) => {
-      const res = MessageValidator.parse(data.data);
+      router.replace(`/chat?id=${data.data.id}`);
+      const message = data.data.reply;
+      const res = MessageValidator.parse(message);
       setChatHistory(chatHistory.concat(res));
       setInput("");
     },
@@ -94,17 +99,8 @@ const ChatContainer: FC<ChatContainerProps> = ({ className, ...props }) => {
 
   const submitMessage = () => {
     if (!sendMessageMutation.isPending && input.length > 0) {
-      if (!props.partyId) {
-        toast({
-          title: "Houve um problema.",
-          description: "Não conseguimos enviar a mensagem.",
-          variant: "destructive",
-        });
-        return;
-      }
       sendMessageMutation.mutate({
         id: props.chatId,
-        party: props.partyId.toLowerCase(),
         message: input,
         previous_messages: chatHistory,
       });
@@ -137,9 +133,7 @@ const ChatContainer: FC<ChatContainerProps> = ({ className, ...props }) => {
             {sendMessageMutation.isPending && (
               <MessageSkeleton
                 alertMessage={
-                  props.partyId == "multi"
-                    ? "As respostas no modo multi-partido podem demorar até 1 minuto a ser geradas."
-                    : null
+                  "As respostas  podem demorar até 1 minuto a ser geradas."
                 }
               />
             )}
@@ -147,11 +141,7 @@ const ChatContainer: FC<ChatContainerProps> = ({ className, ...props }) => {
         </ScrollArea>
         <div>
           {chatHistory.length <= 1 && (
-            <ChatExamples
-              className="pb-4 lg:mr-8"
-              party={props.partyId.toUpperCase()}
-              setInput={setInput}
-            />
+            <ChatExamples className="pb-4 lg:mr-8" setInput={setInput} />
           )}
 
           <div className="relative lg:mr-8 ">
@@ -194,8 +184,6 @@ const ChatContainer: FC<ChatContainerProps> = ({ className, ...props }) => {
           </div>
         </>
       )}
-
-      {/* <Modal contentLabel={reference?.party} ariaHideApp={true} isOpen={!!reference} onRequestClose={() => setReference(null)} ><ReferenceModal reference={reference}/></Modal> */}
     </div>
   );
 };

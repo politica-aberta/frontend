@@ -6,7 +6,6 @@ import { Button } from "../ui/button";
 import { parties } from "@/lib/constants";
 
 interface ChatExamplesProps extends React.HTMLAttributes<HTMLDivElement> {
-  party: string;
   setInput: (input: string) => void;
 }
 
@@ -59,37 +58,16 @@ const ChatExamples: FC<ChatExamplesProps> = ({ className, ...props }) => {
     }
   }, [randParties]);
 
-  const examples = [
-    {
-      prob: 0.3,
-      question: `O ${props.party} tem alguma proposta para implementar uma reforma tributária?`,
-    },
-    {
-      prob: 0.6,
-      question: `Como visa o ${props.party} melhorar o sistema de saúde pública?`,
-    },
-    {
-      prob: 0.8,
-      question: `Como planeia o ${props.party} enfrentar as mudanças climáticas e promover sustentabilidade?`,
-    },
-    {
-      prob: 0.5,
-      question: `Quais são as medidas do ${props.party} para combater a corrupção?`,
-    },
-  ];
-
-  const questionsToDisplay =
-    props.party === "MULTI" ? comparisonExamples : examples;
 
   return (
     <>
-      {questionsToDisplay && questionsToDisplay.length > 0 && (
+      {comparisonExamples && comparisonExamples.length > 0 && (
         <h2 className="text-description pl-4 pb-1">Exemplos</h2>
       )}
       <div className={cn("grid lg:grid-cols-2 gap-4", className)}>
-        {questionsToDisplay &&
-          questionsToDisplay.length > 0 &&
-          questionsToDisplay.map((ex, index) => (
+        {comparisonExamples &&
+          comparisonExamples.length > 0 &&
+          comparisonExamples.map((ex, index) => (
             <Button
               key={index} // Don't forget to add a key when mapping in React
               className={`h-20 p-4 text-left whitespace-normal items-start justify-start ${

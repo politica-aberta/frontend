@@ -1,7 +1,7 @@
 import ChatContainer from "@/components/chat/ChatContainer";
 import ChatSidebar from "@/components/chat/ChatSidebar";
-import CreateChatMessage from "@/components/chat/CreateChatMessage";
 import ConversationHistory from "@/components/chat/ConversationHistory";
+import { getSupabaseServerClient } from "@/lib/supabase_utils";
 
 export default async function Chat({
   params,
@@ -10,28 +10,28 @@ export default async function Chat({
   params: { id: string };
   searchParams: { [key: string]: string | string[] | undefined };
 }) {
-  // match  /chat?id&party
+  let history = null;
 
+  if (searchParams.id !== undefined) {
+    const supabase = getSupabaseServerClient();
+
+    const { data, error } = await supabase
+      .from("conversation_data")
+      .select("id,entity,conversation_history")
+      .eq("id", searchParams.id)
+      .single();
+
+    history = data?.conversation_history;
+  }
 
   return (
     <div className="h-screen pt-16 flex flex-row ">
       <ChatSidebar conversationHistory={<ConversationHistory />}></ChatSidebar>
-      {
-        // whenever no chat is selected, show the create chat message
-        searchParams.id === undefined || searchParams.party === undefined ? (
-          <CreateChatMessage
-            className=""
-            conversationHistory={<ConversationHistory />}
-          />
-        ) : (
-          <ChatContainer
-            chatId={searchParams.id as string}
-            partyId={searchParams.party as string}
-            chatHistory={[]}
-            conversationHistory={<ConversationHistory />}
-          />
-        )
-      }
+      <ChatContainer
+        chatId={searchParams.id as string}
+        chatHistory={history === null ? [] : history}
+        conversationHistory={<ConversationHistory />}
+      />
     </div>
   );
 }
