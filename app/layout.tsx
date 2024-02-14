@@ -19,7 +19,6 @@ export const metadata = {
     published_time: new Date().toISOString(),
     author: "Projeto Política Aberta",
   },
-  
 };
 
 export default function RootLayout({

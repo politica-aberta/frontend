@@ -7,6 +7,7 @@ import { ArrowDown } from "lucide-react";
 import Link from "next/link";
 import PartyShowcase from "@/components/PartyShowcase";
 
+
 export default async function Index({
   params,
   searchParams,

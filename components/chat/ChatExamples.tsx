@@ -22,7 +22,9 @@ function pickRandomTwo(array: string[]) {
 
 const ChatExamples: FC<ChatExamplesProps> = ({ className, ...props }) => {
   const [randParties, setRandParties] = useState<string[][]>([]);
-  const [comparisonExamples, setComparisonExamples] = useState<{prob: number, question: string}[]>([]);
+  const [comparisonExamples, setComparisonExamples] = useState<
+    { prob: number; question: string }[]
+  >([]);
 
   useEffect(() => {
     const newRandParties = [
@@ -35,16 +37,15 @@ const ChatExamples: FC<ChatExamplesProps> = ({ className, ...props }) => {
   }, []);
 
   useEffect(() => {
-    if(randParties && randParties.length > 0) {
-
-      setComparisonExamples(
-        [{
+    if (randParties && randParties.length > 0) {
+      setComparisonExamples([
+        {
           prob: 0.8,
           question: `Como pretendem o ${randParties[0][0]} e o ${randParties[0][1]} abordar a questão das mudanças climáticas?`,
         },
         {
           prob: 0.55,
-          question: `Qual é a visão dos ${randParties[1][0]} e da ${randParties[1][1]} sobre a geração de empregos e crescimento económico?`,
+          question: `Qual é a visão do ${randParties[1][0]} e da ${randParties[1][1]} sobre a geração de empregos e crescimento económico?`,
         },
         {
           prob: 0.6,
@@ -53,12 +54,10 @@ const ChatExamples: FC<ChatExamplesProps> = ({ className, ...props }) => {
         {
           prob: 0.7,
           question: `Em que aspectos as políticas de combate à corrupção diferem entre o ${randParties[3][0]} e o ${randParties[3][1]}?`,
-        },]
-      )
+        },
+      ]);
     }
   }, [randParties]);
-
-
 
   const examples = [
     {
@@ -84,20 +83,24 @@ const ChatExamples: FC<ChatExamplesProps> = ({ className, ...props }) => {
 
   return (
     <>
-      {questionsToDisplay && questionsToDisplay.length > 0 &&<h2 className="text-description pl-4 pb-1">Exemplos</h2>}
+      {questionsToDisplay && questionsToDisplay.length > 0 && (
+        <h2 className="text-description pl-4 pb-1">Exemplos</h2>
+      )}
       <div className={cn("grid lg:grid-cols-2 gap-4", className)}>
-        {questionsToDisplay && questionsToDisplay.length > 0 && questionsToDisplay.map((ex, index) => (
-          <Button
-            key={index} // Don't forget to add a key when mapping in React
-            className={`h-20 p-4 text-left whitespace-normal items-start justify-start ${
-              index >= 2 ? "hidden lg:block" : "block"
-            }`}
-            onClick={() => props.setInput(ex.question)}
-            variant={"outline"}
-          >
-            {ex.question}
-          </Button>
-        ))}
+        {questionsToDisplay &&
+          questionsToDisplay.length > 0 &&
+          questionsToDisplay.map((ex, index) => (
+            <Button
+              key={index} // Don't forget to add a key when mapping in React
+              className={`h-20 p-4 text-left whitespace-normal items-start justify-start ${
+                index >= 2 ? "hidden lg:block" : "block"
+              }`}
+              onClick={() => props.setInput(ex.question)}
+              variant={"outline"}
+            >
+              {ex.question}
+            </Button>
+          ))}
       </div>
     </>
   );

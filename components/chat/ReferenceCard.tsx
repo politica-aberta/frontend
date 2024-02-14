@@ -16,20 +16,13 @@ import "@react-pdf-viewer/core/lib/styles/index.css";
 import "@react-pdf-viewer/zoom/lib/styles/index.css";
 
 import { Button, buttonVariants } from "@/components/ui/button";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
+
 import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
 import {
-  ChevronsLeft,
-  ChevronsRight,
   Download,
   ZoomIn as ZoomInIcon,
   ZoomOut as ZoomOutIcon,
@@ -111,18 +104,7 @@ const ReferencesCard: FC<ReferencesCardProps> = ({ className, ...props }) => {
           <CollapsibleTrigger
             className={buttonVariants({ variant: "ghost" })}
             disabled={props.reference === null}
-          >
-            <TooltipProvider>
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  {open ? <ChevronsRight /> : <ChevronsLeft />}
-                </TooltipTrigger>
-                <TooltipContent>
-                  <p>Add to library</p>
-                </TooltipContent>
-              </Tooltip>
-            </TooltipProvider>
-          </CollapsibleTrigger>
+          ></CollapsibleTrigger>
           {open && (
             <div className="flex flex-row justify-between items-center w-full ">
               <div className="component-header">

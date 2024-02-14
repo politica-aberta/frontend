@@ -1,3 +1,5 @@
+import { StaticImageData } from "next/image";
+
 export type FAQQuestion = {
   question: string;
   answer: string;
@@ -8,6 +10,10 @@ export type Party = {
   path: string;
   title: string;
   subtitle: string;
+  logo: StaticImageData;
+  size?: string;
+  height?: number;
+  width?: number;
 };
 
 export type Message = {

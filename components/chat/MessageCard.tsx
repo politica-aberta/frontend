@@ -1,3 +1,5 @@
+"use client";
+
 import * as React from "react";
 import { FC } from "react";
 import { Reference } from "@/lib/types";
@@ -31,6 +33,8 @@ const MessageCard: FC<MessageCardProps> = ({ className, ...props }) => {
   const color = props.sender === "user" ? "bg-muted" : "";
   const sender = props.sender === "user" ? "Utilizador" : "Assistente";
 
+  const [refPopoverOpen, setRefPopoverOpen] = React.useState(false);
+
   // consistent with lg: modifier in tailwind
   const isMobile = window.innerWidth < 1024;
 
@@ -42,14 +46,14 @@ const MessageCard: FC<MessageCardProps> = ({ className, ...props }) => {
             {sender}
           </CardDescription>
         </CardHeader>
-        
+
         <CardContent>
           <p className="whitespace-pre-wrap w-full">{props.msg}</p>
         </CardContent>
       </div>
       <div className="basis-full">
         {props.references && props.references.length > 0 ? (
-          <Popover>
+          <Popover open={refPopoverOpen} onOpenChange={setRefPopoverOpen}>
             <PopoverTrigger className="lg:border-l lg:hover:bg-muted lg:h-full lg:mx-auto w-full">
               <div
                 className={cn(
@@ -73,6 +77,7 @@ const MessageCard: FC<MessageCardProps> = ({ className, ...props }) => {
                     onClick={() => {
                       props.setReference(reference);
                       isMobile && props.setOpenMobileReference(true);
+                      setRefPopoverOpen(false);
                     }}
                   >
                     {`${reference.party} - ${parties.find(

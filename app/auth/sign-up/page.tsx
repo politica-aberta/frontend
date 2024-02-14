@@ -4,6 +4,10 @@ import Link from "next/link";
 import CreateUserForm from "@/components/CreateUserForm";
 import Image from "next/image";
 import Waves from "@/images/pexels-andrew-neel-7174579.jpg";
+
+import OneTap from "@/components/OneTap";
+import { redirect } from "next/navigation";
+import { getSupabaseServerClient } from "@/lib/supabase_utils";
 import OAuthSignInButton from "@/components/OAuthSignInButton";
 
 export const metadata: Metadata = {
@@ -11,7 +15,16 @@ export const metadata: Metadata = {
   description: "Authentication forms built using the components.",
 };
 
-export default function AuthenticationPage() {
+export default async function AuthenticationPage() {
+  const supabase = getSupabaseServerClient();
+
+  const { data } = await supabase.auth.getSession();
+
+  if (data.session !== null) {
+    console.log(data)
+    redirect("/");
+  }
+
   return (
     <div className="pt-16 container relative  h-screen flex-col items-center justify-center md:grid lg:max-w-none lg:grid-cols-2 lg:px-0">
       <div className="relative hidden h-full flex-col bg-muted p-10 text-white dark:border-r lg:flex">
