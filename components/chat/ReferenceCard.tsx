@@ -63,18 +63,13 @@ const ReferencesCard: FC<ReferencesCardProps> = ({ className, ...props }) => {
   if (props.reference) {
     Object.entries(props.reference.pages).forEach(([page, areas]) => {
       const pageIndex = parseInt(page) - 1;
-      // TODO: send this data from backend maybe
-      // TODO: ReferenceModal as well
-      const pdfWidth = 595.2760009765625;
-      const pdfHeight = 841.8900146484375;
       areas.forEach((area) => {
         highlightAreas.push({
           pageIndex,
-          // Assuming area is [x0, y0, x1, y1]
-          left: area[0] / pdfWidth * 100,
-          top: area[1] / pdfHeight * 100,
-          width: (area[2] - area[0]) / pdfWidth * 100,
-          height: (area[3] - area[1]) / pdfHeight * 100,
+          left: area[0],
+          top: area[1],
+          width: area[2],
+          height: area[3],
         });
       });
     });
@@ -89,11 +84,6 @@ const ReferencesCard: FC<ReferencesCardProps> = ({ className, ...props }) => {
                     key={idx}
                     className="highlight-area"
                     style={Object.assign(
-                        {},
-                        {
-                            background: 'yellow',
-                            opacity: 0.4,
-                        },
                         props.getCssProperties(area, props.rotation)
                     )}
                 />
