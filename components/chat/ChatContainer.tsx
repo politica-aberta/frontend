@@ -102,7 +102,10 @@ const ChatContainer: FC<ChatContainerProps> = ({ className, ...props }) => {
       sendMessageMutation.mutate({
         id: props.chatId,
         message: input,
-        previous_messages: chatHistory,
+        previous_messages: chatHistory.map(({ references, ...rest }) => ({
+          ...rest,
+          references: null, // Drop references before sending messages
+        })),
       });
     }
   };

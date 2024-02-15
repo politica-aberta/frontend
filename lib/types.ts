@@ -22,8 +22,12 @@ export type Message = {
   references: Reference[] | null; // FIXME change this to an array in multi party configs
 };
 
+type HighlightArea = [number, number, number, number];
+
+type Page = Record<number, HighlightArea[]>;
+
 export type Reference = {
   party: string;
   document: string;
-  pages: number[];
+  pages: Page;
 };

@@ -23,10 +23,13 @@ export const CreateUserValidator = z.object({
   name: z.string().min(2),
 });
 
+const HighlightArea = z.tuple([z.number(), z.number(), z.number(), z.number()]);
+const PagesValidator = z.record(z.array(HighlightArea)); 
+
 export const ReferenceValidator = z.object({
   party: z.string(),
   document: z.string(),
-  pages: z.array(z.number()),
+  pages: PagesValidator,
 });
 
 export const MessageValidator = z.object({
