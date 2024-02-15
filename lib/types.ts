@@ -22,9 +22,9 @@ export type Message = {
   references: Reference[] | null; 
 };
 
-type HighlightArea = [number, number, number, number];
+export type HighlightArea = [number, number, number, number];
 
-type Page = Record<number, HighlightArea[]>;
+type Page = Record<number, HighlightArea[]> | number[];
 
 export type Reference = {
   party: string;

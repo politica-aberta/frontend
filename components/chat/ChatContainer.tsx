@@ -38,9 +38,7 @@ const ChatContainer: FC<ChatContainerProps> = ({ className, ...props }) => {
     useState<boolean>(false);
   const [chatHistory, setChatHistory] = useState<Message[]>([]);
 
-
-  const router = useRouter()
-
+  const router = useRouter();
 
   useEffect(() => {
     setChatHistory(

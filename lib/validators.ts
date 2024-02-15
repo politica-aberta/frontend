@@ -4,7 +4,7 @@ import { parties } from "./constants";
 const partyValues = parties.map((p) => p.id);
 
 export const CreateConversationValidator = z.object({
-  party: z.enum([ "multi", ...partyValues] as [string, ...string[]]),
+  party: z.enum(["multi", ...partyValues] as [string, ...string[]]),
 });
 
 export const CreateConversationResponseValidator = z.object({
@@ -24,7 +24,9 @@ export const CreateUserValidator = z.object({
 });
 
 const HighlightArea = z.tuple([z.number(), z.number(), z.number(), z.number()]);
-const PagesValidator = z.record(z.array(HighlightArea)); 
+const LegacyPages = z.array(z.number());
+
+const PagesValidator = z.record(z.array(HighlightArea)).or(LegacyPages);
 
 export const ReferenceValidator = z.object({
   party: z.string(),
@@ -38,15 +40,11 @@ export const MessageValidator = z.object({
   references: z.array(ReferenceValidator).nullable(),
 });
 
-
 export const ChatValidator = z.object({
   id: z.string().uuid(),
   message: z.string(),
   previous_messages: z.array(MessageValidator),
 });
-
-
-
 
 export type CreateUserPayload = z.infer<typeof CreateUserValidator>;
 
@@ -65,3 +63,5 @@ export type MessagePayload = z.infer<typeof MessageValidator>;
 export type ChatPayload = z.infer<typeof ChatValidator>;
 
 export type MessageResponse = z.infer<typeof MessageValidator>;
+
+export type LegacyPages = z.infer<typeof LegacyPages>;

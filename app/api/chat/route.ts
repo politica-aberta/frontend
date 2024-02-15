@@ -13,6 +13,7 @@ export const dynamic = "force-dynamic";
 
 // Error handler
 const handleError = (error: Error) => {
+
   if (error instanceof ZodError) {
     return NextResponse.json(
       {
@@ -30,8 +31,6 @@ async function handleConversation(
   session: Session,
   body: any
 ) {
-
-
   if (body.id === undefined) {
     const newReq = {
       entity: "MULTI",
@@ -44,9 +43,7 @@ async function handleConversation(
       .select("id, entity")
       .single();
 
-  
     body.id = data?.id;
-  
   }
 
   return body;
@@ -89,35 +86,39 @@ export async function POST(req: NextRequest) {
     infer_chat_mode: true,
   };
 
-  const { data } = await axios.post<MessageResponse>(
-    `${getBackendURL()}multi-chat`,
-    payload
-  );
+  try {
+    const { data } = await axios.post<MessageResponse>(
+      `${getBackendURL()}multi-chat`,
+      payload
+    );
 
-  await supabase
-    .from("user_data")
-    .update({ usage: prev_usage + 1 })
-    .eq("id", session!.user.id);
+    await supabase
+      .from("user_data")
+      .update({ usage: prev_usage + 1 })
+      .eq("id", session!.user.id);
 
-  const question: MessageResponse = {
-    role: "user",
-    message: message,
-    references: null,
-  };
+    const question: MessageResponse = {
+      role: "user",
+      message: message,
+      references: null,
+    };
 
-  const reply: MessageResponse = {
-    role: "assistant",
-    message: data.message,
-    references: data.references,
-  };
+    const reply: MessageResponse = {
+      role: "assistant",
+      message: data.message,
+      references: data.references,
+    };
 
-  await supabase
-    .from("conversation_data")
-    .update({
-      conversation_history: previous_messages.concat([question, reply]),
-    })
-    .eq("id", id)
-    .select("conversation_history");
+    await supabase
+      .from("conversation_data")
+      .update({
+        conversation_history: previous_messages.concat([question, reply]),
+      })
+      .eq("id", id)
+      .select("conversation_history");
 
-  return NextResponse.json({ id: id, reply: reply }, { status: 200 });
+    return NextResponse.json({ id: id, reply: reply }, { status: 200 });
+  } catch (error: any) {
+    return handleError(error);
+  }
 }

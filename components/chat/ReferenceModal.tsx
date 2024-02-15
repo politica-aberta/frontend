@@ -43,7 +43,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-import { Reference } from "@/lib/types";
+import { HighlightArea, Reference } from "@/lib/types";
 import { cn } from "@/lib/utils";
 import { parties } from "@/lib/constants";
 import { FC } from "react";
@@ -54,36 +54,19 @@ interface ReferenceModalProps extends React.HTMLAttributes<HTMLDivElement> {
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const ReferenceModal: FC<ReferenceModalProps> = ({ className, ...props }) => {
-  const party = parties.find(
-    (party) => party.id === props.reference?.party.toLowerCase()
-  )!;
-  // ugly code for backwards compatibility
-
-  let pageNumbers: any = [];
-  if (!Array.isArray(props.reference?.pages)) {
-    pageNumbers = props.reference
-      ? Object.keys(props.reference?.pages).map(Number)
-      : [];
-  } else {
-    pageNumbers = props.reference?.pages ?? [];
-  }
-
-  const pageNavigationPluginInstance = pageNavigationPlugin({
-    enableShortcuts: false,
-  });
-  const zoomPluginInstance = zoomPlugin({ enableShortcuts: false });
-  const { ZoomIn, ZoomOut } = zoomPluginInstance;
-
+const handleReferences = (reference: Reference | null) => {
+  let pages: number[] = [];
   let highlightAreas: HighlightAreaType[] = [];
-  if (props.reference) {
-    Object.entries(props.reference.pages).forEach(([page, areas]) => {
-      if (typeof areas !== "object" || areas === null) {
-        return;
-      }
 
+  if (!reference) {
+    return { pages, highlightAreas };
+  } else if (Array.isArray(reference.pages)) {
+    pages = reference.pages;
+  } else {
+    pages = Object.keys(reference.pages).map((page) => parseInt(page));
+    Object.entries(reference.pages).forEach(([page, areas]) => {
       const pageIndex = parseInt(page) - 1;
-      areas.forEach((area) => {
+      areas.forEach((area: HighlightArea) => {
         highlightAreas.push({
           pageIndex,
           left: area[0],
@@ -94,6 +77,23 @@ const ReferenceModal: FC<ReferenceModalProps> = ({ className, ...props }) => {
       });
     });
   }
+
+  return { pages, highlightAreas };
+};
+
+const ReferenceModal: FC<ReferenceModalProps> = ({ className, ...props }) => {
+  const party = parties.find(
+    (party) => party.id === props.reference?.party.toLowerCase()
+  )!;
+  // ugly code for backwards compatibility
+
+  const pageNavigationPluginInstance = pageNavigationPlugin({
+    enableShortcuts: false,
+  });
+  const zoomPluginInstance = zoomPlugin({ enableShortcuts: false });
+  const { ZoomIn, ZoomOut } = zoomPluginInstance;
+
+  const { pages, highlightAreas } = handleReferences(props.reference);
 
   const renderHighlights = (props: RenderHighlightsProps) => (
     <div>
@@ -142,7 +142,7 @@ const ReferenceModal: FC<ReferenceModalProps> = ({ className, ...props }) => {
                 <DropdownMenuContent align="end" alignOffset={-10}>
                   <DropdownMenuLabel>Páginas</DropdownMenuLabel>
                   <ul className="flex flex-col space-y-2 pb-2">
-                    {pageNumbers?.map((pageNum: number) => (
+                    {pages?.map((pageNum: number) => (
                       <Button
                         className="mx-2"
                         key={pageNum}
@@ -207,7 +207,7 @@ const ReferenceModal: FC<ReferenceModalProps> = ({ className, ...props }) => {
             </SheetHeader>
 
             <Viewer
-              initialPage={pageNumbers ? pageNumbers[0] - 1 : 0}
+              initialPage={pages ? pages[0] - 1 : 0}
               theme={"auto"}
               fileUrl={props.reference!.document}
               plugins={[

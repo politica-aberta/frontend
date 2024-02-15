@@ -38,42 +38,21 @@ import { Reference } from "@/lib/types";
 import { cn } from "@/lib/utils";
 import { parties } from "@/lib/constants";
 
-interface ReferencesCardProps extends React.HTMLAttributes<HTMLDivElement> {
-  reference: Reference | null;
-}
+import { HighlightArea } from "@/lib/types";
 
-const ReferencesCard: FC<ReferencesCardProps> = ({ className, ...props }) => {
-  const [open, setOpen] = useState<boolean>(true);
-  const party = parties.find(
-    (party) => party.id === props.reference?.party.toLowerCase()
-  )!;
-
-  // ugly code for backwards compatibility
-
-  let pageNumbers: any = [];
-  if (!Array.isArray(props.reference?.pages)) {
-    pageNumbers = props.reference
-      ? Object.keys(props.reference?.pages).map(Number)
-      : [];
-  } else {
-    pageNumbers = props.reference?.pages ?? [];
-  }
-
-  const pageNavigationPluginInstance = pageNavigationPlugin({
-    enableShortcuts: false,
-  });
-  const zoomPluginInstance = zoomPlugin({ enableShortcuts: false });
-  const { ZoomIn, ZoomOut } = zoomPluginInstance;
-
+const handleReferences = (reference: Reference | null) => {
+  let pages: number[] = [];
   let highlightAreas: HighlightAreaType[] = [];
-  if (props.reference) {
-    Object.entries(props.reference.pages).forEach(([page, areas]) => {
-      if (typeof areas !== "object") {
-        return;
-      }
 
+  if (!reference) {
+    return { pages, highlightAreas };
+  } else if (Array.isArray(reference.pages)) {
+    pages = reference.pages;
+  } else {
+    pages = Object.keys(reference.pages).map((page) => parseInt(page));
+    Object.entries(reference.pages).forEach(([page, areas]) => {
       const pageIndex = parseInt(page) - 1;
-      areas.forEach((area) => {
+      areas.forEach((area: HighlightArea) => {
         highlightAreas.push({
           pageIndex,
           left: area[0],
@@ -84,6 +63,26 @@ const ReferencesCard: FC<ReferencesCardProps> = ({ className, ...props }) => {
       });
     });
   }
+  return { pages, highlightAreas };
+};
+
+interface ReferencesCardProps extends React.HTMLAttributes<HTMLDivElement> {
+  reference: Reference | null;
+}
+
+const ReferencesCard: FC<ReferencesCardProps> = ({ className, ...props }) => {
+  const [open, setOpen] = useState<boolean>(true);
+  const party = parties.find(
+    (party) => party.id === props.reference?.party.toLowerCase()
+  )!;
+
+  const pageNavigationPluginInstance = pageNavigationPlugin({
+    enableShortcuts: false,
+  });
+  const zoomPluginInstance = zoomPlugin({ enableShortcuts: false });
+  const { ZoomIn, ZoomOut } = zoomPluginInstance;
+
+  const { pages, highlightAreas } = handleReferences(props.reference);
 
   const renderHighlights = (props: RenderHighlightsProps) => (
     <div>
@@ -130,7 +129,7 @@ const ReferencesCard: FC<ReferencesCardProps> = ({ className, ...props }) => {
               </div>
 
               <div className="space-x-2 flex items-center">
-                {pageNumbers?.map((pageNum: number) => (
+                {pages?.map((pageNum: number) => (
                   <Button
                     key={pageNum}
                     variant={"secondary"}
@@ -176,7 +175,7 @@ const ReferencesCard: FC<ReferencesCardProps> = ({ className, ...props }) => {
             props.reference && ( // maybe delete the props.reference later
               <CollapsibleContent className="overflow-hidden h-[84vh]">
                 <Viewer
-                  initialPage={pageNumbers ? pageNumbers[0] - 1 : 0}
+                  initialPage={pages ? pages[0] - 1 : 0}
                   theme={"auto"}
                   fileUrl={props.reference!.document}
                   plugins={[
