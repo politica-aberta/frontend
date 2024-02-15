@@ -27,6 +27,8 @@ import {
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
 import {
+  ChevronsLeft,
+  ChevronsRight,
   Download,
   ZoomIn as ZoomInIcon,
   ZoomOut as ZoomOutIcon,
@@ -46,7 +48,6 @@ const ReferencesCard: FC<ReferencesCardProps> = ({ className, ...props }) => {
     (party) => party.id === props.reference?.party.toLowerCase()
   )!;
 
-  
   // ugly code for backwards compatibility
 
   let pageNumbers: any = [];
@@ -57,7 +58,6 @@ const ReferencesCard: FC<ReferencesCardProps> = ({ className, ...props }) => {
   } else {
     pageNumbers = props.reference?.pages ?? [];
   }
-
 
   const pageNavigationPluginInstance = pageNavigationPlugin({
     enableShortcuts: false,
@@ -119,7 +119,9 @@ const ReferencesCard: FC<ReferencesCardProps> = ({ className, ...props }) => {
           <CollapsibleTrigger
             className={buttonVariants({ variant: "ghost" })}
             disabled={props.reference === null}
-          ></CollapsibleTrigger>
+          >
+            {open ? <ChevronsRight /> : <ChevronsLeft />}
+          </CollapsibleTrigger>
           {open && (
             <div className="flex flex-row justify-between items-center w-full ">
               <div className="component-header">
