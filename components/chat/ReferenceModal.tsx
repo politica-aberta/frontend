@@ -8,8 +8,12 @@ import {
   RenderZoomOutProps,
   zoomPlugin,
 } from "@react-pdf-viewer/zoom";
-import { highlightPlugin, Trigger, HighlightArea as HighlightAreaType } from '@react-pdf-viewer/highlight';
-import type { RenderHighlightsProps } from '@react-pdf-viewer/highlight';
+import {
+  highlightPlugin,
+  Trigger,
+  HighlightArea as HighlightAreaType,
+} from "@react-pdf-viewer/highlight";
+import type { RenderHighlightsProps } from "@react-pdf-viewer/highlight";
 import { pageNavigationPlugin } from "@react-pdf-viewer/page-navigation";
 import "@react-pdf-viewer/core/lib/styles/index.css";
 import "@react-pdf-viewer/zoom/lib/styles/index.css";
@@ -54,8 +58,16 @@ const ReferenceModal: FC<ReferenceModalProps> = ({ className, ...props }) => {
   const party = parties.find(
     (party) => party.id === props.reference?.party.toLowerCase()
   )!;
-  // const referencePages = props.reference?.pages;//.sort((a, b) => a - b);
-  const pageNumbers = props.reference? Object.keys(props.reference?.pages).map(Number) : [];
+  // ugly code for backwards compatibility
+
+  let pageNumbers: any = [];
+  if (!Array.isArray(props.reference?.pages)) {
+    pageNumbers = props.reference
+      ? Object.keys(props.reference?.pages).map(Number)
+      : [];
+  } else {
+    pageNumbers = props.reference?.pages ?? [];
+  }
 
   const pageNavigationPluginInstance = pageNavigationPlugin({
     enableShortcuts: false,
@@ -66,6 +78,10 @@ const ReferenceModal: FC<ReferenceModalProps> = ({ className, ...props }) => {
   let highlightAreas: HighlightAreaType[] = [];
   if (props.reference) {
     Object.entries(props.reference.pages).forEach(([page, areas]) => {
+      if (typeof areas !== "object" || areas === null) {
+        return;
+      }
+
       const pageIndex = parseInt(page) - 1;
       areas.forEach((area) => {
         highlightAreas.push({
@@ -81,17 +97,15 @@ const ReferenceModal: FC<ReferenceModalProps> = ({ className, ...props }) => {
 
   const renderHighlights = (props: RenderHighlightsProps) => (
     <div>
-        {highlightAreas
-            .filter((area) => area.pageIndex === props.pageIndex)
-            .map((area, idx) => (
-                <div
-                    key={idx}
-                    className="highlight-area"
-                    style={Object.assign(
-                        props.getCssProperties(area, props.rotation)
-                    )}
-                />
-            ))}
+      {highlightAreas
+        .filter((area) => area.pageIndex === props.pageIndex)
+        .map((area, idx) => (
+          <div
+            key={idx}
+            className="highlight-area"
+            style={Object.assign(props.getCssProperties(area, props.rotation))}
+          />
+        ))}
     </div>
   );
 
@@ -128,7 +142,7 @@ const ReferenceModal: FC<ReferenceModalProps> = ({ className, ...props }) => {
                 <DropdownMenuContent align="end" alignOffset={-10}>
                   <DropdownMenuLabel>Páginas</DropdownMenuLabel>
                   <ul className="flex flex-col space-y-2 pb-2">
-                    {pageNumbers?.map((pageNum) => (
+                    {pageNumbers?.map((pageNum: number) => (
                       <Button
                         className="mx-2"
                         key={pageNum}
@@ -196,7 +210,11 @@ const ReferenceModal: FC<ReferenceModalProps> = ({ className, ...props }) => {
               initialPage={pageNumbers ? pageNumbers[0] - 1 : 0}
               theme={"auto"}
               fileUrl={props.reference!.document}
-              plugins={[pageNavigationPluginInstance, zoomPluginInstance, highlightPluginInstance]}
+              plugins={[
+                pageNavigationPluginInstance,
+                zoomPluginInstance,
+                highlightPluginInstance,
+              ]}
             />
           </>
         )}

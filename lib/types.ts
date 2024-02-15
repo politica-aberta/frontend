@@ -19,7 +19,7 @@ export type Party = {
 export type Message = {
   role: string;
   message: string;
-  references: Reference[] | null; // FIXME change this to an array in multi party configs
+  references: Reference[] | null; 
 };
 
 type HighlightArea = [number, number, number, number];
