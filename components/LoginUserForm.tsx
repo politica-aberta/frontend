@@ -60,6 +60,8 @@ export function LoginUserForm({onClose}: LoginUserFormProps) {
     },
   });
 
+
+
   return (
     <Popover>
       <PopoverTrigger className={buttonVariants({ variant: "default" })}>
@@ -108,6 +110,7 @@ export function LoginUserForm({onClose}: LoginUserFormProps) {
         <div className="text-sm text-muted-foreground text-center mt-4">
           <OAuthSignInButton provider="Google" />
         </div>
+        {/* <OneTap className="mt-2 overflow-hidden"/> */}
 
         <div className="text-sm text-muted-foreground text-center mt-4">
           Não tens conta?

@@ -67,7 +67,7 @@ export const parties: Party[] = [
   },
   {
     id: "ps",
-    path: "https://dzwdgfmvuevjqjutrpye.supabase.co/storage/v1/object/public/documents/ps-legislativas22.pdf",
+    path: "https://dzwdgfmvuevjqjutrpye.supabase.co/storage/v1/object/public/documents/ps-legislativas24.pdf",
     title: "Partido Socialista",
     subtitle: "Programa eleitoral (2022)",
     logo: PS,

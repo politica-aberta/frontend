@@ -4,7 +4,8 @@ import Link from "next/link";
 
 import { getSupabaseServerClient } from "@/lib/supabase_utils";
 
-interface ConversationHistoryProps extends React.HTMLAttributes<HTMLDivElement> {}
+interface ConversationHistoryProps
+  extends React.HTMLAttributes<HTMLDivElement> {}
 
 const ConversationHistory: FC<ConversationHistoryProps> = async ({
   className,
@@ -14,30 +15,16 @@ const ConversationHistory: FC<ConversationHistoryProps> = async ({
 
   let { data, error } = await supabase
     .from("conversation_data")
-    .select("id,entity,created_at")
+    .select("id,entity,created_at,conversation_history")
     .order("created_at", { ascending: false });
-
-  // FIXME come up with names for the entries, maybe use the entity name + a number,
-  // but this should be done in supabase
-
-  // let entries: { [key: string]: ChatHistoryEntry[] } = {};
-
-  // data?.forEach((element) => {
-  //   if (element.entity in entries) {
-  //     entries[element.entity].push({id: element.id, title: `${element.entity}${entries[element.entity].length + 1}`});
-  //   }
-  //   else {
-  //     entries[element.entity] = [element.id];
-  //   }
-  // });
 
   return (
     <div>
       <p className="hidden lg:block text-description pl-2">Histórico</p>
-      <ul className="flex flex-col  ">
+      <ul className="flex flex-col">
         <ScrollArea className="h-[60vh] mt-4 ">
           <ul className="flex flex-col ">
-            {data?.map((entry) => (
+            {data?.filter((entry) => entry.conversation_history).map((entry) => (
               <Link
                 className="mr-4 items-stretch hover:bg-muted p-2 rounded-sm"
                 prefetch={false}
@@ -45,7 +32,9 @@ const ConversationHistory: FC<ConversationHistoryProps> = async ({
                 href={`/chat/${entry.id}`}
               >
                 <div>
-                  <p className="">{entry.entity}</p>
+                  <p className="">
+                    {entry.conversation_history?.at(1).message}
+                  </p>
                   <p className="text-description">
                     {new Date(entry.created_at).toLocaleString()}
                   </p>

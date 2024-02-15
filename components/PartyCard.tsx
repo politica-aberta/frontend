@@ -26,7 +26,7 @@ interface PartyCardProps extends React.HTMLAttributes<HTMLDivElement> {
 const PartyCard: FC<PartyCardProps> = ({ className, party, ...props }) => {
   return (
     <Dialog>
-      <DialogTrigger className="w-full bg-muted rounded-md h-16 grid place-content-center hover:bg-muted-foreground  ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
+      <DialogTrigger className="w-full bg-muted dark:bg-white hover:bg-muted-foreground dark:hover:bg-muted dark:border rounded-md h-16 grid place-content-center   ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
         <Image
           className={party.size}
           height={party.height}
@@ -38,7 +38,7 @@ const PartyCard: FC<PartyCardProps> = ({ className, party, ...props }) => {
       <DialogContent className="max-w-4xl h-[48rem] p-8 ">
         <div id="head">
           <h1 className="text-title">{party.title}</h1>
-          <div className="mt-4 h-[32rem] border rounded-md p-16 grid place-content-center">
+          <div className="mt-4 h-[32rem] border rounded-md p-16 bg-white grid place-content-center">
             <Image src={party.logo} alt="party logo"></Image>
           </div>
         </div>
@@ -50,7 +50,7 @@ const PartyCard: FC<PartyCardProps> = ({ className, party, ...props }) => {
           {/* #FIXME map over docs whenever >1*/}
           <ul className="pl-4 pt-2 list-disc">
             <li className=" ">
-              <Link href={party.path} target="_blank">
+              <Link className=" underline " href={party.path} target="_blank">
                 {party.subtitle}
               </Link>
             </li>
