@@ -22,25 +22,27 @@ const ConversationHistory: FC<ConversationHistoryProps> = async ({
     <div>
       <p className="hidden lg:block text-description pl-2">Histórico</p>
       <ul className="flex flex-col">
-        <ScrollArea className="h-[60vh] mt-4 ">
+        <ScrollArea className="h-[70vh] mt-4 ">
           <ul className="flex flex-col ">
-            {data?.filter((entry) => entry.conversation_history).map((entry) => (
-              <Link
-                className="mr-4 items-stretch hover:bg-muted p-2 rounded-sm"
-                prefetch={false}
-                key={entry.id}
-                href={`/chat/${entry.id}`}
-              >
-                <div>
-                  <p className="">
-                    {entry.conversation_history?.at(1).message}
-                  </p>
-                  <p className="text-description">
-                    {new Date(entry.created_at).toLocaleString()}
-                  </p>
-                </div>
-              </Link>
-            ))}
+            {data
+              ?.filter((entry) => entry.conversation_history)
+              .map((entry) => (
+                <Link
+                  className="mr-4 items-stretch hover:bg-muted p-2 rounded-sm"
+                  prefetch={false}
+                  key={entry.id}
+                  href={`/chat/${entry.id}`}
+                >
+                  <div>
+                    <p className="">
+                      {entry.conversation_history?.at(1).message}
+                    </p>
+                    <p className="text-description">
+                      {new Date(entry.created_at).toLocaleString()}
+                    </p>
+                  </div>
+                </Link>
+              ))}
           </ul>
         </ScrollArea>
       </ul>
