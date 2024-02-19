@@ -40,7 +40,7 @@ export const parties: Party[] = [
   },
   {
     id: "l",
-    path: "https://dzwdgfmvuevjqjutrpye.supabase.co/storage/v1/object/public/documents/livre-legislativas24.pdf",
+    path: "https://dzwdgfmvuevjqjutrpye.supabase.co/storage/v1/object/public/documents/l-legislativas24.pdf",
     title: "Partido Livre",
     subtitle: "Programa eleitoral (2024)",
     logo: Livre,
@@ -49,9 +49,9 @@ export const parties: Party[] = [
   },
   {
     id: "pan",
-    path: "https://dzwdgfmvuevjqjutrpye.supabase.co/storage/v1/object/public/documents/pan-legislativas22.pdf",
+    path: "https://dzwdgfmvuevjqjutrpye.supabase.co/storage/v1/object/public/documents/pan-legislativas24.pdf",
     title: "Partido Animais e Natureza",
-    subtitle: "Programa eleitoral (2022)",
+    subtitle: "Programa eleitoral (2024)",
     logo: PAN,
     height: 60,
     width: 80,
