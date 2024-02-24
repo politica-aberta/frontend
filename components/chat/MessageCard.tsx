@@ -21,6 +21,11 @@ import {
 
 import { parties } from "@/lib/constants";
 
+import { remark } from "remark";
+import html from "remark-html";
+
+import styles from "./styles.module.css";
+
 interface MessageCardProps extends React.HTMLAttributes<HTMLDivElement> {
   msg: string;
   sender: string;
@@ -32,11 +37,23 @@ interface MessageCardProps extends React.HTMLAttributes<HTMLDivElement> {
 const MessageCard: FC<MessageCardProps> = ({ className, ...props }) => {
   const color = props.sender === "user" ? "bg-muted" : "";
   const sender = props.sender === "user" ? "Utilizador" : "Assistente";
+  const [renderedHtml, setRenderedHtml] = React.useState<string>("");
 
   const [refPopoverOpen, setRefPopoverOpen] = React.useState(false);
 
   // consistent with lg: modifier in tailwind
   const isMobile = window.innerWidth < 1024;
+
+  React.useEffect(() => {
+    // Use remark to convert markdown into HTML string
+    props.sender !== "user" &&
+      remark()
+        .use(html)
+        .process(props.msg)
+        .then((processedContent) => {
+          setRenderedHtml(processedContent.toString());
+        });
+  }, []);
 
   return (
     <Card className={cn("w-full lg:flex lg:flex-row ", className, color)}>
@@ -46,9 +63,15 @@ const MessageCard: FC<MessageCardProps> = ({ className, ...props }) => {
             {sender}
           </CardDescription>
         </CardHeader>
-
         <CardContent>
-          <p className="whitespace-pre-wrap w-full">{props.msg}</p>
+          {renderedHtml ? (
+            <div
+              className={`prose prose-neutral dark:prose-invert`}
+              dangerouslySetInnerHTML={{ __html: renderedHtml }}
+            ></div>
+          ) : (
+            <p className={`whitespace-pre-wrap w-full `}>{props.msg}</p>
+          )}
         </CardContent>
       </div>
       <div className="basis-full">

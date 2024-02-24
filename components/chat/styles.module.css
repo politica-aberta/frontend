@@ -1,0 +1,9 @@
+.asd ul {
+    list-style-type: disc; /* Define o tipo de marcador como bolinhas */
+    padding-left: 20px; /* Ajusta o espaçamento à esquerda para alinhar com o conteúdo */
+}
+
+.asd li {
+    margin-bottom: 10px; /* Espaçamento entre os itens */
+    margin-top: 2rem;
+}
