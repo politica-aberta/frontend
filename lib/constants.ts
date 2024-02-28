@@ -57,7 +57,7 @@ export const parties: Party[] = [
     width: 80,
   },
   {
-    id: "pcp",
+    id: "cdu",
     path: "https://dzwdgfmvuevjqjutrpye.supabase.co/storage/v1/object/public/documents/pcp-legislativas24.pdf",
     title: "Coligação Democrática Unitária",
     subtitle: "Programa eleitoral (2024)",
@@ -75,7 +75,7 @@ export const parties: Party[] = [
     width: 80,
   },
   {
-    id: "psd",
+    id: "ad",
     path: "https://dzwdgfmvuevjqjutrpye.supabase.co/storage/v1/object/public/documents/psd-legislativas24.pdf",
     title: "Aliança Democrática",
     subtitle: "Programa eleitoral (2024)",
