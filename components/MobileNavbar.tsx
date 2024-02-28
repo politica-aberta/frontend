@@ -1,6 +1,6 @@
 "use client";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { Menu, Smile, X } from "lucide-react";
+import { InstagramIcon, LinkedinIcon, Menu, Smile, X, XIcon } from "lucide-react";
 import Link from "next/link";
 import ThemeToggle from "./ThemeToggle";
 import SignOutButton from "./SignOutButton";
@@ -32,7 +32,7 @@ const MobileNavbar: FC<MobileNavbarProps> = ({ className, ...props }) => {
         <SheetTrigger className="">
           <Menu />
         </SheetTrigger>
-        <SheetContent className="">
+        <SheetContent className="h-full">
           <div className="flex flex-col pt-32 pb-16 px-4 space-y-8 text-xl">
             <Link onClick={() => setOpen(false)} href="/">
               Início
@@ -44,10 +44,15 @@ const MobileNavbar: FC<MobileNavbarProps> = ({ className, ...props }) => {
               Chat
             </Link>
           </div>
-          <div className="flex pt-8 gap-8 px-4 border-t">
+          <div className="flex pt-8 gap-8 px-4 border-t ">
             {props.session?.user ? <SignOutButton /> : <LoginUserForm onClose={() => setOpen(false)} />}
 
             <ThemeToggle className="" />
+          </div>
+          <div className=" inline-flex pt-8 gap-8 px-4 ">
+            <a href="https://instagram.com/chatpoliticaaberta" target="_blank"><InstagramIcon /></a>
+            <a href="https://x.com/politica_aberta" target="_blank"><XIcon/></a>
+            <a href="https://www.linkedin.com/company/pol%C3%ADtica-aberta/" target="_blank"><LinkedinIcon/></a>
           </div>
         </SheetContent>
       </Sheet>

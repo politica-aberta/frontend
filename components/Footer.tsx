@@ -1,7 +1,8 @@
 import { cn } from "@/lib/utils";
-import { Smile } from "lucide-react";
+import { InstagramIcon, LinkedinIcon, Smile, TwitterIcon, XIcon } from "lucide-react";
 import Link from "next/link";
 import { buttonVariants } from "./ui/button";
+
 
 const cols = [
   {
@@ -59,6 +60,11 @@ export default function Footer({ className, ...props }: FooterProps) {
         <div className="inline-flex gap-4">
           <Smile size={36} className="self-center" />
           <h1 className="text-3xl font-bold">Política Aberta</h1>
+          <div className="gap-4 md:ml-10 hidden md:inline-flex">
+            <a href="https://instagram.com/chatpoliticaaberta" target="_blank"><InstagramIcon /></a>
+            <a href="https://x.com/politica_aberta" target="_blank"><XIcon/></a>
+            <a href="https://www.linkedin.com/company/pol%C3%ADtica-aberta/" target="_blank"><LinkedinIcon/></a>
+          </div>
         </div>
       </div>
     </footer>
