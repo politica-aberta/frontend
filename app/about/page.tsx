@@ -2,12 +2,20 @@ import Footer from "@/components/Footer";
 import { Smile } from "lucide-react";
 import Link from "next/link";
 
-const contributors: string[] = [
-  "xtwigs",
-  "jmartinhoj",
-  "diogosoares22",
-  "ManelCoutinho",
-  "go-liv",
+const contributors = [
+  { name: "Hugo Pitorro", link: "https://pitorro.de/" },
+  { name: "José Martinho", link: "https://www.linkedin.com/in/jmartinhoj/" },
+  {
+    name: "Diogo Soares",
+    link: "https://www.linkedin.com/in/diogo-sousa-soares/",
+  },
+  { name: "Manuel Coutinho", link: "https://github.com/ManelCoutinho" },
+  { name: "Guilherme Miguel", link: "https://www.linkedin.com/in/goliv/" },
+  {
+    name: "Miguel Abelho",
+    link: "https://www.linkedin.com/in/miguel-abelho-6a1508239/",
+  },
+  { name: "Tomás Prego", link: "https://www.linkedin.com/in/tomasprego/" },
 ];
 
 export default async function About() {
@@ -50,15 +58,15 @@ export default async function About() {
         <div className="">
           <h2>Agradecemos profundamente a quem nos ajudou com o projeto.</h2>
           <ul className="pt-2">
-            {contributors.map((col, index) => (
+            {contributors.map((contributor, index) => (
               <div key={index}>
                 <Link
-                  href={`https://github.com/${col}`}
+                  href={contributor.link}
                   rel="noopener noreferrer"
                   target="_blank"
                 >
                   <h2 className="text-md font-bold hover:text-muted-foreground">
-                    {col}
+                    {contributor.name}
                   </h2>
                 </Link>
               </div>
